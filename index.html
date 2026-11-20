@@ -624,8 +624,8 @@
             <span class="field-error" id="err-custPhone" role="alert" hidden></span>
           </div>
           <div class="field-group">
-            <label for="custEmail">Email <span class="optional">(optional)</span></label>
-            <input class="field-input" id="custEmail" name="email" type="email" inputmode="email" maxlength="120" autocomplete="off" autocapitalize="none" aria-describedby="err-custEmail">
+            <label for="custEmail">Email</label>
+            <input class="field-input" id="custEmail" name="email" type="email" inputmode="email" maxlength="120" autocomplete="off" autocapitalize="none" aria-required="true" aria-describedby="err-custEmail">
             <span class="field-error" id="err-custEmail" role="alert" hidden></span>
           </div>
           <div class="field-group">
@@ -640,8 +640,8 @@
           </div>
           <div class="field-row">
             <div class="field-group field-group--half">
-              <label for="custState">State <span class="optional">(optional)</span></label>
-              <input class="field-input" id="custState" name="state" type="text" maxlength="2" autocomplete="off" autocapitalize="characters" aria-describedby="err-custState">
+              <label for="custState">State</label>
+              <input class="field-input" id="custState" name="state" type="text" maxlength="2" autocomplete="off" autocapitalize="characters" aria-required="true" aria-describedby="err-custState">
               <span class="field-error" id="err-custState" role="alert" hidden></span>
             </div>
             <div class="field-group field-group--half">
@@ -825,10 +825,10 @@ var SIZE_ORDER = ['s', 'm', 'l'];
 var FIELDS = [
   { id: 'custName',    required: true, msg: 'Enter your full name.' },
   { id: 'custPhone',   required: true, test: function(v) { var d = v.replace(/\D/g, ''); return d.length >= 10 && d.length <= 15; }, msg: 'Enter a phone number with area code.' },
-  { id: 'custEmail',   test: function(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v); }, msg: 'Check the email address, like name@example.com.' },
+  { id: 'custEmail',   required: true, empty: 'Enter your email address.', test: function(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v); }, msg: 'Check the email address, like name@example.com.' },
   { id: 'custAddress', required: true, msg: 'Enter the street address.' },
   { id: 'custCity',    required: true, msg: 'Enter the city.' },
-  { id: 'custState',   test: function(v) { return /^[A-Za-z]{2}$/.test(v); }, msg: 'Use the 2-letter state, like NC.' },
+  { id: 'custState',   required: true, empty: 'Enter your state, like NC.', test: function(v) { return /^[A-Za-z]{2}$/.test(v); }, msg: 'Use the 2-letter state, like NC.' },
   { id: 'custZip',     test: function(v) { return /^\d{5}(-\d{4})?$/.test(v); }, msg: 'Enter a 5-digit ZIP, like 27601.' }
 ];
 
@@ -1129,7 +1129,7 @@ function validateFields() {
     var bad = !v ? !!f.required : (f.test ? !f.test(v) : false);
     if (!bad) { clearError(f.id); return; }
     var el = $(f.id), err = $('err-' + f.id);
-    err.textContent = f.msg; err.hidden = false;
+    err.textContent = (!v && f.empty) ? f.empty : f.msg; err.hidden = false;
     el.classList.add('error'); el.setAttribute('aria-invalid', 'true');
     if (!firstBad) firstBad = el;
   });
@@ -1148,7 +1148,7 @@ function buildMessage() {
   var body = 'Hi Tim,\n\nA customer is interested in the ' + t.name + ' tier of Hero Club membership.\n\n';
   body += 'Customer: ' + fieldValue('custName') + '\n';
   body += 'Phone: ' + fieldValue('custPhone') + '\n';
-  if (email) body += 'Email: ' + email + '\n';
+  body += 'Email: ' + email + '\n';
   body += 'Address: ' + fieldValue('custAddress') + '\n';
   body += '         ' + cityLine + '\n\n';
   body += 'Tier: ' + t.name + ' (' + t.visits + ' visits/year)\n';
