@@ -26,6 +26,7 @@ const COL = {
   state: 'text_mm99zyjk',
   zip: 'text_mm99q1ys',
   notes: 'long_text_mm99wj3g',
+  referredBy: 'text_mm99kje9',
 };
 
 const clean = (v) => String(v == null ? '' : v).replace(/\s+/g, ' ').trim();
@@ -54,6 +55,10 @@ function buildColumnValues(d) {
   if (/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
     values[COL.email] = { email, text: email };
   }
+
+  // The member who referred them, from the referral link or typed on the form.
+  const referredBy = clean(d['referred-by']).slice(0, 120);
+  if (referredBy) values[COL.referredBy] = referredBy;
 
   const notes = String(d.notes == null ? '' : d.notes).trim();
   if (notes) values[COL.notes] = { text: notes };
