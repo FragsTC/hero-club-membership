@@ -204,9 +204,13 @@
   .seg input:focus-visible + span { outline: 3px solid var(--gold-light); outline-offset: 2px; }
 
   /* home size: asked once, before the tiers, because it is a fact about the house */
-  .seg--size { max-width: 360px; margin: 20px auto 0; background: rgba(255,255,255,0.05); box-shadow: inset 0 0 0 1px var(--line); }
+  .size-label { display: block; text-align: center; margin-top: 20px; font-size: 0.8125rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-3); }
+  .size-error { text-align: center; margin-top: 8px; font-size: 0.875rem; }
+  .seg.none::before { opacity: 0; }
+  .seg--size.attention { box-shadow: inset 0 0 0 2px var(--error); }
+  .seg--size { --n: 3; max-width: 420px; margin: 8px auto 0; background: rgba(255,255,255,0.05); box-shadow: inset 0 0 0 1px var(--line); }
   .seg--size::before { background: rgba(255,255,255,0.14); box-shadow: inset 0 1px 0 rgba(255,255,255,0.18); }
-  .seg--size span { font-size: 0.875rem; min-height: 40px; padding: 4px 6px; }
+  .seg--size span { font-size: 0.875rem; min-height: 44px; padding: 4px 4px; }
   .seg--size input:checked + span { color: var(--white); font-weight: 600; }
 
   /* tiers: the main switch. White is reserved for this one selected thing. */
@@ -277,6 +281,10 @@
   .plan-price { padding: 22px 0 0; line-height: 1; font-variant-numeric: tabular-nums; }
   .plan-amount { font-family: var(--font-display); font-size: 4.75rem; font-weight: 700; letter-spacing: 0.5px; text-shadow: 0 0 34px rgba(255,255,255,0.28); }
   .plan-unit { font-size: 1.0625rem; font-weight: 500; color: var(--text-2); }
+  .plan-price.is-text .plan-amount { font-size: 2.25rem; letter-spacing: 0.2px; text-transform: uppercase; text-shadow: none; }
+  .plan-price.is-text .plan-unit { display: none; }
+  .plan-price.is-text .plan-deposit { font-size: 1rem; line-height: 1.4; max-width: 30ch; }
+  .plan-price.is-wait .plan-amount { color: var(--text-2); }
   .plan-deposit { display: block; font-size: 0.9375rem; color: var(--text-2); margin-top: 10px; }
 
   .plan-list { list-style: none; display: flex; flex-direction: column; gap: 15px; margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--line); }
@@ -499,6 +507,7 @@
     .plan-visits { font-size: 0.8125rem; flex-basis: 100%; }
     .plan-body { padding: 16px 14px 18px; }
     .plan-amount { font-size: 3.25rem; }
+    .plan-price.is-text .plan-amount { font-size: 1.625rem; }
     .plan-unit { font-size: 0.9375rem; }
     .plan-list { gap: 12px; margin-top: 18px; padding-top: 18px; }
     .plan-list li { font-size: 0.9375rem; padding-left: 28px; }
@@ -508,7 +517,8 @@
     .app { padding-left: 12px; padding-right: 12px; }
     .plan-body { padding: 18px 16px 20px; }
     .plan-amount { font-size: 4rem; }
-    .seg--size span { font-size: 0.8125rem; }
+    .seg--size span { font-size: 0.75rem; }
+    .plan-price.is-text .plan-amount { font-size: 1.875rem; }
     .plan-save, .plan-tag { font-size: 0.75rem; padding: 8px 10px; }
     .plan-visits { font-size: 0.8125rem; }
     .screen-title { font-size: 2.125rem; }
@@ -545,11 +555,13 @@
     <!-- 1 · TIER -->
     <section class="screen" id="screen-tier" data-step="1" aria-labelledby="t-tier" hidden>
       <h1 class="screen-title" id="t-tier" tabindex="-1"><em>Welcome to the</em> Hero Club</h1>
-      <span class="visually-hidden" id="sizeLabel">Home size</span>
-      <div class="seg seg--size" id="segSize" role="radiogroup" aria-labelledby="sizeLabel">
-        <label><input type="radio" name="size-choice" value="s" checked><span>Up to 2,500 sq ft</span></label>
-        <label><input type="radio" name="size-choice" value="m"><span>2,501 to 3,500 sq ft</span></label>
+      <span class="size-label" id="sizeLabel">Your home size, in square feet</span>
+      <div class="seg seg--size none" id="segSize" role="radiogroup" aria-labelledby="sizeLabel" aria-describedby="sizeError">
+        <label><input type="radio" name="size-choice" value="s"><span>Up to 2,500</span></label>
+        <label><input type="radio" name="size-choice" value="m"><span>2,501 to 3,500</span></label>
+        <label><input type="radio" name="size-choice" value="l"><span>Over 3,500</span></label>
       </div>
+      <p class="field-error size-error" id="sizeError" role="alert" hidden>Choose your home size to continue.</p>
 
       <span class="visually-hidden" id="tierLabel">Tier</span>
       <div class="seg seg--tier" id="segTier" role="radiogroup" aria-labelledby="tierLabel">
@@ -800,7 +812,8 @@ var TIERS = {
   }
 };
 var ORDER = ['bronze', 'silver', 'gold'];
-var HOME_SIZES = { s: 'up to 2,500 sq ft', m: '2,501 to 3,500 sq ft' };
+var HOME_SIZES = { s: 'up to 2,500 sq ft', m: '2,501 to 3,500 sq ft', l: 'over 3,500 sq ft' };
+var SIZE_ORDER = ['s', 'm', 'l'];
 
 var FIELDS = [
   { id: 'custName',    required: true, msg: 'Enter your full name.' },
@@ -816,15 +829,17 @@ function $(id) { return document.getElementById(id); }
 function each(list, fn) { Array.prototype.forEach.call(list, fn); }
 function reducedMotion() { return window.matchMedia('(prefers-reduced-motion: reduce)').matches; }
 
-var state = { step: 0, tier: 'silver', size: 's', addons: [], sent: false, sending: false };
+var state = { step: 0, tier: 'silver', size: null, addons: [], sent: false, sending: false };
 var lastMessage = null;
 var form = $('leadForm');
 var dialog = $('emailFallback');
 var SCREENS = ['screen-landing', 'screen-tier', 'screen-addons', 'screen-details'];
 var LAST = SCREENS.length - 1;
 
-function price() { return TIERS[state.tier].price[state.size]; }
-function priceText() { var p = price(); return '$' + p[0] + '/month after $' + p[1] + ' deposit'; }
+// Homes over 3,500 sq ft have no published price: they get a custom plan.
+function isCustom() { return state.size === 'l'; }
+function price() { return TIERS[state.tier].price[state.size] || null; }
+function priceText() { var p = price(); return p ? '$' + p[0] + '/month after $' + p[1] + ' deposit' : 'Custom plan, to be quoted'; }
 
 /* ── landing reel ──
    To use job photos: put the files in a "photos" folder next to this page and
@@ -904,7 +919,7 @@ function buildCards() {
     inner.appendChild(body); root.appendChild(tab); root.appendChild(inner); wrap.appendChild(root);
     // on phones only one card shows and the tabs choose; a click here would undo a swipe
     root.addEventListener('click', function() { if (isWide()) setTier(id); });
-    cards[id] = { root: root, body: body, amount: amount, deposit: deposit, terms: terms, shown: null };
+    cards[id] = { root: root, body: body, price: price, amount: amount, deposit: deposit, terms: terms, shown: null };
   });
 }
 
@@ -925,11 +940,25 @@ function roll(card, to) {
 
 function renderPlan(direction) {
   ORDER.forEach(function(id) {
-    var c = cards[id], p = TIERS[id].price[state.size];
+    var c = cards[id], p = state.size ? TIERS[id].price[state.size] : null;
     c.root.classList.toggle('is-active', id === state.tier);
-    roll(c, p[0]);
-    c.deposit.textContent = 'after $' + p[1] + ' deposit';
-    c.terms.textContent = 'Prices for homes ' + HOME_SIZES[state.size] + '. 12-month agreement.';
+    c.price.classList.toggle('is-text', !p);
+    c.price.classList.toggle('is-wait', !state.size);
+    if (p) {
+      roll(c, p[0]);
+      c.deposit.textContent = 'after $' + p[1] + ' deposit';
+      c.terms.textContent = 'Prices for homes ' + HOME_SIZES[state.size] + '. 12-month agreement.';
+    } else if (isCustom()) {
+      c.shown = null;
+      c.amount.textContent = 'Custom plan';
+      c.deposit.textContent = "Homes over 3,500 sq ft get a plan built for them. We'll give you your price when we reach out.";
+      c.terms.textContent = 'Larger homes are priced individually.';
+    } else {
+      c.shown = null;
+      c.amount.textContent = 'Your price';
+      c.deposit.textContent = 'Choose your home size above to see it.';
+      c.terms.textContent = 'Prices depend on home size. 12-month agreement.';
+    }
   });
   $('segTier').style.setProperty('--i', ORDER.indexOf(state.tier));
   if (direction && !reducedMotion() && !isWide()) {
@@ -957,7 +986,9 @@ each(document.querySelectorAll('input[name="tier-choice"]'), function(r) {
 each(document.querySelectorAll('input[name="size-choice"]'), function(r) {
   r.addEventListener('change', function() {
     state.size = r.value;
-    $('segSize').style.setProperty('--i', r.value === 's' ? 0 : 1);
+    $('segSize').style.setProperty('--i', SIZE_ORDER.indexOf(r.value));
+    $('segSize').classList.remove('none', 'attention');
+    $('sizeError').hidden = true;
     renderPlan(0);
   });
 });
@@ -1003,8 +1034,8 @@ function renderAddons() {
 function renderSummary() {
   var t = TIERS[state.tier], p = price();
   $('sumTier').textContent = t.name;
-  $('sumPrice').textContent = '$' + p[0] + '/mo';
-  $('sumLine').textContent = t.visits + ' visits per year · home ' + HOME_SIZES[state.size] + ' · after $' + p[1] + ' deposit';
+  $('sumPrice').textContent = p ? '$' + p[0] + '/mo' : 'Custom plan';
+  $('sumLine').textContent = t.visits + ' visits per year · home ' + HOME_SIZES[state.size] + ' · ' + (p ? 'after $' + p[1] + ' deposit' : "we'll give you your price when we confirm");
   $('sumAddons').textContent = state.addons.length ? 'Add-ons: ' + state.addons.join(', ') + ". We'll give you a price for these when we confirm." : 'No add-ons';
   $('fieldTier').value = t.name + ' (' + t.visits + ' visits/year)';
   $('fieldHomeSize').value = HOME_SIZES[state.size];
@@ -1065,6 +1096,14 @@ $('btnEditTier').addEventListener('click', function() { history.go(-2); });
 $('btnEditAddons').addEventListener('click', function() { history.back(); });
 $('btnNext').addEventListener('click', function() {
   if (state.sent) { startOver(); return; }
+  if (state.step === 1 && !state.size) {
+    // prices depend on home size, so it has to be chosen before moving on
+    $('sizeError').hidden = false;
+    $('segSize').classList.add('attention');
+    $('segSize').scrollIntoView({ behavior: reducedMotion() ? 'auto' : 'smooth', block: 'center' });
+    document.querySelector('input[name="size-choice"]').focus({ preventScroll: true });
+    return;
+  }
   if (state.step < LAST) { go(state.step + 1); return; }
   submitLead();
 });
@@ -1106,8 +1145,8 @@ function buildMessage() {
   body += 'Address: ' + fieldValue('custAddress') + '\n';
   body += '         ' + cityLine + '\n\n';
   body += 'Tier: ' + t.name + ' (' + t.visits + ' visits/year)\n';
-  body += 'Home size: ' + HOME_SIZES[state.size] + '\n';
-  body += 'Price: ' + priceText() + ', 12-month agreement\n';
+  body += 'Home size: ' + HOME_SIZES[state.size] + (isCustom() ? ' (CUSTOM PLAN: needs a quote)' : '') + '\n';
+  body += 'Price: ' + (isCustom() ? 'custom plan, to be quoted. Customer was told we will give the price when we confirm.' : priceText() + ', 12-month agreement') + '\n';
   body += 'Services included:\n';
   t.email.forEach(function(s) { body += '  • ' + s + '\n'; });
   if (state.addons.length) {
@@ -1198,7 +1237,10 @@ $('btnCopyEmail').addEventListener('click', function() {
 function showSent() {
   state.sent = true;
   var first = fieldValue('custName').split(' ')[0];
-  $('sentDetail').textContent = 'Thanks, ' + first + '. Window Hero will reach out to confirm your ' + TIERS[state.tier].name + ' plan and schedule' + (state.addons.length ? ', and to give you a price for your add-ons.' : '.');
+  var owed = [];
+  if (isCustom()) owed.push('your custom plan price');
+  if (state.addons.length) owed.push('a price for your add-ons');
+  $('sentDetail').textContent = 'Thanks, ' + first + '. Window Hero will reach out to confirm your ' + TIERS[state.tier].name + ' plan and schedule' + (owed.length ? ', and to give you ' + owed.join(' and ') + '.' : '.');
   SCREENS.forEach(function(id) { $(id).hidden = true; });
   var s = $('screen-sent');
   s.hidden = false;
@@ -1216,11 +1258,13 @@ function showSent() {
 function startOver() {
   form.reset();
   FIELDS.forEach(function(f) { clearError(f.id); });
-  state = { step: 0, tier: 'silver', size: 's', addons: [], sent: false, sending: false };
+  state = { step: 0, tier: 'silver', size: null, addons: [], sent: false, sending: false };
   lastMessage = null;
   document.querySelector('input[name="tier-choice"][value="silver"]').checked = true;
-  document.querySelector('input[name="size-choice"][value="s"]').checked = true;
-  $('segSize').style.setProperty('--i', 0);
+  each(document.querySelectorAll('input[name="size-choice"]'), function(r) { r.checked = false; });
+  $('segSize').classList.add('none');
+  $('segSize').classList.remove('attention');
+  $('sizeError').hidden = true;
   history.replaceState({ step: 0 }, '');
   renderPlan(0);
   show(0, -1);
