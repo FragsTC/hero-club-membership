@@ -30,6 +30,8 @@ def main():
 
     emails = {}
     for path in sorted(glob.glob(os.path.join(HERE, "emails", "*.html"))):
+        if os.path.basename(path).startswith("test-"):
+            continue   # internal shortcode tests, not customer emails
         with open(path, encoding="utf-8") as f:
             emails[os.path.basename(path)[:-5]] = f.read()
 

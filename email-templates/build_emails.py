@@ -891,6 +891,63 @@ def hero_club_referral_welcome():
                 b, footer("Questions about your membership? We&rsquo;re here to help."))
 
 
+# ---------- Shortcode test emails ----------
+#
+# Not for customers. Each lists shortcodes by name next to the real shortcode,
+# so one test send shows which ones ServiceMinder fills in for that template
+# type. A name is written with &#123; and &#125; so it is never replaced.
+
+TESTS = {
+    "contact": ("Any template type (ad hoc, contact)",
+                ["contact.first_name", "fullserviceaddress", "organization.name", "organization.phone",
+                 "organization.email", "contact.schedule_url", "contact.update_payment_url",
+                 "contact.next_appointment_link", "contact.next_appointment_date",
+                 "contact.next_appointment_time", "contact.next_appointment_summary",
+                 "unsubscribe.url", "unsubscribe_url"]),
+    "proposal": ("A proposal template (ad hoc proposal type, Contact Proposal, Proposal Reminder)",
+                 ["proposal.title", "proposal.parts_list", "proposal.total", "proposal.deposit_amount",
+                  "proposal.balance_due", "proposal.expiration-date|short_date", "proposal.url",
+                  "proposal.pdf_url", "proposal.owner_name", "contact.first_name", "fullserviceaddress"]),
+    "appointment": ("An appointment template (ad hoc appointment type, Appointment Confirmation, Appointment Complete, Service Agent En Route)",
+                    ["appointment.date", "appointment.duration", "appointment.parts_list",
+                     "appointment.actualfinish", "appointment.arrival_time", "drivetime",
+                     "service_agent.name", "service_agent.names", "appointment.confirm_url",
+                     "appointment.ical_download_url", "appointment.tracking_url",
+                     "contact.first_name", "fullserviceaddress"]),
+    "invoice": ("An invoice template (Contact Invoice, Contact Receipt)",
+                ["url", "invoice.number", "invoice.date", "invoice.parts_list", "invoice.total",
+                 "invoice.balancedue", "invoice.latest_payment_amount", "invoice.total_paid",
+                 "invoice.pdf_url", "receipt_message", "contact.first_name"]),
+    "installment-failure": ("The Installment Payment Failure template",
+                            ["installment_payment_amount", "installment_payment_date", "failure_reason",
+                             "installment_payment_retry_message", "update_payment_url",
+                             "contact.first_name", "contact.update_payment_url"]),
+}
+
+
+def shortcode_test(kind):
+    def build():
+        where, codes = TESTS[kind]
+        cell = ('style="padding:8px 10px; border-bottom:1px solid #d9e2ec; ' + FONT +
+                ' font-size:14px; line-height:1.4; color:' + NAVY + '; text-align:left; word-break:break-word;"')
+        rows = ""
+        for c in codes:
+            rows += ('<tr><td width="48%" valign="top" ' + cell + '>&#123;' + c + '&#125;</td>'
+                     '<td valign="top" ' + cell + '>{' + c + '}</td></tr>')
+        b = hero("Shortcode Test",
+                 "Internal test. Do not send to customers. Paste into: " + where + ".")
+        b += card(
+            heading("What ServiceMinder Filled In", mb=8) +
+            p("Left: the shortcode. Right: what ServiceMinder put there. If the right side still shows the "
+              "shortcode in braces, or is blank, that shortcode does not work in this template type.",
+              mb=14, size=14) +
+            '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">' + rows + '</table>',
+            "#ffffff", border="#d9e2ec")
+        return page("Shortcode test: " + kind, "Internal shortcode test.", b,
+                    footer("Internal test email."))
+    return build
+
+
 if __name__ == "__main__":
     here = os.path.dirname(os.path.abspath(__file__))
     out = os.path.join(here, "emails")
@@ -918,7 +975,12 @@ if __name__ == "__main__":
                      ("hero-club-referral-invite.html", hero_club_referral_invite),
                      ("hero-club-referral-named.html", hero_club_referral_named),
                      ("hero-club-referral-credit.html", hero_club_referral_credit),
-                     ("hero-club-referral-welcome.html", hero_club_referral_welcome)]:
+                     ("hero-club-referral-welcome.html", hero_club_referral_welcome),
+                     ("test-shortcodes-contact.html", shortcode_test("contact")),
+                     ("test-shortcodes-proposal.html", shortcode_test("proposal")),
+                     ("test-shortcodes-appointment.html", shortcode_test("appointment")),
+                     ("test-shortcodes-invoice.html", shortcode_test("invoice")),
+                     ("test-shortcodes-installment-failure.html", shortcode_test("installment-failure"))]:
         html = fn()
         with open(os.path.join(out, name), "w", encoding="utf-8") as f:
             f.write(html)

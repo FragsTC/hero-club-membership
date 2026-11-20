@@ -92,6 +92,27 @@ The other emails need nothing typed in.
   the old one, paste the new file over it.
 - Nothing else was changed.
 
+## Testing the shortcodes
+
+Five files in `emails/` starting with `test-shortcodes-` are for you, not for
+customers. Each lists shortcodes by name beside what ServiceMinder fills in.
+
+| File | Paste it into | Send it from |
+|---|---|---|
+| `test-shortcodes-contact.html` | A new ad hoc template | Any contact |
+| `test-shortcodes-proposal.html` | A new ad hoc proposal template | A Hero Club test proposal |
+| `test-shortcodes-appointment.html` | A new ad hoc appointment template | A finished test appointment |
+| `test-shortcodes-invoice.html` | A copy of the Contact Invoice template | A test invoice |
+| `test-shortcodes-installment-failure.html` | The Installment Payment Failure template | A failed test installment |
+
+Send each to yourself. Any row whose right-hand side is blank or still shows
+the shortcode in braces does not work in that template type. Send us the
+results and we will correct the templates. The contact test includes both
+spellings of the unsubscribe link, which settles which one to use. The
+proposal test shows what `{proposal.deposit_amount}` gives on an unsigned
+proposal; if it is the down payment, the follow-up email can fill that in
+automatically.
+
 ## If a plan changes
 
 The welcome emails read what each plan includes from the signup page

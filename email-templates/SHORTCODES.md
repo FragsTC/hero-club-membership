@@ -5,6 +5,16 @@ Collected on 2026-11-18 from ServiceMinder's help pages:
 - Shortcodes: https://serviceminder.knowledgeowl.com/help/shortcodes
 - Automated email templates: https://serviceminder.knowledgeowl.com/help/automated-email-templates
 
+**Re-checked on 2026-11-20** against the live shortcodes page: 44 of the 45
+shortcodes used across the 24 templates appear there exactly as written. The
+one that does not is `{unsubscribe.url}`; the page lists `{unsubscribe_url}`.
+The page has no shortcode for a proposal's monthly payment-plan amount, and
+gives no description for `{proposal.deposit_amount}` (it is listed with the
+deposit date and payment method, which suggests the deposit already paid).
+
+Being on the list does not prove a shortcode fills in for a given template
+type. Send the `test-shortcodes-*.html` emails to find out.
+
 This is a summary of those pages, not a guarantee. The source page is inconsistent in places (for example `scheduled_start` and `scheduled-start` both appear). **The safest source is the shortcode picker inside ServiceMinder itself.** Never invent a shortcode; a wrong one prints as literal text in the customer's email.
 
 ## The scoping rule
