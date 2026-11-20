@@ -45,7 +45,6 @@ including the brackets. Before you press send, search the email for `[`.
 
 | Email | Blanks |
 |---|---|
-| 2. Proposal follow-up | `[MONTHLY CHARGE]`, `[DOWN PAYMENT]` |
 | 6. Payment still unpaid | `[AMOUNT]`, `[DATE DUE]`, `[END DATE]` (30 days after the date due) |
 | 7. Renewal notice | `[PLAN]`, `[RENEWAL DATE]` (three places, plus the subject), `[NEW DOWN PAYMENT]`, `[NEW MONTHLY CHARGE]`, `[CURRENT MONTHLY CHARGE]` |
 | 8. Cancellation | `[END DATE]`, `[SERVICES RECEIVED AMOUNT]`, `[AMOUNT PAID]`, `[BALANCE DUE OR $0]` |
@@ -110,8 +109,7 @@ the shortcode in braces does not work in that template type. Send us the
 results and we will correct the templates. The contact test includes both
 spellings of the unsubscribe link, which settles which one to use. The
 proposal test shows what `{proposal.deposit_amount}` gives on an unsigned
-proposal; if it is the down payment, the follow-up email can fill that in
-automatically.
+proposal.
 
 ## If a plan changes
 

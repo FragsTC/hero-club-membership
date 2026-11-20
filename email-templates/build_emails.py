@@ -645,15 +645,10 @@ def hero_club_welcome(tier_id):
 # ---------- HC 2. Proposal follow-up (ad hoc, proposal type) ----------
 
 def hero_club_proposal_follow_up():
-    b = greeting() + intro("We wanted to follow up on your Hero Club membership. Your spot is still open, and we&rsquo;re happy to answer any questions before you join.")
-    b += summary("Your Membership at a Glance",
-                 [("Property", "{fullserviceaddress}"),
-                  ("Plan", "{proposal.parts_list}"),
-                  ("Monthly Charge", fillin("MONTHLY CHARGE") + " a month")],
-                 note="After a down payment of " + fillin("DOWN PAYMENT") + " when you join. Your membership is 12 monthly charges, and your price is locked for the year.")
+    b = greeting() + intro("We wanted to follow up on the Hero Club membership we put together for your home. It&rsquo;s still open, and we&rsquo;re happy to answer any questions before you join.")
     b += card(
         heading("Your Hero Club Membership Is Ready", size=28, color="#ffffff", mb=14, tag="h1", cls="h1") +
-        p("Review your membership agreement and join online. It only takes a few minutes.", mb=24, color="#ffffff", size=17, lh=1.7) +
+        p("Open your Hero Club membership to see your plan, your price and the agreement, and join online. It only takes a few minutes.", mb=24, color="#ffffff", size=17, lh=1.7) +
         button("{proposal.url}", "Review &amp; Join") +
         '<p style="margin:18px 0 0 0; color:#ffffff; font-size:13px;">No login required.</p>',
         NAVY, align="center", color="#ffffff")
