@@ -19,6 +19,22 @@ What the office does once ServiceMinder is set up
 6. Schedule the year's visits and tell the customer the seasons to expect
    them.
 
+### One-time board setup
+
+The **Signed on** and **Renewal notice sent** date columns are already on
+the board. Two things are left to do by hand:
+
+1. **Add three status labels.** Click any Status cell, choose **Edit
+   Labels**, and add `Active`, `Not renewing` and `Cancelled`. Leave `New`
+   as it is; the signup page uses it.
+2. **Add the renewal reminder.** Click **Automate** at the top of the board,
+   choose the template "When date arrives, notify someone", set the date
+   column to **Signed on**, set it to fire 330 days after the date, and
+   notify the board owner. That is 35 days before the anniversary. If
+   monday.com will not accept 330 days, add a date column called
+   **Renewal date**, fill it in with the anniversary when you set **Signed
+   on**, and set the reminder to 35 days before that date.
+
 **Signed on** is what every date below is counted from. If it is blank, the
 renewal reminder cannot fire.
 
