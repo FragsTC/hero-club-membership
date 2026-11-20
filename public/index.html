@@ -253,9 +253,9 @@
     transform: rotate(8deg); animation: stage-sheen 7s ease-in-out infinite; pointer-events: none;
   }
   @keyframes stage-sheen { 0%, 55% { left: -60%; } 100% { left: 130%; } }
-  .stage-art { position: relative; height: 200px; }
+  .stage-art { position: relative; height: 230px; }
   .stage-art svg { position: relative; display: block; width: 100%; height: 100%; overflow: visible; }
-  .stage-art canvas { display: none; position: absolute; top: -14px; left: -18px; width: calc(100% + 36px); height: calc(100% + 20px); touch-action: pan-y; cursor: grab; transition: opacity 0.5s; }
+  .stage-art canvas { display: none; position: absolute; top: -14px; left: -18px; width: calc(100% + 36px); height: calc(100% + 24px); touch-action: pan-y; cursor: grab; transition: opacity 0.5s; }
   .stage-art canvas:active { cursor: grabbing; }
   .stage.gl .stage-art canvas { display: block; }
   .stage.gl .stage-art svg { display: none; }
@@ -1275,14 +1275,14 @@ var wakeHouse = function() {};
   try { gl = cv.getContext('webgl', { antialias: true, alpha: true, premultipliedAlpha: true }); } catch (e) {}
   if (!gl) return;
 
-  var V = [];
+  var V = [], GRP = 0, PIV = null;
   function sub(a, b) { return [a[0]-b[0], a[1]-b[1], a[2]-b[2]]; }
   function cross(a, b) { return [a[1]*b[2]-a[2]*b[1], a[2]*b[0]-a[0]*b[2], a[0]*b[1]-a[1]*b[0]]; }
   function dot(a, b) { return a[0]*b[0]+a[1]*b[1]+a[2]*b[2]; }
   function norm(a) { var l = Math.sqrt(dot(a, a)) || 1; return [a[0]/l, a[1]/l, a[2]/l]; }
   function hex(h) { return [parseInt(h.substr(1,2),16)/255, parseInt(h.substr(3,2),16)/255, parseInt(h.substr(5,2),16)/255]; }
-  function vert(p, n, c, part, kind) { V.push(p[0],p[1],p[2], n[0],n[1],n[2], c[0],c[1],c[2], part, kind); }
-  // kind: 0 plain, 1 window glass, 2 ground disc, 3 siding, 4 shingles
+  function vert(p, n, c, part, kind) { var v = PIV || p; V.push(p[0],p[1],p[2], n[0],n[1],n[2], c[0],c[1],c[2], part, kind, v[0],v[1],v[2], GRP); }
+  // kind: 0 plain, 1 glowing glass, 2 lawn, 3 siding, 4 shingles (ridge along x), 5 pavers, 6 brick, 7 shingles (ridge along y)
   function tri(a, b, c, col, part, kind, inside) {
     var n = norm(cross(sub(b, a), sub(c, a)));
     if (inside && dot(n, sub(a, inside)) < 0) n = [-n[0], -n[1], -n[2]];
@@ -1297,110 +1297,172 @@ var wakeHouse = function() {};
     quad([x1,y1,z1],[x1,y2,z1],[x1,y2,z2],[x1,y1,z2], col, part, kind, m);
     quad([x1,y1,z2],[x2,y1,z2],[x2,y2,z2],[x1,y2,z2], col, part, kind, m);
   }
-  function prism(q, th, top, edge, part) {
+  function prism(q, th, top, edge, part, kind) {
     var t = q.map(function(p) { return [p[0], p[1], p[2] + th]; });
     var m = [0,0,0]; q.concat(t).forEach(function(p) { m[0]+=p[0]/8; m[1]+=p[1]/8; m[2]+=p[2]/8; });
-    quad(t[0],t[1],t[2],t[3], top, part, 4, m);
+    quad(t[0],t[1],t[2],t[3], top, part, kind, m);
     quad(q[0],q[1],q[2],q[3], edge, part, 0, m);
     for (var i = 0; i < 4; i++) { var j = (i+1) % 4; quad(q[i],q[j],t[j],t[i], edge, part, 0, m); }
   }
-  var WALL = hex('#eef2f7'), ROOF = hex('#0075aa'), EDGE = hex('#00456f'), NAVY = hex('#003b64'), WHITE = hex('#ffffff'), GLASS = hex('#fcaf17');
+  var WALL = hex('#f1f4f8'), ROOF = hex('#0075aa'), EDGE = hex('#00456f'), NAVY = hex('#003b64'), WHITE = hex('#ffffff'), GLASS = hex('#fcaf17'),
+      PATH = hex('#cfd7e2'), G1 = hex('#2f8f68'), G2 = hex('#237456'), G3 = hex('#3aa277'), PINE = hex('#1d6a55'), TRUNK = hex('#4a4038'),
+      GD = hex('#e3e8ef'), GLN = hex('#a9b8cc'), BRICK = hex('#a4614a'), MULCH = hex('#3a2f2a'), SKY = hex('#009bd8'), STEEL = hex('#c7d0dc');
   // gabled block. swap=false: ridge runs along x. swap=true: ridge runs along y.
   function gable(u1, u2, v1, v2, h, r, part, roofPart, swap) {
     function P(u, v, z) { return swap ? [v, u, z] : [u, v, z]; }
-    var vm = (v1+v2)/2, um = (u1+u2)/2, mid = P(um, vm, h/2), ov = 2.5, th = 1.4, ze = h - ov * r / ((v2-v1)/2);
+    var vm = (v1+v2)/2, um = (u1+u2)/2, mid = P(um, vm, h/2), ov = 2.5, th = 1.4, ze = h - ov * r / ((v2-v1)/2), k = swap ? 7 : 4;
     quad(P(u1,v2,0),P(u2,v2,0),P(u2,v2,h),P(u1,v2,h), WALL, part, 3, mid);
     quad(P(u1,v1,0),P(u2,v1,0),P(u2,v1,h),P(u1,v1,h), WALL, part, 3, mid);
     [u1, u2].forEach(function(u) {
       quad(P(u,v1,0),P(u,v2,0),P(u,v2,h),P(u,v1,h), WALL, part, 3, mid);
       tri(P(u,v1,h),P(u,v2,h),P(u,vm,h+r), WALL, part, 3, mid);
     });
-    prism([P(u1-ov,v2+ov,ze),P(u2+ov,v2+ov,ze),P(u2+ov,vm,h+r),P(u1-ov,vm,h+r)], th, ROOF, EDGE, roofPart);
-    prism([P(u1-ov,v1-ov,ze),P(u2+ov,v1-ov,ze),P(u2+ov,vm,h+r),P(u1-ov,vm,h+r)], th, ROOF, EDGE, roofPart);
+    prism([P(u1-ov,v2+ov,ze),P(u2+ov,v2+ov,ze),P(u2+ov,vm,h+r),P(u1-ov,vm,h+r)], th, ROOF, EDGE, roofPart, k);
+    prism([P(u1-ov,v1-ov,ze),P(u2+ov,v1-ov,ze),P(u2+ov,vm,h+r),P(u1-ov,vm,h+r)], th, ROOF, EDGE, roofPart, k);
+    // ridge cap, and white gutters along both eaves
+    var a = P(u1-ov, vm-0.9, h+r+th-0.3), b = P(u2+ov, vm+0.9, h+r+th+0.5);
+    box(Math.min(a[0],b[0]), Math.max(a[0],b[0]), Math.min(a[1],b[1]), Math.max(a[1],b[1]), a[2], b[2], EDGE, roofPart, 0);
+    [[v2+ov, v2+ov+1.1], [v1-ov-1.1, v1-ov]].forEach(function(g) {
+      var c = P(u1-ov, g[0], ze-0.9), d = P(u2+ov, g[1], ze+0.3);
+      box(Math.min(c[0],d[0]), Math.max(c[0],d[0]), Math.min(c[1],d[1]), Math.max(c[1],d[1]), c[2], d[2], WHITE, roofPart, 0);
+    });
   }
-  // windows: white frame, glowing glass, navy mullion. ax 'y' = on a wall facing ±y, 'x' = facing ±x
-  function win(ax, at, s, a1, a2, z1, z2, part) {
+  // windows: white frame and sill, glowing glass, navy mullions, optional shutters
+  function win(ax, at, s, a1, a2, z1, z2, part, shut) {
     function P(a, z, o) { return ax === 'y' ? [a, at + s*o, z] : [at + s*o, a, z]; }
-    var ins = ax === 'y' ? [(a1+a2)/2, at - s*5, (z1+z2)/2] : [at - s*5, (a1+a2)/2, (z1+z2)/2], am = (a1+a2)/2;
-    quad(P(a1-1,z1-1,.25),P(a2+1,z1-1,.25),P(a2+1,z2+1,.25),P(a1-1,z2+1,.25), WHITE, part, 0, ins);
-    quad(P(a1,z1,.45),P(a2,z1,.45),P(a2,z2,.45),P(a1,z2,.45), GLASS, part, 1, ins);
-    quad(P(am-.3,z1,.6),P(am+.3,z1,.6),P(am+.3,z2,.6),P(am-.3,z2,.6), NAVY, part, 0, ins);
+    var ins = ax === 'y' ? [(a1+a2)/2, at - s*5, (z1+z2)/2] : [at - s*5, (a1+a2)/2, (z1+z2)/2], am = (a1+a2)/2, zm = (z1+z2)/2;
+    function q(b1, b2, c1, c2, o, col, k) { quad(P(b1,c1,o),P(b2,c1,o),P(b2,c2,o),P(b1,c2,o), col, part, k, ins); }
+    q(a1-1, a2+1, z1-1, z2+1, .25, WHITE, 0);
+    q(a1, a2, z1, z2, .45, GLASS, 1);
+    q(am-.3, am+.3, z1, z2, .6, NAVY, 0); q(a1, a2, zm-.25, zm+.25, .6, NAVY, 0);
+    q(a1-1.6, a2+1.6, z1-2, z1-1, .9, WHITE, 0);
+    if (shut) { q(a1-4.2, a1-1.3, z1-1, z2+1, .35, NAVY, 0); q(a2+1.3, a2+4.2, z1-1, z2+1, .35, NAVY, 0); }
   }
-  function flat(x1, x2, y1, y2, z, col, part) { quad([x1,y1,z],[x2,y1,z],[x2,y2,z],[x1,y2,z], col, part, 0, [0,0,-50]); }
-  function blob(cx, cy, cz, r, sq, col, part) {
-    var N = 7, M = 4, c = [cx, cy, cz];
+  function flat(x1, x2, y1, y2, z, col, part, kind) { quad([x1,y1,z],[x2,y1,z],[x2,y2,z],[x1,y2,z], col, part, kind || 0, [0,0,-50]); }
+  function blob(cx, cy, cz, r, sq, col, part, N, M) {
+    N = N || 7; M = M || 4; var c = [cx, cy, cz];
     function pt(i, j) { var a = i/N*6.2832, b = j/M*3.1416; return [cx + r*Math.sin(b)*Math.cos(a), cy + r*Math.sin(b)*Math.sin(a), cz + r*sq*Math.cos(b)]; }
     for (var i = 0; i < N; i++) for (var j = 0; j < M; j++) quad(pt(i,j),pt(i+1,j),pt(i+1,j+1),pt(i,j+1), col, part, 0, c);
   }
+  function cone(cx, cy, z0, r, h, col) {
+    for (var i = 0; i < 8; i++) { var a = i/8*6.2832, b = (i+1)/8*6.2832; tri([cx+r*Math.cos(a),cy+r*Math.sin(a),z0],[cx+r*Math.cos(b),cy+r*Math.sin(b),z0],[cx,cy,z0+h], col, 5, 0, [cx,cy,z0]); }
+  }
+  // garden props grow out of the ground around their own base (PIV); GRP says which size brings them in
+  function prop(grp, x, y, fn) { GRP = grp; PIV = [x, y, 0]; fn(x, y); GRP = 0; PIV = null; }
+  function tree(x, y, s) { box(x-1*s, x+1*s, y-1*s, y+1*s, 0, 13*s, TRUNK, 5, 0); blob(x, y, 19*s, 9*s, 1, G1, 5); blob(x+3*s, y-2*s, 26*s, 6.5*s, 1, G3, 5); blob(x-4*s, y+2*s, 15*s, 6*s, 1, G2, 5); }
+  function pine(x, y, s) { box(x-.8*s, x+.8*s, y-.8*s, y+.8*s, 0, 5*s, TRUNK, 5, 0); cone(x, y, 4*s, 8*s, 12*s, PINE); cone(x, y, 11*s, 6.2*s, 11*s, G2); cone(x, y, 18*s, 4.2*s, 10*s, PINE); }
+  function bush(x, y, r) { blob(x, y, r*0.6, r, 0.8, G1, 5); blob(x+r*0.9, y-0.6, r*0.5, r*0.7, 0.8, G2, 5); }
+  function bed(x1, x2, y1, y2, part, seed) {
+    flat(x1, x2, y1, y2, 0.2, MULCH, part);
+    var cols = [GLASS, WHITE, SKY, GLASS, WHITE], n = Math.round((x2 - x1) / 2.6);
+    for (var i = 0; i < n; i++) {
+      var r = Math.sin((i + 1) * 12.9898 * seed) * 43758.5453; r -= Math.floor(r);
+      blob(x1 + 1.3 + i * 2.6, y1 + 1.2 + r * (y2 - y1 - 2.4), 1.5 + r, 1.15, 1, cols[i % 5], part, 5, 3);
+      blob(x1 + 1.3 + i * 2.6, y1 + 1.2 + r * (y2 - y1 - 2.4), 0.6, 1.3, 0.7, G2, part, 5, 3);
+    }
+  }
   // parts: 0 main, 1 main roof, 2 garage, 3 wing, 4 front gable, 5 fixed
   (function build() {
-    var i, N = 48;
-    for (i = 0; i < N; i++) { // ground disc (unit circle, placed in the shader)
+    var i, N = 56;
+    for (i = 0; i < N; i++) { // lawn (unit circle, placed and sized in the shader)
       var a = i/N*6.2832, b = (i+1)/N*6.2832;
       vert([0,0,0],[0,0,1],[0,0,0],5,2); vert([Math.cos(a),Math.sin(a),0],[0,0,1],[0,0,0],5,2); vert([Math.cos(b),Math.sin(b),0],[0,0,1],[0,0,0],5,2);
     }
-    var PATH = hex('#c9d3e0'), G1 = hex('#2f8f68'), G2 = hex('#237456'), TRUNK = hex('#3a4a5c'), GD = hex('#dfe5ee'), GL = hex('#a9b8cc');
     // main house
     gable(0, 64, 0, 46, 34, 15, 0, 1, false);
-    win('y', 46, 1, 7, 19, 11, 24, 0); win('y', 46, 1, 45, 57, 11, 24, 0);
+    win('y', 46, 1, 8, 19, 11, 24, 0, true); win('y', 46, 1, 45, 56, 11, 24, 0, true);
     win('y', 0, -1, 9, 21, 11, 24, 0); win('y', 0, -1, 43, 55, 11, 24, 0);
     win('x', 64, 1, 17, 29, 11, 24, 0); win('x', 64, 1, 19.5, 26.5, 35, 42, 0);
     win('x', 0, -1, 17, 29, 11, 24, 0); win('x', 0, -1, 19.5, 26.5, 35, 42, 0);
-    quad([26,46.3,0],[38,46.3,0],[38,46.3,21],[26,46.3,21], WHITE, 0, 0, [32,40,10]);
-    quad([27,46.5,0],[37,46.5,0],[37,46.5,20],[27,46.5,20], NAVY, 0, 0, [32,40,10]);
-    quad([34.6,46.7,9.4],[35.8,46.7,9.4],[35.8,46.7,10.6],[34.6,46.7,10.6], GLASS, 0, 0, [32,40,10]);
-    box(44, 50, 9, 15, 30, 57, WALL, 1, 3); box(43.2, 50.8, 8.2, 15.8, 57, 59, NAVY, 1, 0);
+    function door(y, part, top) {
+      var ins = [32, y - 6, 10];
+      quad([26,y+.3,0],[38,y+.3,0],[38,y+.3,top+1],[26,y+.3,top+1], WHITE, part, 0, ins);
+      quad([27,y+.5,0],[37,y+.5,0],[37,y+.5,top],[27,y+.5,top], NAVY, part, 0, ins);
+      quad([29,y+.65,top-6],[35,y+.65,top-6],[35,y+.65,top-2],[29,y+.65,top-2], GLASS, part, 1, ins);
+      quad([34.6,y+.7,9],[35.8,y+.7,9],[35.8,y+.7,10.2],[34.6,y+.7,10.2], GLASS, part, 0, ins);
+      box(24.5, 39.5, y, y + 4.5, 0, 1.3, PATH, part, 5);
+      [23.4, 39.6].forEach(function(x) { box(x, x + 1, y, y + 0.9, 13.5, 16, GLASS, part, 1); box(x - .2, x + 1.2, y, y + 1.1, 16, 16.5, NAVY, part, 0); });
+    }
+    door(46, 0, 20);
+    box(44, 50, 9, 15, 30, 58, BRICK, 1, 6); box(43.2, 50.8, 8.2, 15.8, 58, 59.6, STEEL, 1, 0);
+    box(61.6, 63, 46, 47.3, 0, 31, WHITE, 0, 0); box(1, 2.4, 46, 47.3, 0, 31, WHITE, 0, 0);
+    bed(2.5, 23, 46.6, 51.5, 0, 1.31); bed(41, 61.5, 46.6, 51.5, 0, 2.17);
     // garage + driveway
     gable(64, 102, 4, 42, 23, 11, 2, 2, false);
-    quad([70,42.3,0],[96,42.3,0],[96,42.3,18],[70,42.3,18], GD, 2, 0, [83,30,9]);
-    [4.5, 9, 13.5].forEach(function(z) { quad([70,42.45,z-.3],[96,42.45,z-.3],[96,42.45,z+.3],[70,42.45,z+.3], GL, 2, 0, [83,30,9]); });
+    quad([69,42.25,0],[97,42.25,0],[97,42.25,19],[69,42.25,19], WHITE, 2, 0, [83,30,9]);
+    quad([70,42.4,0],[96,42.4,0],[96,42.4,18],[70,42.4,18], GD, 2, 0, [83,30,9]);
+    [4.5, 9, 13.5].forEach(function(z) { quad([70,42.5,z-.3],[96,42.5,z-.3],[96,42.5,z+.3],[70,42.5,z+.3], GLN, 2, 0, [83,30,9]); });
+    [73, 79.4, 85.8, 92.2].forEach(function(x) { quad([x-1.8,42.55,14.3],[x+1.8,42.55,14.3],[x+1.8,42.55,17],[x-1.8,42.55,17], GLASS, 2, 1, [83,30,9]); });
     win('x', 102, 1, 17, 29, 9, 19, 2); win('y', 4, -1, 77, 89, 9, 19, 2);
-    flat(70, 96, 42, 72, 0.15, PATH, 2);
+    flat(69, 97, 42, 74, 0.15, PATH, 2, 5);
+    [67.2, 97.8].forEach(function(x) { box(x, x + 1, 42, 42.9, 12, 14.5, GLASS, 2, 1); });
     // left wing
     gable(-40, 0, 6, 42, 25, 12, 3, 3, false);
-    win('y', 42, 1, -33, -23, 9, 21, 3); win('y', 42, 1, -17, -7, 9, 21, 3);
+    win('y', 42, 1, -33, -24, 9, 21, 3, true); win('y', 42, 1, -16, -7, 9, 21, 3, true);
     win('y', 6, -1, -33, -23, 9, 21, 3); win('x', -40, -1, 18, 30, 9, 21, 3);
+    bed(-38, -2, 42.6, 47, 3, 3.3);
     // front gable (ridge along y, runs back into the main roof)
     gable(30, 60, 20, 44, 28, 9, 4, 4, true);
-    quad([26,60.3,0],[38,60.3,0],[38,60.3,20],[26,60.3,20], WHITE, 4, 0, [32,50,10]);
-    quad([27,60.5,0],[37,60.5,0],[37,60.5,19],[27,60.5,19], NAVY, 4, 0, [32,50,10]);
-    quad([34.6,60.7,9],[35.8,60.7,9],[35.8,60.7,10.2],[34.6,60.7,10.2], GLASS, 4, 0, [32,50,10]);
+    door(60, 4, 19);
     win('y', 60, 1, 29, 35, 24.5, 31, 4);
-    // garden
-    flat(27, 37, 46, 72, 0.15, PATH, 5);
-    blob(13, 52, 3.5, 5.5, 0.8, G1, 5); blob(51, 52, 3.5, 5.5, 0.8, G1, 5); blob(58.5, 51, 2.6, 3.8, 0.8, G2, 5); blob(5.5, 51, 2.6, 3.8, 0.8, G2, 5);
-    box(-13, -11, 61, 63, 0, 13, TRUNK, 5, 0); blob(-12, 62, 19, 9, 1, G1, 5); blob(-10, 60, 27, 6, 1, G2, 5);
+    // always there
+    flat(27, 37, 46, 74, 0.15, PATH, 5, 5);
+    prop(0, 12, 54, function(x, y) { bush(x, y, 4.6); }); prop(0, 52, 54, function(x, y) { bush(x, y, 4.6); });
+    prop(0, -9, 60, function(x, y) { tree(x, y, 0.95); });
+    prop(0, 60, -9, function(x, y) { pine(x, y, 1); });
+    prop(0, 45, 72, function(x, y) { box(x-.5, x+.5, y-.5, y+.5, 0, 7, WHITE, 5, 0); box(x-1.3, x+1.3, y-2.2, y+2.2, 7, 9.6, NAVY, 5, 0); box(x+1.3, x+1.7, y-.4, y+.4, 8, 11.5, GLASS, 5, 1); });
+    // arrive with the middle size
+    prop(1, 111, 54, function(x, y) { tree(x, y, 1.1); });
+    prop(1, 92, -14, function(x, y) { pine(x, y, 1.15); });
+    prop(1, 108, 30, function(x, y) { bush(x, y, 4.4); });
+    prop(1, 104, 12, function(x, y) { bush(x, y, 3.6); });
+    // arrive with the largest
+    prop(2, -50, 56, function(x, y) { pine(x, y, 1.2); });
+    prop(2, -44, 6, function(x, y) { tree(x, y, 1.15); });
+    prop(2, -48, 32, function(x, y) { bush(x, y, 4.2); });
+    prop(2, 10, -14, function(x, y) { pine(x, y, 0.9); });
+    prop(2, 4, 68, function(x, y) { bush(x, y, 3.6); });
   })();
 
   function sh(type, src) { var s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); return s; }
   var prog = gl.createProgram();
   gl.attachShader(prog, sh(gl.VERTEX_SHADER,
-    'attribute vec3 aPos,aNor,aCol;attribute float aPart,aKind;uniform mat4 uMVP;uniform vec3 uOff[6];uniform vec3 uDisc;' +
-    'varying vec3 vCol,vNor,vW;varying float vKind;varying vec2 vUnit;' +
-    'void main(){vec3 p=aPos+uOff[int(aPart+0.5)];vUnit=aPos.xy;if(aKind>1.5&&aKind<2.5)p=vec3(uDisc.xy+aPos.xy*uDisc.z,0.0);' +
+    'attribute vec3 aPos,aNor,aCol,aPiv;attribute float aPart,aKind,aGrp;uniform mat4 uMVP;uniform vec3 uOff[6];uniform vec3 uDisc;uniform vec3 uGrow;' +
+    'varying vec3 vCol,vNor,vW,vM;varying float vKind;varying vec2 vUnit;' +
+    'void main(){float g=aGrp<0.5?uGrow.x:(aGrp<1.5?uGrow.y:uGrow.z);vec3 p=aPiv+(aPos-aPiv)*g+uOff[int(aPart+0.5)];vUnit=aPos.xy;vM=aPos;' +
+    'if(aKind>1.5&&aKind<2.5)p=vec3(uDisc.xy+aPos.xy*uDisc.z,0.0);' +
     'vW=p;vCol=aCol;vNor=aNor;vKind=aKind;gl_Position=uMVP*vec4(p,1.0);}'));
   gl.attachShader(prog, sh(gl.FRAGMENT_SHADER,
-    'precision mediump float;varying vec3 vCol,vNor,vW;varying float vKind;varying vec2 vUnit;' +
-    'uniform float uLit,uGhost;uniform vec4 uSh;' +
-    'void main(){vec3 L=normalize(vec3(-0.45,0.6,0.72));float a=1.0;vec3 c;' +
-    'if(vKind>1.5&&vKind<2.5){float r=length(vUnit);c=mix(vec3(0.16,0.50,0.39),vec3(0.10,0.36,0.31),r);' +
-    'vec2 q=vW.xy-vec2(7.0,-6.0);float s=smoothstep(uSh.x-9.0,uSh.x+3.0,q.x)*(1.0-smoothstep(uSh.z-3.0,uSh.z+9.0,q.x))*smoothstep(uSh.y-9.0,uSh.y+3.0,q.y)*(1.0-smoothstep(uSh.w-3.0,uSh.w+9.0,q.y));' +
-    'c*=1.0-0.5*s;a=1.0-smoothstep(0.9,1.0,r);}' +
-    'else if(vKind>0.5&&vKind<1.5){c=mix(vec3(0.10,0.25,0.38),vec3(1.0,0.72,0.14),uLit);}' +
-    'else{float d=max(dot(normalize(vNor),L),0.0);c=vCol*(0.56+0.5*d);' +
-    'if(vKind>2.5&&vKind<3.5)c*=1.0-0.07*step(0.82,fract(vW.z/2.6));' +
-    'if(vKind>3.5)c*=1.0-0.10*step(0.8,fract(vW.z/1.9));}' +
+    '#ifdef GL_FRAGMENT_PRECISION_HIGH\nprecision highp float;\n#else\nprecision mediump float;\n#endif\n' +
+    'varying vec3 vCol,vNor,vW,vM;varying float vKind;varying vec2 vUnit;uniform float uLit,uGhost;uniform vec4 uSh;' +
+    'float hash(vec2 p){return fract(sin(dot(p,vec2(12.9898,78.233)))*43758.5453);}' +
+    'void main(){vec3 L=normalize(vec3(-0.45,0.6,0.72));float a=1.0;vec3 c;float d=max(dot(normalize(vNor),L),0.0);' +
+    'if(vKind>1.5&&vKind<2.5){float r=length(vUnit);' +                                   // lawn: mown stripes, mottling, house shadow, soft edge
+    'float st=smoothstep(-0.25,0.25,sin(vW.x*0.30+vW.y*0.17));float n=hash(floor(vW.xy*1.3));float n2=hash(floor(vW.xy*0.35)+7.0);' +
+    'c=mix(vec3(0.17,0.50,0.36),vec3(0.21,0.58,0.40),st)*(0.90+0.12*n)*(0.94+0.10*n2);c=mix(c,vec3(0.10,0.34,0.30),smoothstep(0.55,1.0,r)*0.75);' +
+    'vec2 q=vW.xy-vec2(8.0,-7.0);float s=smoothstep(uSh.x-10.0,uSh.x+3.0,q.x)*(1.0-smoothstep(uSh.z-3.0,uSh.z+10.0,q.x))*smoothstep(uSh.y-10.0,uSh.y+3.0,q.y)*(1.0-smoothstep(uSh.w-3.0,uSh.w+10.0,q.y));' +
+    'c*=1.0-0.48*s;a=1.0-smoothstep(0.80,1.0,r);}' +
+    'else if(vKind>0.5&&vKind<1.5){vec3 lit=mix(vec3(1.0,0.66,0.10),vec3(1.0,0.86,0.42),fract(vM.z*0.21+vM.x*0.05+vM.y*0.05));c=mix(vec3(0.09,0.22,0.34),lit,uLit);}' +
+    'else{c=vCol*(0.55+0.52*d);' +
+    'if(vKind>2.5&&vKind<3.5){float f=fract(vM.z/2.5);c*=1.0-0.13*smoothstep(0.72,1.0,f);c*=0.97+0.04*hash(vec2(floor(vM.z/2.5),3.0));' +   // lap siding + stone footing
+    'if(vM.z<2.6){float b=floor((vM.x+vM.y)/4.0+0.5*step(1.3,vM.z));c=vec3(0.50,0.54,0.60)*(0.55+0.52*d)*(0.86+0.2*hash(vec2(b,step(1.3,vM.z))));c*=1.0-0.2*step(0.93,fract((vM.x+vM.y)/4.0+0.5*step(1.3,vM.z)));c*=1.0-0.2*step(0.9,fract(vM.z/1.3));}' +
+    'c*=0.84+0.16*smoothstep(0.0,8.0,vM.z);}' +
+    'if(vKind>3.5&&vKind<4.5||vKind>6.5){float al=vKind>6.5?vM.y:vM.x;float row=floor(vM.z/1.55);float u=al/3.4+0.5*mod(row,2.0);' +         // staggered shingles
+    'c*=0.88+0.2*hash(vec2(floor(u),row));c*=1.0-0.22*smoothstep(0.7,1.0,fract(vM.z/1.55));c*=1.0-0.14*step(0.93,fract(u));}' +
+    'if(vKind>4.5&&vKind<5.5){vec2 t=vM.xy/4.2;c*=0.92+0.1*hash(floor(t));c*=1.0-0.16*max(step(0.93,fract(t.x)),step(0.93,fract(t.y)));}' +      // pavers
+    'if(vKind>5.5&&vKind<6.5){float row=floor(vM.z/1.5);float u=(vM.x+vM.y)/3.0+0.5*mod(row,2.0);c*=0.84+0.24*hash(vec2(floor(u),row));c=mix(c,vec3(0.78,0.74,0.70)*(0.55+0.52*d),max(step(0.9,fract(vM.z/1.5)),step(0.92,fract(u))));}' +  // brick
+    '}' +
     'float g=dot(c,vec3(0.3,0.59,0.11));c=mix(c,vec3(g*0.72,g*0.82,g*0.95),uGhost);' +
     'gl_FragColor=vec4(c*a,a);}'));
   gl.linkProgram(prog);
   if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) return;
   gl.useProgram(prog);
-  var buf = gl.createBuffer(), data = new Float32Array(V), count = V.length / 11;
-  gl.bindBuffer(gl.ARRAY_BUFFER, buf); gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW);
-  [['aPos',3,0],['aNor',3,3],['aCol',3,6],['aPart',1,9],['aKind',1,10]].forEach(function(a) {
-    var l = gl.getAttribLocation(prog, a[0]); gl.enableVertexAttribArray(l); gl.vertexAttribPointer(l, a[1], gl.FLOAT, false, 44, a[2]*4);
+  var buf = gl.createBuffer(), count = V.length / 15;
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(V), gl.STATIC_DRAW);
+  [['aPos',3,0],['aNor',3,3],['aCol',3,6],['aPart',1,9],['aKind',1,10],['aPiv',3,11],['aGrp',1,14]].forEach(function(a) {
+    var l = gl.getAttribLocation(prog, a[0]); if (l < 0) return; gl.enableVertexAttribArray(l); gl.vertexAttribPointer(l, a[1], gl.FLOAT, false, 60, a[2]*4);
   });
-  var U = {}; ['uMVP','uOff','uDisc','uLit','uGhost','uSh'].forEach(function(n) { U[n] = gl.getUniformLocation(prog, n); });
+  var U = {}; ['uMVP','uOff','uDisc','uLit','uGhost','uSh','uGrow'].forEach(function(n) { U[n] = gl.getUniformLocation(prog, n); });
   gl.enable(gl.DEPTH_TEST); gl.enable(gl.BLEND); gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
   stageEl.classList.add('gl');
 
@@ -1411,24 +1473,43 @@ var wakeHouse = function() {};
     o[0]=s[0];o[4]=s[1];o[8]=s[2];o[1]=u[0];o[5]=u[1];o[9]=u[2];o[2]=-f[0];o[6]=-f[1];o[10]=-f[2];
     o[12]=-dot(s,e);o[13]=-dot(u,e);o[14]=dot(f,e);o[15]=1; return o;
   }
-  // what each size shows: camera target, distance, ground disc radius, shadow footprint
+  // per size: lawn centre and radius, tallest point, shadow footprint
   var VIEW = {
-    none: { t: [32,29,19], d: 300, r: 54, sh: [0,0,64,46] },
-    s:    { t: [32,29,19], d: 272, r: 54, sh: [0,0,64,46] },
-    m:    { t: [50,29,18], d: 322, r: 68, sh: [0,0,102,46] },
-    l:    { t: [31,31,18], d: 384, r: 86, sh: [-40,0,102,58] }
+    none: { c: [32,32], r: 62, top: 60, zoom: 1.12, sh: [0,0,64,46] },
+    s:    { c: [32,32], r: 62, top: 60, zoom: 1,    sh: [0,0,64,46] },
+    m:    { c: [50,30], r: 78, top: 60, zoom: 1,    sh: [0,0,102,46] },
+    l:    { c: [31,30], r: 96, top: 60, zoom: 1,    sh: [-40,0,102,60] }
   };
-  var cur = { g: 0, w: 0, b: 0, lit: 0, ghost: 1, t: [32,29,19], d: 300, r: 54, sh: [0,0,64,46], az: 0 };
+  var EL = 0.72, FOV = 0.42;
+  var cur = { g: 0, w: 0, b: 0, lit: 0, ghost: 1, c: [32,32], r: 62, zoom: 1.12, sh: [0,0,64,46], az: -0.62, g1: 0, g2: 0, v1: 0, v2: 0 };
   var drag = 0, dragging = null, hopAt = -1, lastSize = null, raf = 0, last = 0, t0 = 0;
   cv.addEventListener('pointerdown', function(e) { dragging = { x: e.clientX, a: drag }; try { cv.setPointerCapture(e.pointerId); } catch (x) {} });
   cv.addEventListener('pointermove', function(e) { if (dragging) drag = Math.max(-1.25, Math.min(1.25, dragging.a + (e.clientX - dragging.x) * 0.011)); });
   ['pointerup', 'pointercancel'].forEach(function(n) { cv.addEventListener(n, function() { dragging = null; }); });
 
+  function camera(dist, asp, az, tz) {
+    var t = [cur.c[0], cur.c[1], tz];
+    var eye = [t[0] + dist * Math.cos(EL) * Math.sin(-az), t[1] + dist * Math.cos(EL) * Math.cos(az), t[2] + dist * Math.sin(EL)];
+    return mul(persp(FOV, asp, 40, 1600), look(eye, t));
+  }
+  // how far outside the frame the lawn rim and the rooftop reach at this distance (1 = exactly at the edge)
+  function reach(m, top) {
+    var worst = 0, i, p, x, y, w;
+    for (i = 0; i < 20; i++) {
+      p = i < 16 ? [cur.c[0] + Math.cos(i/16*6.2832) * cur.r, cur.c[1] + Math.sin(i/16*6.2832) * cur.r, 0]
+                 : [cur.c[0] + (i % 2 ? 40 : -40), cur.c[1] + (i < 18 ? -20 : 12), top];
+      w = m[3]*p[0] + m[7]*p[1] + m[11]*p[2] + m[15];
+      x = (m[0]*p[0] + m[4]*p[1] + m[8]*p[2] + m[12]) / w; y = (m[1]*p[0] + m[5]*p[1] + m[9]*p[2] + m[13]) / w;
+      worst = Math.max(worst, Math.abs(x), Math.abs(y));
+    }
+    return worst;
+  }
+
   function frame(ts) {
     raf = 0;
     if (state.step !== 1 || document.hidden) return;
     var dt = Math.min(0.05, (ts - last) / 1000 || 0.016); last = ts;
-    var still = reducedMotion(), sz = state.size || 'none', v = VIEW[sz];
+    var still = reducedMotion(), sz = state.size || 'none', v = VIEW[sz], i;
     function ease(c, to, k) { return still ? to : c + (to - c) * (1 - Math.exp(-dt * k)); }
     if (sz !== lastSize) { if (lastSize === 'none' && !still) hopAt = ts; lastSize = sz; }
     cur.g = ease(cur.g, sz === 'm' || sz === 'l' ? 1 : 0, 5.5);
@@ -1436,24 +1517,33 @@ var wakeHouse = function() {};
     cur.b = ease(cur.b, sz === 'l' ? 1 : 0, 4.5);
     cur.ghost = ease(cur.ghost, sz === 'none' ? 1 : 0, 6);
     cur.lit = ease(cur.lit, sz !== 'none' && cur.ghost < 0.25 ? 1 : 0, 5);
-    cur.d = ease(cur.d, v.d, 3.5); cur.r = ease(cur.r, v.r, 3.5);
-    for (var i = 0; i < 3; i++) cur.t[i] = ease(cur.t[i], v.t[i], 3.5);
+    cur.r = ease(cur.r, v.r, 3.5); cur.zoom = ease(cur.zoom, v.zoom, 3.5);
+    for (i = 0; i < 2; i++) cur.c[i] = ease(cur.c[i], v.c[i], 3.5);
     for (i = 0; i < 4; i++) cur.sh[i] = ease(cur.sh[i], v.sh[i], 4);
+    // garden props spring up (a little overshoot) once their part of the house is mostly out
+    function spring(val, vel, to) { if (still) return [to, 0]; vel += ((to - val) * 90 - vel * 11) * dt; return [val + vel * dt, vel]; }
+    var s1 = spring(cur.g1, cur.v1, cur.g > 0.6 ? 1 : 0), s2 = spring(cur.g2, cur.v2, cur.w > 0.6 ? 1 : 0);
+    cur.g1 = s1[0]; cur.v1 = s1[1]; cur.g2 = s2[0]; cur.v2 = s2[1];
     var hop = 0;
     if (hopAt >= 0) { var u = (ts - hopAt) / 620; if (u >= 1) hopAt = -1; else hop = 13 * Math.sin(Math.PI * u) * (1 - u * 0.35); }
     var sway = still ? 0 : Math.sin((ts - t0) / 2600) * 0.3;
     cur.az = ease(cur.az, -0.62 + sway + drag, 7);
 
     var w = cv.clientWidth, h = cv.clientHeight, dpr = Math.min(2, window.devicePixelRatio || 1);
+    if (!w || !h) { raf = requestAnimationFrame(frame); return; }
     if (cv.width !== Math.round(w * dpr) || cv.height !== Math.round(h * dpr)) { cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); }
     gl.viewport(0, 0, cv.width, cv.height);
     gl.clearColor(0, 0, 0, 0); gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-    var el = 0.74, eye = [cur.t[0] + cur.d * Math.cos(el) * Math.sin(-cur.az), cur.t[1] + cur.d * Math.cos(el) * Math.cos(cur.az), cur.t[2] + cur.d * Math.sin(el)];
-    gl.uniformMatrix4fv(U.uMVP, false, mul(persp(0.42, w / h, 40, 1200), look(eye, cur.t)));
+    // pull the camera back exactly far enough that the whole lawn and the rooftop stay inside the frame
+    var tz = 10, dist = 300, m;
+    for (i = 0; i < 3; i++) { m = camera(dist, w / h, cur.az, tz); dist *= reach(m, v.top + 4) / 0.94; }
+    m = camera(dist * cur.zoom, w / h, cur.az, tz);
+    gl.uniformMatrix4fv(U.uMVP, false, m);
     gl.uniform3fv(U.uOff, new Float32Array([0,0,0, 0,0,hop, -44*(1-cur.g),0,0, 44*(1-cur.w),0,0, 0,-24*(1-cur.b),0, 0,0,0]));
-    gl.uniform3f(U.uDisc, cur.t[0], cur.t[1] + 8, cur.r);
+    gl.uniform3f(U.uDisc, cur.c[0], cur.c[1], cur.r);
+    gl.uniform3f(U.uGrow, 1, Math.max(0, cur.g1), Math.max(0, cur.g2));
     gl.uniform1f(U.uLit, cur.lit); gl.uniform1f(U.uGhost, cur.ghost);
-    gl.uniform4f(U.uSh, cur.sh[0] - 44*0 , cur.sh[1], cur.sh[2], cur.sh[3]);
+    gl.uniform4f(U.uSh, cur.sh[0], cur.sh[1], cur.sh[2], cur.sh[3]);
     gl.drawArrays(gl.TRIANGLES, 0, count);
     raf = requestAnimationFrame(frame);
   }
