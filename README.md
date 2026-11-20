@@ -66,6 +66,13 @@ The prices in those documents must match `TIERS` in `public/index.html`.
 After changing a price, run `node scripts/check-agreement.js`; it fails and
 names the figure if a document is out of step.
 
+## Email templates
+
+`email-templates/` holds the ServiceMinder email templates: the general
+Window Hero set and fourteen for the Hero Club. `HERO-CLUB-EMAILS.md` there
+says when to send each one and what to type in by hand; `HANDOFF.md` covers
+the whole kit. Build with `python3 email-templates/build_emails.py`.
+
 ## Referrals
 
 "Give a month, get a month" is run by the office and is not part of this

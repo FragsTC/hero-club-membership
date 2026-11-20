@@ -66,6 +66,11 @@ how with a test before the first renewal comes due.
 
 ### The renewal notice
 
+This notice is also a ready-made ServiceMinder template,
+`email-templates/emails/hero-club-renewal-notice.html`. The payment and
+cancellation emails have templates too; see
+`email-templates/HERO-CLUB-EMAILS.md`.
+
 Subject: Your Hero Club membership renews on [RENEWAL DATE]
 
 > Hi [FIRST NAME],

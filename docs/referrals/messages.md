@@ -4,6 +4,10 @@ Copy, fill in the square brackets, and send. There are no links or codes:
 the neighbor tells Window Hero the member's name and street address when
 they join.
 
+The email versions of these are ready-made ServiceMinder templates in
+`email-templates/` (numbers 9 to 12 in `HERO-CLUB-EMAILS.md`). The wording
+below is for texts, or for email if you are not using the templates.
+
 When a message says "a month free", send the referral terms with it or have
 them to hand. They are in `referral-terms.md`.
 

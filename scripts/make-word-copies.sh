@@ -13,3 +13,4 @@ make docs/referrals/referral-terms.md                 5-referral-terms
 make docs/referrals/office-steps.md                   6-referral-office-steps
 make docs/referrals/messages.md                       7-referral-messages
 make docs/sales/tech-scripts.md                       8-tech-scripts
+make email-templates/HERO-CLUB-EMAILS.md              9-email-templates-guide
