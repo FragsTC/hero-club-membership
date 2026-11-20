@@ -58,8 +58,13 @@ All of these are near the top of the `<script>` in `public/index.html`.
   the `SHELL` list in `sw.js` so they work offline.
 - **Fallback email address:** `CONTACT_EMAIL`.
 
+When replacing a photo, give the new file a new name (for example
+`plan-gold-v3.jpg`) and update the reference. Phones keep photos they have
+already downloaded, so a new file under an old name can go on showing the old
+picture.
+
 After changing anything, bump the `CACHE` name in `sw.js` (for example
-`hero-club-v19` to `hero-club-v20`) so returning visitors get the new files.
+`hero-club-v20` to `hero-club-v21`) so returning visitors get the new files.
 
 ## Deploying
 
