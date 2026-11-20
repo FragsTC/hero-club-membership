@@ -1,6 +1,8 @@
 # Referrals: office steps
 
-How the office runs "give a month, get a month". The rules customers see are
+How the office runs referrals: a member who refers a neighbor gets a credit
+equal to the neighbor's first monthly charge. The neighbor gets nothing
+extra. The rules customers see are
 in `referral-terms.md`. One person should own this: the owner of the **Hero
 Club Requests** board.
 
@@ -57,40 +59,38 @@ ServiceMinder after it, for example `Pending: David Mitchell account`.
 
 A referral counts when the new member has signed, paid the down payment, and
 paid their **first monthly charge**, which runs one month after **Signed
-on**. The referrer gets their credit only if their membership is still
-**Active** on that day. The new member gets their free month either way.
+on**. The referrer gets the credit only if their membership is still
+**Active** on that day.
 
 On that day:
 
-1. **Work out the referrer's credit.** It is the new member's monthly
-   charge, but never more than the referrer's own monthly charge.
+1. **Work out the credit.** It is the new member's first monthly charge,
+   whatever the referrer's own plan costs.
 
-   | Referrer pays | New member pays | Referrer's credit |
-   |---|---|---|
-   | $125 a month | $54 a month | $54 |
-   | $54 a month | $170 a month | $54 |
-   | $80 a month | $80 a month | $80 |
+   | Referrer pays | New member pays | Credit | How it comes off |
+   |---|---|---|---|
+   | $125 a month | $54 a month | $54 | $54 off the next charge |
+   | $80 a month | $80 a month | $80 | The next charge is free |
+   | $54 a month | $170 a month | $170 | The next three charges are free, and the rest comes off the fourth |
 
 2. **Check the limit.** Count the credits already noted in the referrer's
    **Referral credit** column since their last **Renewal date** (or
    **Signed on**, in their first year). The limit is 12. If they already
-   have 12, skip step 3: the referrer gets no credit for this one. Still do
-   step 4, because the new member gets their month regardless. Note it in
-   the referrer's column as `No credit: 12 already this year`.
-3. **Apply the referrer's credit in ServiceMinder.** Reduce their next
-   monthly installment by the credit amount. If the next installment is
-   already reduced to zero by another credit, use the one after it.
-4. **Set the new member's free month in ServiceMinder.** Reduce their
-   twelfth monthly installment to zero now, so it is not forgotten. If
-   ServiceMinder will not let you edit an installment that far ahead, do it
-   when the renewal reminder for that member arrives, 35 days before their
-   **Renewal date**.
-5. **Write it down on the board.**
+   have 12, there is no credit for this one. Note it in the referrer's
+   column as `No credit: 12 already this year`.
+3. **Apply the credit in ServiceMinder.** Reduce the referrer's next monthly
+   installment by the credit amount. If the credit is more than that
+   installment, set it to zero and take the rest off the installments that
+   follow until the credit is used up. If an installment is already reduced
+   by an earlier credit, start from the first one that is not.
+4. **Write it down on the board.**
    - Referrer's **Referral credit**: add a line such as
-     `$54 for Pat Example, applied 15 Jan 2027`.
+     `$170 for Pat Example, applied 15 Jan 2027: Feb, Mar and Apr free, the rest off May`.
    - New member's **Referral credit**: change `Pending` to
-     `Month 12 free, referred by Mitchell household, set 15 Jan 2027`.
-6. **Tell them both.** The messages are in `messages.md`.
+     `Counted 15 Jan 2027, credit to Mitchell account`.
+5. **Tell the referrer.** The message is in `messages.md`.
+
+Nothing changes on the new member's bill. They pay the normal price.
 
 How to reduce a single installment on a ServiceMinder payment plan has not
 been confirmed. Try it on your own test membership first. If an installment
@@ -106,16 +106,13 @@ runs.
 - **The new member cancels in the first 3 business days, or never pays the
   first monthly charge.** The referral never counted. Change **Referral
   credit** to `Not counted: cancelled` and do nothing else.
-- **The new member leaves before month twelve.** They do not get their free
-  month. The referrer keeps their credit. If you already set the twelfth
-  installment to zero, it is cancelled with the rest when the membership
-  ends; it does not change the cancellation settlement, which counts only
-  what was paid and what was received.
+- **The new member leaves after the referral counted.** The referrer keeps
+  their credit.
 - **The referrer's membership has ended before the referral counts.** No
-  credit for the referrer. The new member still gets their twelfth month.
-- **The referrer has no monthly charges left this year.** The credit carries
-  into their renewal year: reduce the first monthly charge of the new year.
-  If they do not renew, it is lost.
+  credit.
+- **The credit is more than the monthly charges the referrer has left this
+  year.** What is left over carries into their renewal year: take it off the
+  first monthly charges of the new year. If they do not renew, it is lost.
 - **A member says they referred someone who did not mention them.** The
   terms say the new member has to name them before signing. If the new
   member confirms it when you ask, and they have not been a member more

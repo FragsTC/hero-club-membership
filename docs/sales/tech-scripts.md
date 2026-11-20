@@ -51,8 +51,9 @@ The best opening a tech gets.
 ## 5. To an existing member, at the end of a visit
 
 > "All set, and your next visit is [SEASON]. One thing: if a neighbor joins
-> the Hero Club and gives us your name and address, you each get a month
-> free. Anyone on the street been asking about your windows?"
+> the Hero Club and gives us your name and address, you get a credit on your
+> bill worth their first month. Anyone on the street been asking about your
+> windows?"
 
 ## Answers to what customers push back with
 

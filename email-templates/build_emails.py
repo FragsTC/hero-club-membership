@@ -594,8 +594,8 @@ def esc(text):
 GUARANTEE = ("<strong>Not happy with something?</strong> Tell us within 7 days of a visit and "
              "we&rsquo;ll come back and fix it at no charge.")
 
-REFERRAL_SMALL = ("Their twelfth month is free, and you get a credit on your bill worth their monthly charge, "
-                  "up to one month of your own plan, once they&rsquo;ve paid their down payment and first monthly charge.")
+REFERRAL_SMALL = ("Your credit equals the first monthly charge of the plan they choose. It goes on your bill "
+                  "once they&rsquo;ve paid their down payment and first monthly charge.")
 
 
 # ---------- HC 1. Welcome, one per plan (ad hoc; contact shortcodes only) ----------
@@ -630,8 +630,8 @@ def hero_club_welcome(tier_id):
                     "If weather gets in the way, we move your visit. You never lose it.",
                     "Tell us within 7 days if anything about a visit isn&rsquo;t right, and we&rsquo;ll come back and fix it at no charge."])
         b += card(
-            heading("Give a Month, Get a Month", mb=10) +
-            p("If a neighbor joins the Hero Club and gives us your name and street address, you each get a month free.",
+            heading("Refer a Neighbor, Get a Month", mb=10) +
+            p("If a neighbor joins the Hero Club and gives us your name and street address, you get a credit on your bill worth their first month.",
               mb=10, align="center", color=NAVY) +
             p(REFERRAL_SMALL, mb=0, align="center", size=14),
             "#f7f9fc", border="#d9e2ec")
@@ -703,8 +703,8 @@ def hero_club_visit_complete():
                  note="Your plan services are covered by your membership. Any add-on you asked for is billed separately at your member discount.")
     b += card(callout(GUARANTEE), "#f7f9fc", border="#d9e2ec")
     b += card(
-        heading("Give a Month, Get a Month", size=24, color="#ffffff", mb=12) +
-        p("If a neighbor asks who did your home, have them give us your name and street address when they join the Hero Club. You each get a month free.",
+        heading("Refer a Neighbor, Get a Month", size=24, color="#ffffff", mb=12) +
+        p("If a neighbor asks who did your home, have them give us your name and street address when they join the Hero Club. You get a credit on your bill worth their first month.",
           mb=14, color="#ffffff", size=17, lh=1.7) +
         p(REFERRAL_SMALL, mb=0, color="#ffffff", size=14),
         NAVY, align="center", color="#ffffff")
@@ -808,26 +808,27 @@ def hero_club_cancellation():
 
 def hero_club_referral_invite():
     b = greeting()
-    b += hero("Give a Month, Get a Month",
-              "Refer a neighbor to the Hero Club. When they join, you each get a month free.")
+    b += hero("Refer a Neighbor, Get a Month",
+              "When a neighbor you refer joins the Hero Club, you get a credit on your bill equal to their first monthly charge.")
     b += ticks("How It Works",
                ["Tell a neighbor about the Hero Club.",
                 "When they join, they give us your name and street address.",
-                "Their twelfth month is free.",
-                "You get a credit on your bill worth their monthly charge, up to one month of your own plan."])
+                "Once they&rsquo;ve paid their down payment and first monthly charge, your credit goes on your bill.",
+                "Your credit equals the first monthly charge of the plan they choose."])
     b += card(
         heading("The Details", align="left", mb=10) +
         check_rows(["Your neighbor needs to tell us who referred them before they sign.",
-                    "Your credit applies once they&rsquo;ve paid their down payment and first monthly charge, while your membership is active.",
+                    "Your credit comes off your next monthly charge. If it&rsquo;s more than one charge, the rest comes off the charges that follow.",
+                    "Your membership needs to be active when your neighbor&rsquo;s first monthly charge is paid.",
                     "Your neighbor must be new to the Hero Club. Past one-time Window Hero customers count as new.",
                     "You can earn up to 12 credits in each membership year.",
-                    "Credits come off monthly charges, have no cash value, and can&rsquo;t be transferred."],
+                    "Credit comes off monthly charges, has no cash value, and can&rsquo;t be transferred."],
                    GREY, size=14, cols=1, pad="3px 0") +
-        p("Ask us for the full referral terms any time.", mb=0, size=14).replace('<p style="', '<p style="margin-top:10px; ', 1).replace("margin-top:10px; margin:0 0 0px 0;", "margin:10px 0 0 0;"),
+        '<p style="margin:10px 0 0 0; font-size:14px;">Ask us for the full referral terms any time.</p>',
         "#f7f9fc", border="#d9e2ec")
     b += closing("Thank you for being a Hero Club member, and for spreading the word.")
-    return page("Give a month, get a month",
-                "Refer a neighbor to the Hero Club and you each get a month free.",
+    return page("Refer a neighbor, get a month",
+                "Refer a neighbor to the Hero Club and get a credit equal to their first monthly charge.",
                 b, footer("Questions about referrals? We&rsquo;re here to help."))
 
 
@@ -852,38 +853,16 @@ def hero_club_referral_named():
 def hero_club_referral_credit():
     b = greeting()
     b += hero("Your Referral Credit Is Here",
-              fillin("NEIGHBOR FIRST NAME") + " is now a Hero Club member, so " + fillin("CREDIT AMOUNT") + " is coming off your next Hero Club payment.")
+              fillin("NEIGHBOR FIRST NAME") + " is now a Hero Club member, so you&rsquo;ve earned a " + fillin("CREDIT AMOUNT") + " credit, equal to their first monthly charge.")
     b += summary("Your Credit",
                  [("For Referring", fillin("NEIGHBOR FIRST NAME")),
                   ("Credit", fillin("CREDIT AMOUNT")),
                   ("Applied To", "your next monthly charge")],
-                 note="You can earn up to 12 referral credits in each membership year. A neighbor just needs to give us your name and street address when they join.")
+                 note="If your credit is more than one monthly charge, the rest comes off the charges that follow until it is used up. You can earn up to 12 referral credits in each membership year.")
     b += closing("Thank you for spreading the word.")
     return page("Your Hero Club referral credit",
                 "Your referral credit is coming off your next Hero Club payment.",
                 b, footer("Questions about your credit? We&rsquo;re here to help."))
-
-
-# ---------- HC 12. Referral: the new member's free month (ad hoc) ----------
-
-def hero_club_referral_welcome():
-    b = greeting()
-    b += hero("Your Twelfth Month Is on Us",
-              "Because " + fillin("REFERRER FIRST NAME") + " referred you, your twelfth monthly Hero Club payment is free.")
-    b += ticks("How It Works",
-               ["You don&rsquo;t need to do anything. We&rsquo;ve already set it up.",
-                "Your first eleven monthly charges run as normal.",
-                "Your twelfth monthly charge is free, as long as your membership is still active."])
-    b += card(
-        heading("Know Someone Else?", mb=10) +
-        p("You can refer your own neighbors too. Have them give us your name and street address when they join, and you each get a month free.",
-          mb=10, align="center", color=NAVY) +
-        p(REFERRAL_SMALL, mb=0, align="center", size=14),
-        "#f7f9fc", border="#d9e2ec")
-    b += closing("Welcome to the Hero Club. We&rsquo;re glad you&rsquo;re here.")
-    return page("Your twelfth Hero Club month is free",
-                "Because a member referred you, your twelfth monthly payment is on us.",
-                b, footer("Questions about your membership? We&rsquo;re here to help."))
 
 
 # ---------- Shortcode test emails ----------
@@ -970,7 +949,6 @@ if __name__ == "__main__":
                      ("hero-club-referral-invite.html", hero_club_referral_invite),
                      ("hero-club-referral-named.html", hero_club_referral_named),
                      ("hero-club-referral-credit.html", hero_club_referral_credit),
-                     ("hero-club-referral-welcome.html", hero_club_referral_welcome),
                      ("test-shortcodes-contact.html", shortcode_test("contact")),
                      ("test-shortcodes-proposal.html", shortcode_test("proposal")),
                      ("test-shortcodes-appointment.html", shortcode_test("appointment")),

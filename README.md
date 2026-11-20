@@ -75,7 +75,8 @@ the whole kit. Build with `python3 email-templates/build_emails.py`.
 
 ## Referrals
 
-"Give a month, get a month" is run by the office and is not part of this
+Referrals (a member who refers a neighbor gets a credit equal to the
+neighbor's first monthly charge) are run by the office and is not part of this
 page yet. A new customer tells Window Hero the name and street address of
 the member who referred them, and the office matches the address in
 ServiceMinder. The terms, messages and office steps are in

@@ -14,7 +14,13 @@ After the first build the owner decided:
   the referral terms page and the function change were removed. Referrals
   are documentation and office process only: `docs/referrals/`.
 
-The reward and the rules below are unchanged. "Approaches" and "What gets
+- **Referrer-only reward (later the same day).** The new member no longer
+  gets a free month. The referrer gets a credit equal to the new member's
+  first monthly charge, in full, with no cap at the referrer's own monthly
+  charge; a credit larger than one charge runs over the charges that
+  follow. This costs at most 7.5% of the new member's first year.
+
+Where this section and the text below disagree, this section wins. "Approaches" and "What gets
 built" describe the first build and are kept for the record. The removed
 code is in the git history up to commit `847dd6b`.
 

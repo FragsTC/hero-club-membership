@@ -1,6 +1,6 @@
 # Hero Club email templates
 
-Fourteen ServiceMinder email templates for the Hero Club, in the same design
+Thirteen ServiceMinder email templates for the Hero Club, in the same design
 as the other Window Hero emails. The files are in `emails/` and all start
 with `hero-club-`.
 
@@ -29,10 +29,9 @@ Send each one to yourself before a customer sees it.
 | 6 | `hero-club-payment-reminder.html` | Day 7, if the payment is still unpaid | Ad hoc | Reminder: your Hero Club payment is still outstanding |
 | 7 | `hero-club-renewal-notice.html` | 35 days before the renewal date | Ad hoc | Your Hero Club membership renews on [RENEWAL DATE] |
 | 8 | `hero-club-cancellation.html` | A membership is ending | Ad hoc | Your Hero Club cancellation is confirmed |
-| 9 | `hero-club-referral-invite.html` | A member becomes Active, and again after their first visit | Ad hoc | Give a month, get a month |
+| 9 | `hero-club-referral-invite.html` | A member becomes Active, and again after their first visit | Ad hoc | Refer a neighbor, get a month |
 | 10 | `hero-club-referral-named.html` | A new customer names this member as their referrer | Ad hoc | Thank you for the referral |
 | 11 | `hero-club-referral-credit.html` | The referral counts and the credit is applied | Ad hoc | Your Hero Club referral credit |
-| 12 | `hero-club-referral-welcome.html` | The referral counts, to the new member | Ad hoc | Your twelfth Hero Club month is on us |
 
 The welcome email comes in three versions because ServiceMinder has no
 shortcode for a member's plan. Each lists exactly what that plan includes.
@@ -50,7 +49,6 @@ including the brackets. Before you press send, search the email for `[`.
 | 8. Cancellation | `[END DATE]`, `[SERVICES RECEIVED AMOUNT]`, `[AMOUNT PAID]`, `[BALANCE DUE OR $0]` |
 | 10. Neighbor named you | `[NEIGHBOR FIRST NAME]` |
 | 11. Credit applied | `[NEIGHBOR FIRST NAME]` (two places), `[CREDIT AMOUNT]` (two places) |
-| 12. New member's free month | `[REFERRER FIRST NAME]` |
 
 The other emails need nothing typed in.
 
@@ -78,8 +76,11 @@ The other emails need nothing typed in.
 - **The cancellation email is for a membership ending after the first 3
   business days.** For a cancellation inside the 3-day window, do not use
   it: the customer gets a full refund and there is nothing to settle.
-- **The referral emails say "a month free".** Email 9 carries the main
-  rules. Have the referral terms document ready for anyone who asks.
+- **The referral reward goes to the member who refers.** They get a credit
+  equal to the new member's first monthly charge. The new member gets
+  nothing extra, so there is no referral email for them. Email 9 carries
+  the main rules; have the referral terms document ready for anyone who
+  asks.
 
 ## Changes to the earlier templates
 

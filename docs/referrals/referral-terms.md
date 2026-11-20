@@ -1,17 +1,22 @@
-# Hero Club: give a month, get a month
+# Hero Club: refer a neighbor, get a month
 
-Refer a neighbor to the Hero Club. When they join, you each get a month free.
+Refer a neighbor to the Hero Club. When they join, you get a credit on your
+bill equal to their first monthly charge.
 
-These are the terms to give to members and new customers. They are not on
-the signup page yet.
+These are the terms to give to members. They are not on the signup page yet.
 
-## What each of you gets
+## What you get
 
-- **The new member** gets one month of their own plan free. It comes off
-  their twelfth monthly charge.
-- **The member who referred them** gets a credit on their bill equal to the
-  new member's monthly charge, up to one month of their own plan. It comes
-  off their next monthly charge.
+A credit on your Hero Club bill equal to the first monthly charge of the
+plan your neighbor chooses. A neighbor who joins on a plan that costs more
+per month earns you a bigger credit.
+
+The credit comes off your next monthly charge. If it is more than one
+monthly charge, the rest comes off the charges that follow until it is used
+up.
+
+The reward is for the member who refers. The neighbor who joins pays the
+normal price for their plan.
 
 ## How to refer
 
@@ -24,34 +29,29 @@ gives us, whoever in the household the account is under.
 
 ## When it counts
 
-- The new member tells us who referred them before they sign their Hero Club
+- Your neighbor tells us who referred them before they sign their Hero Club
   agreement.
-- The new member signs their agreement and pays their down payment and their
+- Your neighbor signs their agreement and pays their down payment and their
   first monthly charge.
 - The address they gave is the home of a Hero Club member.
-- The member who referred them receives their credit only if their
-  membership is still active on that day. The new member gets their free
-  month either way.
+- Your membership is still active on that day.
 
 ## The rules
 
 - Only active Hero Club members can refer.
-- The new member must be a household that has never had a Hero Club
+- The neighbor must be a household that has never had a Hero Club
   membership. Past one-time Window Hero customers count as new. Your own
   address does not.
-- You can earn up to 12 referral credits in each membership year. After
-  that, the neighbors you refer still get their free month, and you start
+- You can earn up to 12 referral credits in each membership year. You start
   earning again when your next membership year begins.
-- A credit you cannot use this year carries into your renewal year. Credits
-  are lost if your membership ends.
-- Credits come off monthly charges only, not a down payment.
-- A new member who leaves before their twelfth monthly charge does not
-  receive their free month.
-- A new member can name one referring household. If they name more than
-  one, the first one they gave us counts.
-- Credits have no cash value and cannot be transferred.
-- Window Hero can change or end this offer at any time. Credits already
-  earned are honored.
+- Credit you cannot use this year carries into your renewal year. Credit is
+  lost if your membership ends.
+- Credit comes off monthly charges only, not a down payment.
+- A neighbor can name one referring household. If they name more than one,
+  the first one they gave us counts.
+- Credit has no cash value and cannot be transferred.
+- Window Hero can change or end this offer at any time. Credit already
+  earned is honored.
 
 Your Hero Club Membership Agreement covers everything else about your
 membership.
