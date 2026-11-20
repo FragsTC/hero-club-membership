@@ -45,12 +45,54 @@ in Netlify Forms and the email still goes out. The board id and column ids are
 at the top of the function. If a column is deleted or recreated on the board,
 update its id there.
 
+## Membership agreement
+
+Signing and billing happen in ServiceMinder, not on this page. The documents
+are in `docs/agreement/`:
+
+| File | What it is |
+|---|---|
+| `hero-club-membership-agreement.md` | The agreement members sign. A draft until a lawyer has reviewed it |
+| `lawyer-review-notes.md` | What to ask the lawyer, and the blanks to fill in |
+| `serviceminder-setup.md` | Setting up the services, payment plans and proposals, with a test to run first |
+| `office-routine.md` | Renewals, failed payments and cancellations |
+
+Word copies of every document (agreement, referrals and the technician
+scripts in `docs/sales/`) are together in `docs/hero-club-documents/`. The
+`.md` files are the originals: after changing one, run
+`sh scripts/make-word-copies.sh` to remake the Word copies.
+
+The prices in those documents must match `TIERS` in `public/index.html`.
+After changing a price, run `node scripts/check-agreement.js`; it fails and
+names the figure if a document is out of step.
+
+## Email templates
+
+`email-templates/` holds the ServiceMinder email templates: the general
+Window Hero set and fourteen for the Hero Club. `HERO-CLUB-EMAILS.md` there
+says when to send each one and what to type in by hand; `HANDOFF.md` covers
+the whole kit. Build with `python3 email-templates/build_emails.py`.
+
+## Referrals
+
+Referrals (a member who refers a neighbor gets a credit equal to the
+neighbor's first monthly charge) are run by the office and is not part of this
+page yet. A new customer tells Window Hero the name and street address of
+the member who referred them, and the office matches the address in
+ServiceMinder. The terms, messages and office steps are in
+`docs/referrals/`.
+
+An earlier version with referral links, a banner on this page and a link
+maker page was built and then removed. It is in the git history at commit
+`847dd6b` if it is wanted later.
+
 ## Common changes
 
 All of these are near the top of the `<script>` in `public/index.html`.
 
 - **Prices, services, discounts, add-ons:** the `TIERS` object. `price` holds
-  `[monthly, deposit]` for each home size. These must match the Hero Club door
+  `[monthly, down payment]` for each home size. The page and the agreement
+  say "down payment"; the door hanger says "deposit" for the same amount. These must match the Hero Club door
   hanger.
 - **Home sizes:** `HOME_SIZES`.
 - **Landing photos:** add square images to `public/photos/` and list them in `PHOTOS`.

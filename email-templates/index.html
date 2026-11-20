@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Email Template Preview</title>
+<style>
+  :root { --navy:#003b64; --gold:#fcaf17; --line:#d9e2ec; --bg:#eef1f5; --ink:#23323f; --muted:#5d6773; }
+  * { box-sizing:border-box; }
+  html, body { height:100%; margin:0; }
+  body { font-family:Arial, Helvetica, sans-serif; color:var(--ink); background:var(--bg); display:flex; flex-direction:column; }
+  header { background:var(--navy); color:#fff; padding:10px 16px; display:flex; flex-wrap:wrap; gap:10px 16px; align-items:center; }
+  header h1 { font-size:16px; margin:0; margin-right:auto; }
+  .group { display:flex; border:1px solid rgba(255,255,255,.4); border-radius:6px; overflow:hidden; }
+  .group button { background:transparent; color:#fff; border:0; padding:7px 12px; font:inherit; font-size:13px; cursor:pointer; }
+  .group button[aria-pressed="true"] { background:var(--gold); color:var(--navy); font-weight:bold; }
+  .group button:focus-visible, nav button:focus-visible { outline:2px solid var(--gold); outline-offset:2px; }
+  main { flex:1; display:flex; min-height:0; }
+  nav { width:230px; flex:none; background:#fff; border-right:1px solid var(--line); overflow:auto; padding:10px; }
+  nav h2 { font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); margin:12px 8px 6px; }
+  nav button { display:block; width:100%; text-align:left; background:none; border:0; border-radius:6px; padding:8px; font:inherit; font-size:14px; color:var(--ink); cursor:pointer; }
+  nav button:hover { background:var(--bg); }
+  nav button[aria-current="true"] { background:var(--navy); color:#fff; font-weight:bold; }
+  .stage { flex:1; overflow:auto; padding:16px; display:flex; flex-direction:column; align-items:center; min-width:0; }
+  .meta { font-size:13px; color:var(--muted); margin:0 0 10px; text-align:center; }
+  iframe { background:#fff; border:1px solid var(--line); border-radius:8px; width:100%; max-width:720px; flex:1; min-height:500px; }
+  iframe.phone { max-width:375px; }
+  @media (max-width:700px) {
+    main { flex-direction:column; }
+    nav { width:auto; border-right:0; border-bottom:1px solid var(--line); display:flex; gap:6px; overflow-x:auto; padding:8px; }
+    nav h2 { display:none; }
+    nav button { width:auto; white-space:nowrap; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>Window Hero email templates</h1>
+  <div class="group" role="group" aria-label="Screen size">
+    <button id="desk" aria-pressed="true">Desktop</button>
+    <button id="phone" aria-pressed="false">Phone</button>
+  </div>
+  <div class="group" role="group" aria-label="Shortcodes">
+    <button id="sample" aria-pressed="true">Sample data</button>
+    <button id="raw" aria-pressed="false">Shortcodes</button>
+  </div>
+</header>
+<main>
+  <nav id="nav" aria-label="Templates"></nav>
+  <div class="stage">
+    <p class="meta" id="meta"></p>
+    <iframe id="frame" title="Email preview"></iframe>
+  </div>
+</main>
+<script>
+const TEMPLATES = [
+  ["Hero Club", [
+    ["hero-club-welcome-bronze", "Welcome: Bronze"],
+    ["hero-club-welcome-silver", "Welcome: Silver"],
+    ["hero-club-welcome-gold", "Welcome: Gold"],
+    ["hero-club-proposal-follow-up", "Proposal follow-up"],
+    ["hero-club-visit-reminder", "Visit reminder"],
+    ["hero-club-visit-complete", "Visit complete"],
+    ["hero-club-payment-failed", "Payment failed"],
+    ["hero-club-payment-reminder", "Payment still unpaid"],
+    ["hero-club-renewal-notice", "Renewal notice"],
+    ["hero-club-cancellation", "Cancellation"],
+    ["hero-club-referral-invite", "Referral: how it works"],
+    ["hero-club-referral-named", "Referral: neighbor named you"],
+    ["hero-club-referral-credit", "Referral: credit applied"]]],
+  ["Rebuilt", [
+    ["service-complete", "Service complete"],
+    ["commercial-proposal", "Commercial proposal"],
+    ["residential-proposal", "Residential proposal"]]],
+  ["New", [
+    ["appointment-confirmation", "Appointment confirmation"],
+    ["appointment-reminder", "Appointment reminder"],
+    ["on-our-way", "On our way"],
+    ["reschedule-notice", "Reschedule notice"],
+    ["proposal-follow-up", "Proposal follow-up"],
+    ["invoice", "Invoice"],
+    ["receipt", "Payment receipt"]]]
+];
+
+// Made-up values so you can see how a filled-in email reads. Not real customer data.
+const SAMPLE = {
+  "contact.first_name": "Jordan",
+  "fullserviceaddress": "123 Sample Street | Raleigh, NC 27601",
+  "organization.name": "Window Hero",
+  "organization.phone": "(919) 555-0100",
+  "organization.email": "office@example.com",
+  "service_agent.name": "Alex",
+  "service_agent.names": "Alex and Sam",
+  "appointment.parts_list": "Exterior Window Cleaning, House Soft Wash",
+  "appointment.actualfinish": "11/18/2026 2:45 PM",
+  "appointment.date": "Thursday, November 19, 2026 9:00 AM",
+  "appointment.duration": "2 hours",
+  "appointment.arrival_time": "9:10 AM",
+  "drivetime": "17 minutes",
+  "contact.next_appointment_date": "11/19/2026",
+  "contact.next_appointment_time": "9:00 AM",
+  "contact.next_appointment_summary": "Exterior Window Cleaning",
+  "proposal.title": "Sample Office Park Exterior Cleaning",
+  "proposal.parts_list": "Drone Window Cleaning, Building Soft Wash",
+  "proposal.total": "$4,850.00",
+  "proposal.expiration-date|short_date": "12/18/2026",
+  "proposal.owner_name": "Tim Cook",
+  "invoice.number": "10482",
+  "invoice.date": "11/18/2026",
+  "invoice.parts_list": "Exterior Window Cleaning, House Soft Wash",
+  "invoice.total": "$685.00",
+  "invoice.balancedue": "$685.00",
+  "invoice.latest_payment_amount": "$685.00",
+  "invoice.total_paid": "$685.00",
+  "receipt_message": "Thank you for your payment!",
+  "installment_payment_amount": "$80.00",
+  "installment_payment_date": "11/18/2026",
+  "failure_reason": "Card declined",
+  "installment_payment_retry_message": "We will try this card again in 3 days."
+};
+// Values the office types in by hand, shown as [CAPITALS] in the templates.
+const HANDFILL = {
+  "PLAN": "Silver", "RENEWAL DATE": "December 18, 2027", "NEW DOWN PAYMENT": "$108", "NEW MONTHLY CHARGE": "$80",
+  "CURRENT MONTHLY CHARGE": "$80", "END DATE": "December 18, 2026", "SERVICES RECEIVED AMOUNT": "$400",
+  "AMOUNT PAID": "$124", "BALANCE DUE OR $0": "$276", "AMOUNT": "$80", "DATE DUE": "November 18, 2026",
+  "MONTHLY CHARGE": "$80", "DOWN PAYMENT": "$108",
+  "NEIGHBOR FIRST NAME": "Pat", "CREDIT AMOUNT": "$54"
+};
+const LINKS = ["url", "proposal.url", "proposal.pdf_url", "invoice.pdf_url", "unsubscribe.url",
+  "appointment.confirm_url", "appointment.ical_download_url", "appointment.tracking_url",
+  "contact.next_appointment_link", "contact.schedule_url", "contact.update_payment_url", "update_payment_url"];
+
+let current = TEMPLATES[0][1][0][0], useSample = true;
+const frame = document.getElementById("frame"), meta = document.getElementById("meta"), nav = document.getElementById("nav");
+
+function fill(html) {
+  return html.replace(/\{([a-z_.|:-]+)\}/gi, (m, k) => {
+    if (k in SAMPLE) return SAMPLE[k];
+    if (LINKS.includes(k)) return "#";
+    return m;
+  }).replace(/\[([A-Z$0-9' ]+)\]/g, (m, k) => (k in HANDFILL ? HANDFILL[k] : m));
+}
+
+async function show() {
+  const res = await fetch("emails/" + current + ".html", { cache: "no-store" });
+  let html = await res.text();
+  const kb = (new Blob([html]).size / 1024).toFixed(1);
+  if (useSample) {
+    html = fill(html);
+    if (current === "receipt") html = html.replace("Remaining Balance:</strong> $685.00", "Remaining Balance:</strong> $0.00");
+  }
+  frame.srcdoc = html;
+  meta.textContent = "emails/" + current + ".html · " + kb + " KB · " +
+    (useSample ? "showing made-up sample data" : "showing raw shortcodes");
+  nav.querySelectorAll("button").forEach(b => b.setAttribute("aria-current", b.dataset.id === current));
+}
+
+for (const [label, items] of TEMPLATES) {
+  const h = document.createElement("h2"); h.textContent = label; nav.appendChild(h);
+  for (const [id, name] of items) {
+    const b = document.createElement("button");
+    b.textContent = name; b.dataset.id = id;
+    b.onclick = () => { current = id; show(); };
+    nav.appendChild(b);
+  }
+}
+function pair(a, b, onA) {
+  const A = document.getElementById(a), B = document.getElementById(b);
+  A.onclick = () => { A.setAttribute("aria-pressed", true); B.setAttribute("aria-pressed", false); onA(true); };
+  B.onclick = () => { B.setAttribute("aria-pressed", true); A.setAttribute("aria-pressed", false); onA(false); };
+}
+pair("desk", "phone", d => frame.classList.toggle("phone", !d));
+pair("sample", "raw", s => { useSample = s; show(); });
+show();
+</script>
+</body>
+</html>
