@@ -57,6 +57,11 @@ are in `docs/agreement/`:
 | `serviceminder-setup.md` | Setting up the services, payment plans and proposals, with a test to run first |
 | `office-routine.md` | Renewals, failed payments and cancellations |
 
+`docs/agreement/word/` holds Word copies of the same four documents, for
+filling in, sending to the lawyer and pasting into ServiceMinder. The `.md`
+files are the originals: after changing one, remake its Word copy with
+`pandoc docs/agreement/NAME.md -f gfm -o docs/agreement/word/NAME.docx`.
+
 The prices in those documents must match `TIERS` in `public/index.html`.
 After changing a price, run `node scripts/check-agreement.js`; it fails and
 names the figure if a document is out of step.
