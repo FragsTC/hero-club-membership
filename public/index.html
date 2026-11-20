@@ -395,14 +395,15 @@
   }
   .plan-photo {
     position: relative;
-    height: 164px;
-    background: #00355a center / cover no-repeat;
+    --lap: 62px;
+    height: 236px;
+    background: #00355a center 20% / cover no-repeat;
     display: flex; align-items: flex-end;
-    padding: 14px 18px;
+    padding: 14px 18px calc(var(--lap) + 12px);
   }
-  .plan-photo::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,17,29,0) 30%, rgba(0,17,29,0.14) 46%, rgba(0,17,29,0.4) 62%, rgba(0,17,29,0.72) 77%, rgba(0,17,29,0.93) 89%, var(--ink) 97%); }
+  .plan-photo::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,17,29,0) 12%, rgba(0,17,29,0.10) 28%, rgba(0,17,29,0.30) 42%, rgba(0,17,29,0.58) 56%, rgba(0,17,29,0.82) 69%, rgba(0,17,29,0.95) 80%, var(--ink) 90%); }
   .plan-photo .plan-top { position: relative; z-index: 1; }
-  .plan-body { padding: 14px 22px 24px; }
+  .plan-body { position: relative; z-index: 1; margin-top: -62px; padding: 14px 22px 24px; }
   .plan-body.swap-next { animation: swap-next 0.45s var(--ease-out) both; }
   .plan-body.swap-prev { animation: swap-prev 0.45s var(--ease-out) both; }
   @keyframes swap-next { from { opacity: 0; transform: translateX(44px); } to { opacity: 1; transform: none; } }
@@ -685,8 +686,8 @@
     .plan-inner { border-radius: 21px; }
     .plan-tab { flex-wrap: wrap; gap: 4px 8px; padding: 10px 12px; }
     .plan-visits { font-size: 0.8125rem; flex-basis: 100%; }
-    .plan-body { padding: 12px 14px 18px; }
-    .plan-photo { height: 128px; padding: 10px 12px; }
+    .plan-body { margin-top: -44px; padding: 12px 14px 18px; }
+    .plan-photo { --lap: 44px; height: 184px; padding: 10px 12px calc(var(--lap) + 10px); }
     .plan-amount { font-size: 3.25rem; }
     .plan-price.is-text .plan-amount { font-size: 1.625rem; }
     .plan-unit { font-size: 0.9375rem; }
@@ -696,8 +697,8 @@
   }
   @media (max-width: 359px) {
     .app { padding-left: 12px; padding-right: 12px; }
-    .plan-body { padding: 12px 16px 20px; }
-    .plan-photo { height: 136px; padding: 12px 14px; }
+    .plan-body { margin-top: -48px; padding: 12px 16px 20px; }
+    .plan-photo { --lap: 48px; height: 196px; padding: 12px 14px calc(var(--lap) + 10px); }
     .plan-amount { font-size: 4rem; }
     .seg--size span { font-size: 0.75rem; }
     .plan-price.is-text .plan-amount { font-size: 1.875rem; }
