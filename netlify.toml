@@ -1,0 +1,6 @@
+# Hero Club membership page. No build step: "public" is served as it is.
+[build]
+  publish = "public"
+
+[functions]
+  directory = "netlify/functions"

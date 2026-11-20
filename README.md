@@ -1,8 +1,8 @@
 # Hero Club membership page
 
 A customer-facing page for choosing a Hero Club tier and sending a request to
-Window Hero. Plain HTML, CSS and JavaScript with no build step: `index.html`
-is the whole app.
+Window Hero. Plain HTML, CSS and JavaScript with no build step:
+`public/index.html` is the whole app.
 
 Live at https://heroclub-membership.netlify.app (Netlify site
 `heroclub-membership`).
@@ -11,29 +11,48 @@ Live at https://heroclub-membership.netlify.app (Netlify site
 
 | Path | What it is |
 |---|---|
-| `index.html` | The page: styles, markup and script in one file |
-| `sw.js` | Offline support. Pages load fresh when online, from cache when not |
-| `manifest.webmanifest`, `icons/` | Home-screen name and icons |
-| `fonts/` | Barlow and Noto Sans (SIL Open Font License) |
-| `photos/` | Landing-screen photos, 480px squares |
+| `public/index.html` | The page: styles, markup and script in one file |
+| `public/sw.js` | Offline support. Pages load fresh when online, from cache when not |
+| `public/manifest.webmanifest`, `public/icons/` | Home-screen name and icons |
+| `public/fonts/` | Barlow and Noto Sans (SIL Open Font License) |
+| `public/photos/` | Landing-screen photos, 480px squares |
+| `netlify/functions/submission-created.js` | Adds each request to monday.com |
+| `netlify.toml` | Tells Netlify to serve `public/` and where the function is |
 
 ## Flow
 
-Landing → tier → add-ons → details → request received.
+Landing → plan → add-ons → details → request received.
 
 Requests are posted to Netlify Forms (form name `hero-club-lead`). If that
 fails or the phone is offline, a dialog offers to send the same details by
 email instead.
 
+## Where requests go
+
+Each accepted request goes to three places:
+
+1. **Netlify Forms**, under the `heroclub-membership` project.
+2. **Email**, if a notification is set up on the form in Netlify.
+3. **monday.com**, on the "Hero Club Requests" board. The function
+   `submission-created.js` runs on every accepted submission and creates one
+   item per request.
+
+The monday.com step needs an environment variable on the Netlify project:
+`MONDAY_API_TOKEN`, a monday.com API token that can add items to the board.
+Without it the function logs a message and does nothing; the request is still
+in Netlify Forms and the email still goes out. The board id and column ids are
+at the top of the function. If a column is deleted or recreated on the board,
+update its id there.
+
 ## Common changes
 
-All of these are near the top of the `<script>` in `index.html`.
+All of these are near the top of the `<script>` in `public/index.html`.
 
 - **Prices, services, discounts, add-ons:** the `TIERS` object. `price` holds
   `[monthly, deposit]` for each home size. These must match the Hero Club door
   hanger.
 - **Home sizes:** `HOME_SIZES`.
-- **Landing photos:** add square images to `photos/` and list them in `PHOTOS`.
+- **Landing photos:** add square images to `public/photos/` and list them in `PHOTOS`.
   With the list empty, drawn service icons show instead. Also add new files to
   the `SHELL` list in `sw.js` so they work offline.
 - **Fallback email address:** `CONTACT_EMAIL`.
@@ -43,9 +62,10 @@ After changing anything, bump the `CACHE` name in `sw.js` (for example
 
 ## Deploying
 
-Drag this folder onto the Deploys tab of the `heroclub-membership` project in
-Netlify, or deploy it with the Netlify CLI. Deploy the whole folder, not just
-`index.html`.
+Deploy this whole folder with the Netlify CLI, or connect the repo to the
+`heroclub-membership` project with this folder as the base directory. Dragging
+a folder onto the Deploys tab publishes the page but does not deploy the
+monday.com function.
 
 Form detection must stay enabled on the Netlify project, and the form needs an
 email notification set up in Netlify for requests to reach an inbox.
