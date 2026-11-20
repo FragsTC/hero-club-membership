@@ -38,7 +38,8 @@ Each accepted request goes to three places:
    item per request.
 
 The monday.com step needs an environment variable on the Netlify project:
-`MONDAY_API_TOKEN`, a monday.com API token that can add items to the board.
+`monday_api_key` (or `MONDAY_API_TOKEN`), a monday.com API token that can add
+items to the board. Set it for the production context and redeploy afterwards.
 Without it the function logs a message and does nothing; the request is still
 in Netlify Forms and the email still goes out. The board id and column ids are
 at the top of the function. If a column is deleted or recreated on the board,

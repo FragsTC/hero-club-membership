@@ -1,8 +1,10 @@
 // Runs each time Netlify accepts a submission to the "hero-club-lead" form
 // and adds it to the "Hero Club Requests" board on monday.com.
 //
-// Needs one environment variable on the Netlify project:
-//   MONDAY_API_TOKEN  a monday.com API token that can add items to the board
+// Needs one environment variable on the Netlify project, holding a monday.com
+// API token that can add items to the board. Either name works:
+//   monday_api_key  (the name currently set on the project)
+//   MONDAY_API_TOKEN
 //
 // If the token is missing or monday.com rejects the item, the request is still
 // safe: it stays in Netlify Forms and the email notification still goes out.
@@ -71,9 +73,9 @@ exports.handler = async (event) => {
   }
   if (!payload || payload.form_name !== FORM_NAME) return { statusCode: 200, body: 'ignored' };
 
-  const token = process.env.MONDAY_API_TOKEN;
+  const token = (process.env.monday_api_key || process.env.MONDAY_API_TOKEN || '').trim();
   if (!token) {
-    console.error('MONDAY_API_TOKEN is not set, so this request was not added to monday.com.');
+    console.error('No monday.com token is set (monday_api_key), so this request was not added to monday.com.');
     return { statusCode: 200, body: 'no token' };
   }
 
