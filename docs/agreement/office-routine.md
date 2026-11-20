@@ -1,0 +1,157 @@
+# Hero Club office routine
+
+What the office does once ServiceMinder is set up
+(`serviceminder-setup.md`). One person should own this: the owner of the
+**Hero Club Requests** board on monday.com.
+
+## 1. From request to member
+
+1. A request arrives on the board with status **New**.
+2. Call the customer the same day. Confirm the plan, home size and price.
+   For homes over 3,500 sq ft, quote the price.
+3. In ServiceMinder, create a proposal from the matching Hero Club template
+   and send it.
+4. When the customer accepts and pays the deposit, on the board item:
+   - set the status to **Active**;
+   - set **Signed on** to the date they accepted.
+5. Do not schedule a visit inside the first 3 business days unless the
+   customer asks for one. They can cancel for a full refund in that window.
+6. Schedule the year's visits and tell the customer the seasons to expect
+   them.
+
+**Signed on** is what every date below is counted from. If it is blank, the
+renewal reminder cannot fire.
+
+## 2. Renewal
+
+North Carolina law requires a written renewal notice at least 15 and no more
+than 45 days before the renewal date. If it is not sent in that window, the
+renewal clause cannot be enforced. This is the one job on this page that
+must not be missed.
+
+| When | What |
+|---|---|
+| 35 days before the anniversary of **Signed on** | The board reminds the owner. Look up the current price for the member's plan and home size. |
+| 30 days before | Send the notice below by email. Set **Renewal notice sent** on the board item to today. |
+| Up to the renewal date | If the member opts out, set the status to **Not renewing**. Nothing more is charged after the twelfth monthly charge. |
+| Renewal date | If they have not opted out, set up the renewal year in ServiceMinder: 12 monthly charges at the price in the notice, no deposit, the first one month after the renewal date. Set **Signed on** to the renewal date so next year's reminder fires. |
+
+**If the notice was missed:** it can still go out as long as the renewal date
+is at least 15 days away. If it is closer than that, do not renew
+automatically. Call the member and send a new proposal for them to accept.
+
+Setting up the renewal year in ServiceMinder has not been tested. The
+likely way is a payment plan named `Hero Club renewal` with no deposit and
+12 monthly installments, applied to an invoice for the year's total. Confirm
+how with a test before the first renewal comes due.
+
+### The renewal notice
+
+Subject: Your Hero Club membership renews on [RENEWAL DATE]
+
+> Hi [FIRST NAME],
+>
+> Your Hero Club [PLAN] membership for [ADDRESS] renews automatically on
+> **[RENEWAL DATE]** for another 12 months.
+>
+> **Your monthly charge for the new year will be $[NEW MONTHLY PRICE].**
+> There is no deposit. The first charge will be one month after your
+> renewal date, to the card we have on file, and then monthly for 12 months.
+>
+> Your plan includes the same services as this year: [PLAN SERVICES].
+>
+> **If you do not want to renew,** reply to this email, or contact us at
+> [OFFICE EMAIL] or [OFFICE PHONE], any time before [RENEWAL DATE]. There is
+> no charge for not renewing.
+>
+> Thank you for being a Hero Club member.
+>
+> Window Hero
+
+Send it as its own email, not inside a newsletter or a visit report.
+
+## 3. When a payment fails
+
+ServiceMinder emails the member a link to update their card and lists the
+failure under Failed Payments. Check that list every weekday.
+
+| Day | What |
+|---|---|
+| 1 | Text the member (below). Hold their upcoming visits. |
+| 7 | If still unpaid, email and text again. |
+| 10 | Call. The agreement gives them 10 days to update the card. |
+| 30 | If still unpaid, the membership ends. Work out the settlement in section 4 and set the board status to **Cancelled**. |
+
+Day 1 text:
+
+> Hi [FIRST NAME], it's Window Hero. Your Hero Club payment of $[AMOUNT]
+> didn't go through. You can update your card with the link we emailed, or
+> call us at [OFFICE PHONE]. We'll hold your next visit until it's sorted.
+
+Day 7 email and text:
+
+> Hi [FIRST NAME], your Hero Club payment of $[AMOUNT] from [DATE] is still
+> unpaid and your visits are on hold. Please update your card with the link
+> in our earlier email or call [OFFICE PHONE]. If we can't collect it by
+> [DATE + 30 DAYS], your membership will end under the cancellation terms
+> of your agreement.
+
+When the payment goes through, release the held visits.
+
+## 4. When a member cancels
+
+1. Note the date they gave notice. Inside the first 3 business days after
+   signing: refund everything and stop here.
+2. Otherwise the membership ends 30 days after the notice. Monthly charges
+   due before that end date still run. Visits already booked before it
+   still happen.
+3. On the end date, work out the settlement:
+   - **Received:** add up every plan service performed, at the Schedule A
+     price for their home size. Do not count add-ons; those were billed
+     separately.
+   - **Paid:** the deposit plus every monthly charge collected.
+   - **Cap:** the number of monthly charges not yet collected, times their
+     monthly charge.
+   - If Received is more than Paid, they owe the difference, but never more
+     than the Cap. Charge the card on file and email a receipt showing the
+     sum.
+   - If Paid is more than Received, they owe nothing and no refund is due.
+4. Cancel the remaining installments in ServiceMinder and set the board
+   status to **Cancelled**.
+
+If Window Hero ends the membership for any reason other than a failed
+payment, the member owes nothing, and if Paid is more than Received, refund
+the difference.
+
+### Worked examples
+
+Both use Bronze for a home up to 2,500 sq ft: $70 deposit, $54 a month. The
+service prices here ($400 for a house wash, $150 for a gutter cleaning) are
+**made-up figures for the example, not Window Hero's prices**. Use Schedule
+A.
+
+**Example A: leaves right after the house wash.** The member signs, has the
+house wash in the first week, and gives notice on day 5. The membership ends
+on day 35. One monthly charge ran before then.
+
+- Received: $400
+- Paid: $70 + $54 = $124
+- Cap: 11 charges left x $54 = $594
+- $400 - $124 = $276, which is under the cap. **They owe $276.**
+
+**Example B: leaves late in the year.** The member's membership ends after
+nine monthly charges. They have had the house wash and one gutter cleaning.
+
+- Received: $400 + $150 = $550
+- Paid: $70 + 9 x $54 = $556
+- Paid is more than Received. **They owe nothing, and no refund is due.**
+
+## The weekly check
+
+Once a week, the board owner looks at:
+
+- New requests not yet called.
+- Proposals sent but not accepted after 3 days: call.
+- Failed Payments in ServiceMinder.
+- Any **Active** item with a blank **Signed on**.
+- Renewals due in the next 45 days.

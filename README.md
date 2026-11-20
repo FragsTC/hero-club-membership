@@ -45,6 +45,22 @@ in Netlify Forms and the email still goes out. The board id and column ids are
 at the top of the function. If a column is deleted or recreated on the board,
 update its id there.
 
+## Membership agreement
+
+Signing and billing happen in ServiceMinder, not on this page. The documents
+are in `docs/agreement/`:
+
+| File | What it is |
+|---|---|
+| `hero-club-membership-agreement.md` | The agreement members sign. A draft until a lawyer has reviewed it |
+| `lawyer-review-notes.md` | What to ask the lawyer, and the blanks to fill in |
+| `serviceminder-setup.md` | Setting up the services, payment plans and proposals, with a test to run first |
+| `office-routine.md` | Renewals, failed payments and cancellations |
+
+The prices in those documents must match `TIERS` in `public/index.html`.
+After changing a price, run `node scripts/check-agreement.js`; it fails and
+names the figure if a document is out of step.
+
 ## Common changes
 
 All of these are near the top of the `<script>` in `public/index.html`.
