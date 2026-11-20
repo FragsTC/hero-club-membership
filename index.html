@@ -147,7 +147,7 @@
     -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 34%, rgba(0,0,0,0.3) 74%, transparent 100%);
     mask-image: linear-gradient(180deg, #000 0%, #000 34%, rgba(0,0,0,0.3) 74%, transparent 100%);
   }
-  :root { --reel-h: min(56vh, 500px); }
+  :root { --reel-h: min(48vh, 430px); }
   .reel-row { display: flex; gap: 12px; width: max-content; margin-bottom: 12px; animation: drift 70s linear infinite; }
   .reel-row:nth-child(even) { animation-direction: reverse; animation-duration: 85s; }
   .reel-row:nth-child(3) { animation-duration: 60s; }
@@ -169,6 +169,9 @@
   .landing { padding-top: calc(var(--reel-h) - 118px); text-align: center; }
   .landing-logo { display: block; height: 76px; width: auto; margin: 0 auto 18px; filter: drop-shadow(0 6px 18px rgba(0,17,29,0.9)); }
   .landing .screen-title { font-size: 2.75rem; }
+  /* brand callout style: Barlow Bold Italic, in the accent yellow */
+  .landing-hook { font-family: var(--font-display); font-style: italic; font-weight: 700; font-size: 1.375rem; line-height: 1.2; color: var(--perfect-day-yellow); margin-top: 14px; text-wrap: balance; }
+  .landing .screen-sub { margin-top: 8px; padding-bottom: 36px; }
   .landing .screen-title em { font-size: 0.55em; }
   body.on-landing .reel { display: block; animation: reel-in 0.5s ease-out both; }
   @keyframes reel-in { from { opacity: 0; } to { opacity: 1; } }
@@ -459,10 +462,20 @@
 
   /* Short phones: smaller reel so the headline and button both fit */
   @media (max-height: 720px) and (max-width: 759px) {
-    :root { --reel-h: 44vh; }
+    :root { --reel-h: 40vh; }
     .reel { --tile: 104px; }
     .landing-logo { height: 58px; margin-bottom: 12px; }
     .landing .screen-title { font-size: 2.25rem; }
+  }
+
+  /* Very short phones */
+  @media (max-height: 600px) and (max-width: 759px) {
+    :root { --reel-h: 30vh; }
+    .reel { --tile: 84px; }
+    .landing { padding-top: calc(var(--reel-h) - 60px); }
+    .landing-logo { height: 48px; margin-bottom: 8px; }
+    .landing .screen-title { font-size: 2rem; }
+    .landing-hook { font-size: 1.1875rem; margin-top: 10px; }
   }
 
   /* Phone: one tier at a time */
@@ -480,7 +493,7 @@
     .screen-title { font-size: 3rem; }
     .reel { --tile: 168px; }
     .reel-row { gap: 16px; margin-bottom: 16px; }
-    :root { --reel-h: min(58vh, 560px); }
+    :root { --reel-h: min(50vh, 480px); }
     .landing .screen-title { font-size: 3.5rem; }
     .landing-logo { height: 92px; }
     /* the cards themselves are the tier switch here; the radios stay for keyboard and screen readers */
@@ -554,7 +567,8 @@
     <section class="screen landing" id="screen-landing" data-step="0" aria-labelledby="t-landing">
       <img class="landing-logo" id="landingLogo" alt="Hero Club">
       <h1 class="screen-title" id="t-landing" tabindex="-1"><em>It's time to be the</em> Hero of your home</h1>
-      <p class="screen-sub">Gutters, windows and house washing, taken care of all year with a Hero Club membership.</p>
+      <p class="landing-hook">Every exterior clean your home needs.</p>
+      <p class="screen-sub">One membership. We handle the work all year. You keep your weekends.</p>
     </section>
 
     <!-- 1 · TIER -->
