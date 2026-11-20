@@ -215,7 +215,7 @@ def service_complete():
         heading("Be The Hero of Your Home!", size=24, mb=14) +
         p("Join the <strong>Hero Club</strong> and enjoy the convenience of scheduled maintenance, exclusive member savings, and priority scheduling.",
           mb=10, align="center", lh=1.8) +
-        p("Plans starting at just $59/month", mb=22, color=NAVY, size=22, align="center").replace(
+        p("Plans starting at just $54/month", mb=22, color=NAVY, size=22, align="center").replace(
             '<p style="', '<p style="font-weight:bold; ') +
         check_rows(["Exclusive Member Discounts", "Priority Scheduling",
                     "Bronze, Silver &amp; Gold Memberships", "Automatic Service Reminders",

@@ -86,9 +86,10 @@ The other emails need nothing typed in.
 - `hero-club-welcome.html` is replaced by the three plan versions. The old
   one listed benefits that are not in the plans, such as priority
   scheduling.
-- Nothing else was changed. `service-complete.html` still says "Plans
-  starting at just $59/month"; the signup page starts at $54. Say which is
-  right and we will correct it.
+- `service-complete.html` said "Plans starting at just $59/month". It now
+  says $54, which matches the signup page. If the copy in ServiceMinder is
+  the old one, paste the new file over it.
+- Nothing else was changed.
 
 ## If a plan changes
 
