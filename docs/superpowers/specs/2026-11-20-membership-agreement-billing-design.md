@@ -197,12 +197,11 @@ Needs from the owner: ServiceMinder API keys (stored as Netlify environment
 variables, never in the repository) and the ids of the services created in
 phase 1.
 
-## Open with the owner
+## Answered by the owner
 
-- Whether this ServiceMinder account sits under a franchise brand that
-  controls proposal terms, services, payment plans or API keys.
-- Whether there are Hero Club members today who need moving onto the
-  agreement.
+- The owner controls proposal terms, services, payment plans and API keys in
+  this ServiceMinder account.
+- There is one Hero Club member today. They need no migration.
 
 ## Left to the builder
 
