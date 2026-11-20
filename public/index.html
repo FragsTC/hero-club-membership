@@ -79,12 +79,11 @@
   }
 
   /* The page background is one fixed navy gradient; everything else floats over it */
-  html { background: var(--ink); color-scheme: dark; }
+  /* canvas colour = top of the gradient, so the pull-down area on iOS is seamless */
+  html { background: #003b64; color-scheme: dark; }
   html::before {
     content: ''; position: fixed; top: 0; left: 0; right: 0; height: 100vh; height: 100lvh; z-index: -1;
-    background:
-      radial-gradient(900px 520px at 50% -120px, #003b64 0%, rgba(0,59,100,0.35) 45%, transparent 75%) no-repeat,
-      var(--ink);
+    background: linear-gradient(180deg, #003b64 0, #002c4b 150px, #001a2d 340px, var(--ink) 540px);
     pointer-events: none;
   }
   body {
