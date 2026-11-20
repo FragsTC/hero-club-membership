@@ -21,7 +21,7 @@ Live at https://heroclub-membership.netlify.app (Netlify site
 
 ## Flow
 
-Landing → plan → add-ons → details → request received.
+Landing → home size → plan → add-ons → details → request received.
 
 Requests are posted to Netlify Forms (form name `hero-club-lead`). If that
 fails or the phone is offline, a dialog offers to send the same details by
