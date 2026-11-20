@@ -255,6 +255,11 @@
   @keyframes stage-sheen { 0%, 55% { left: -60%; } 100% { left: 130%; } }
   .stage-art { position: relative; height: 200px; }
   .stage-art svg { position: relative; display: block; width: 100%; height: 100%; overflow: visible; }
+  .stage-art canvas { display: none; position: absolute; top: -14px; left: -18px; width: calc(100% + 36px); height: calc(100% + 20px); touch-action: pan-y; cursor: grab; transition: opacity 0.5s; }
+  .stage-art canvas:active { cursor: grabbing; }
+  .stage.gl .stage-art canvas { display: block; }
+  .stage.gl .stage-art svg { display: none; }
+  .stage.gl[data-size="none"] .stage-art canvas { opacity: 0.78; }
   /* the house: three shaded faces per block, lit from the right */
   .lawn { fill: rgba(0,117,170,0.20); transition: fill 0.6s; }
   .stage.has-size .lawn { fill: rgba(0,155,216,0.26); }
@@ -732,7 +737,7 @@
       <h1 class="screen-title" id="t-size" tabindex="-1"><em>How big is</em> your home?</h1>
       <p class="screen-sub">Your price depends on the size of your home.</p>
       <div class="stage" id="stage" data-size="none">
-        <div class="stage-art" aria-hidden="true">
+        <div class="stage-art" aria-hidden="true"><canvas id="houseGL"></canvas>
           <svg viewBox="-160 -108 320 200" preserveAspectRatio="xMidYMid meet"><defs><filter id="hsBlur" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="3"/></filter></defs><ellipse class="lawn" cx="0" cy="58" rx="152" ry="32"/><g class="scene"><g class="float"><g filter="url(#hsBlur)"><polygon class="shade sh-main" points="-10.4,-4.0 55.4,34.0 14.7,59.5 -52.8,20.5"/><polygon class="shade sh-garage" points="39.8,31.0 83.1,56.0 49.4,77.5 4.3,51.5"/><polygon class="shade sh-wing" points="-52.0,-20.0 -6.9,6.0 -39.0,26.5 -85.7,-0.5"/></g><g class="part p-walk"><polygon class="walk" points="-16.5,36.5 -7.8,41.5 -25.1,51.5 -33.8,46.5"/></g><g class="part p-garage-g"><polygon class="drive" points="22.5,57.0 45.0,70.0 22.5,83.0 0.0,70.0"/></g><g class="part p-wing"><polygon class="wall-f" points="-72.7,2.0 -38.1,22.0 -38.1,-4.0 -72.7,-24.0"/><polygon class="wall-r" points="-6.9,4.0 -38.1,22.0 -38.1,-4.0 -22.5,-28.0 -6.9,-22.0"/><polygon class="win" points="-66.7,-3.5 -58.0,1.5 -58.0,-10.5 -66.7,-15.5"/><polyline class="mull" points="-62.4,-1.0 -62.4,-13.0"/><polygon class="win" points="-52.8,4.5 -44.2,9.5 -44.2,-2.5 -52.8,-7.5"/><polyline class="mull" points="-48.5,7.0 -48.5,-5.0"/><polygon class="roof-f" points="-77.9,-21.5 -38.1,1.5 -19.9,-26.5 -59.8,-49.5"/><polyline class="fascia" points="-38.1,1.5 -19.9,-26.5 -1.7,-19.5"/><polyline class="eave" points="-77.9,-21.5 -38.1,1.5"/></g><g class="p-main"><polygon class="wall-f" points="-39.8,23.0 15.6,55.0 15.6,19.0 -39.8,-13.0"/><polygon class="wall-r" points="55.4,32.0 15.6,55.0 15.6,19.0 35.5,-16.5 55.4,-4.0"/><polygon class="win" points="-33.8,14.5 -23.4,20.5 -23.4,7.5 -33.8,1.5"/><polyline class="mull" points="-28.6,17.5 -28.6,4.5"/><polygon class="win" points="-0.9,33.5 9.5,39.5 9.5,26.5 -0.9,20.5"/><polyline class="mull" points="4.3,36.5 4.3,23.5"/><polygon class="door" points="-16.5,36.5 -7.8,41.5 -7.8,21.5 -16.5,16.5"/><circle class="knob" cx="-9.5" cy="30.5" r="0.9"/><polygon class="win" points="40.7,28.5 30.3,34.5 30.3,21.5 40.7,15.5"/><polyline class="mull" points="35.5,31.5 35.5,18.5"/><polygon class="win" points="39.0,-0.5 32.0,3.5 32.0,-4.5 39.0,-8.5"/><polyline class="mull" points="35.5,1.5 35.5,-6.5"/><polygon class="wall-f" points="22.5,-9.0 27.7,-6.0 27.7,-36.0 22.5,-39.0"/><polygon class="wall-r" points="32.9,-9.0 27.7,-6.0 27.7,-36.0 32.9,-39.0"/><polygon class="cap" points="27.7,-42.0 32.9,-39.0 27.7,-36.0 22.5,-39.0"/><g class="roof-main"><polygon class="roof-f" points="-45.0,-9.9 15.6,25.1 38.1,-15.0 -22.5,-50.0"/><polyline class="fascia" points="15.6,25.1 38.1,-15.0 60.6,-0.9"/><polyline class="eave" points="-45.0,-9.9 15.6,25.1"/></g></g><g class="part p-bump"><polygon class="wall-f" points="-34.6,40.0 -13.9,52.0 -13.9,22.0 -24.2,2.0 -34.6,10.0"/><polygon class="wall-r" points="-1.7,45.0 -13.9,52.0 -13.9,22.0 -1.7,15.0"/><polygon class="door" points="-28.6,43.5 -19.9,48.5 -19.9,29.5 -28.6,24.5"/><circle class="knob" cx="-21.6" cy="38.0" r="0.9"/><polygon class="win" points="-26.8,18.5 -21.6,21.5 -21.6,14.5 -26.8,11.5"/><polyline class="mull" points="-24.2,20.0 -24.2,13.0"/><polygon class="roof-r" points="-5.5,-8.9 -26.8,3.5 -14.3,27.6 0.4,19.1"/><polyline class="fascia" points="-39.0,13.3 -26.8,3.5 -14.3,27.6"/></g><g class="part p-garage"><polygon class="wall-f" points="17.3,54.0 50.2,73.0 50.2,49.0 17.3,30.0"/><polygon class="wall-r" points="83.1,54.0 50.2,73.0 50.2,49.0 66.7,25.5 83.1,30.0"/><polygon class="gdoor" points="22.5,57.0 45.0,70.0 45.0,52.0 22.5,39.0"/><polyline class="gline" points="22.5,52.5 45.0,65.5"/><polyline class="gline" points="22.5,48.0 45.0,61.0"/><polyline class="gline" points="22.5,43.5 45.0,56.5"/><polygon class="win" points="71.9,51.5 61.5,57.5 61.5,47.5 71.9,41.5"/><polyline class="mull" points="66.7,54.5 66.7,44.5"/><polygon class="roof-f" points="12.1,32.2 50.2,54.2 69.3,27.0 31.2,5.0"/><polyline class="fascia" points="50.2,54.2 69.3,27.0 88.3,32.2"/><polyline class="eave" points="12.1,32.2 50.2,54.2"/></g></g></g></svg>
         </div>
         <div class="stage-read" aria-live="polite">
@@ -1262,6 +1267,200 @@ function markSize(animate) {
     stageShown.p = 0;
   }
 }
+/* ── the home-size house: a small real-time 3D model (WebGL, no library).
+   If WebGL is unavailable the drawn SVG house underneath is used instead. ── */
+var wakeHouse = function() {};
+(function() {
+  var stageEl = $('stage'), cv = $('houseGL'), gl = null;
+  try { gl = cv.getContext('webgl', { antialias: true, alpha: true, premultipliedAlpha: true }); } catch (e) {}
+  if (!gl) return;
+
+  var V = [];
+  function sub(a, b) { return [a[0]-b[0], a[1]-b[1], a[2]-b[2]]; }
+  function cross(a, b) { return [a[1]*b[2]-a[2]*b[1], a[2]*b[0]-a[0]*b[2], a[0]*b[1]-a[1]*b[0]]; }
+  function dot(a, b) { return a[0]*b[0]+a[1]*b[1]+a[2]*b[2]; }
+  function norm(a) { var l = Math.sqrt(dot(a, a)) || 1; return [a[0]/l, a[1]/l, a[2]/l]; }
+  function hex(h) { return [parseInt(h.substr(1,2),16)/255, parseInt(h.substr(3,2),16)/255, parseInt(h.substr(5,2),16)/255]; }
+  function vert(p, n, c, part, kind) { V.push(p[0],p[1],p[2], n[0],n[1],n[2], c[0],c[1],c[2], part, kind); }
+  // kind: 0 plain, 1 window glass, 2 ground disc, 3 siding, 4 shingles
+  function tri(a, b, c, col, part, kind, inside) {
+    var n = norm(cross(sub(b, a), sub(c, a)));
+    if (inside && dot(n, sub(a, inside)) < 0) n = [-n[0], -n[1], -n[2]];
+    vert(a, n, col, part, kind); vert(b, n, col, part, kind); vert(c, n, col, part, kind);
+  }
+  function quad(a, b, c, d, col, part, kind, inside) { tri(a, b, c, col, part, kind, inside); tri(a, c, d, col, part, kind, inside); }
+  function box(x1, x2, y1, y2, z1, z2, col, part, kind) {
+    var m = [(x1+x2)/2, (y1+y2)/2, (z1+z2)/2];
+    quad([x1,y2,z1],[x2,y2,z1],[x2,y2,z2],[x1,y2,z2], col, part, kind, m);
+    quad([x1,y1,z1],[x2,y1,z1],[x2,y1,z2],[x1,y1,z2], col, part, kind, m);
+    quad([x2,y1,z1],[x2,y2,z1],[x2,y2,z2],[x2,y1,z2], col, part, kind, m);
+    quad([x1,y1,z1],[x1,y2,z1],[x1,y2,z2],[x1,y1,z2], col, part, kind, m);
+    quad([x1,y1,z2],[x2,y1,z2],[x2,y2,z2],[x1,y2,z2], col, part, kind, m);
+  }
+  function prism(q, th, top, edge, part) {
+    var t = q.map(function(p) { return [p[0], p[1], p[2] + th]; });
+    var m = [0,0,0]; q.concat(t).forEach(function(p) { m[0]+=p[0]/8; m[1]+=p[1]/8; m[2]+=p[2]/8; });
+    quad(t[0],t[1],t[2],t[3], top, part, 4, m);
+    quad(q[0],q[1],q[2],q[3], edge, part, 0, m);
+    for (var i = 0; i < 4; i++) { var j = (i+1) % 4; quad(q[i],q[j],t[j],t[i], edge, part, 0, m); }
+  }
+  var WALL = hex('#eef2f7'), ROOF = hex('#0075aa'), EDGE = hex('#00456f'), NAVY = hex('#003b64'), WHITE = hex('#ffffff'), GLASS = hex('#fcaf17');
+  // gabled block. swap=false: ridge runs along x. swap=true: ridge runs along y.
+  function gable(u1, u2, v1, v2, h, r, part, roofPart, swap) {
+    function P(u, v, z) { return swap ? [v, u, z] : [u, v, z]; }
+    var vm = (v1+v2)/2, um = (u1+u2)/2, mid = P(um, vm, h/2), ov = 2.5, th = 1.4, ze = h - ov * r / ((v2-v1)/2);
+    quad(P(u1,v2,0),P(u2,v2,0),P(u2,v2,h),P(u1,v2,h), WALL, part, 3, mid);
+    quad(P(u1,v1,0),P(u2,v1,0),P(u2,v1,h),P(u1,v1,h), WALL, part, 3, mid);
+    [u1, u2].forEach(function(u) {
+      quad(P(u,v1,0),P(u,v2,0),P(u,v2,h),P(u,v1,h), WALL, part, 3, mid);
+      tri(P(u,v1,h),P(u,v2,h),P(u,vm,h+r), WALL, part, 3, mid);
+    });
+    prism([P(u1-ov,v2+ov,ze),P(u2+ov,v2+ov,ze),P(u2+ov,vm,h+r),P(u1-ov,vm,h+r)], th, ROOF, EDGE, roofPart);
+    prism([P(u1-ov,v1-ov,ze),P(u2+ov,v1-ov,ze),P(u2+ov,vm,h+r),P(u1-ov,vm,h+r)], th, ROOF, EDGE, roofPart);
+  }
+  // windows: white frame, glowing glass, navy mullion. ax 'y' = on a wall facing ±y, 'x' = facing ±x
+  function win(ax, at, s, a1, a2, z1, z2, part) {
+    function P(a, z, o) { return ax === 'y' ? [a, at + s*o, z] : [at + s*o, a, z]; }
+    var ins = ax === 'y' ? [(a1+a2)/2, at - s*5, (z1+z2)/2] : [at - s*5, (a1+a2)/2, (z1+z2)/2], am = (a1+a2)/2;
+    quad(P(a1-1,z1-1,.25),P(a2+1,z1-1,.25),P(a2+1,z2+1,.25),P(a1-1,z2+1,.25), WHITE, part, 0, ins);
+    quad(P(a1,z1,.45),P(a2,z1,.45),P(a2,z2,.45),P(a1,z2,.45), GLASS, part, 1, ins);
+    quad(P(am-.3,z1,.6),P(am+.3,z1,.6),P(am+.3,z2,.6),P(am-.3,z2,.6), NAVY, part, 0, ins);
+  }
+  function flat(x1, x2, y1, y2, z, col, part) { quad([x1,y1,z],[x2,y1,z],[x2,y2,z],[x1,y2,z], col, part, 0, [0,0,-50]); }
+  function blob(cx, cy, cz, r, sq, col, part) {
+    var N = 7, M = 4, c = [cx, cy, cz];
+    function pt(i, j) { var a = i/N*6.2832, b = j/M*3.1416; return [cx + r*Math.sin(b)*Math.cos(a), cy + r*Math.sin(b)*Math.sin(a), cz + r*sq*Math.cos(b)]; }
+    for (var i = 0; i < N; i++) for (var j = 0; j < M; j++) quad(pt(i,j),pt(i+1,j),pt(i+1,j+1),pt(i,j+1), col, part, 0, c);
+  }
+  // parts: 0 main, 1 main roof, 2 garage, 3 wing, 4 front gable, 5 fixed
+  (function build() {
+    var i, N = 48;
+    for (i = 0; i < N; i++) { // ground disc (unit circle, placed in the shader)
+      var a = i/N*6.2832, b = (i+1)/N*6.2832;
+      vert([0,0,0],[0,0,1],[0,0,0],5,2); vert([Math.cos(a),Math.sin(a),0],[0,0,1],[0,0,0],5,2); vert([Math.cos(b),Math.sin(b),0],[0,0,1],[0,0,0],5,2);
+    }
+    var PATH = hex('#c9d3e0'), G1 = hex('#2f8f68'), G2 = hex('#237456'), TRUNK = hex('#3a4a5c'), GD = hex('#dfe5ee'), GL = hex('#a9b8cc');
+    // main house
+    gable(0, 64, 0, 46, 34, 15, 0, 1, false);
+    win('y', 46, 1, 7, 19, 11, 24, 0); win('y', 46, 1, 45, 57, 11, 24, 0);
+    win('y', 0, -1, 9, 21, 11, 24, 0); win('y', 0, -1, 43, 55, 11, 24, 0);
+    win('x', 64, 1, 17, 29, 11, 24, 0); win('x', 64, 1, 19.5, 26.5, 35, 42, 0);
+    win('x', 0, -1, 17, 29, 11, 24, 0); win('x', 0, -1, 19.5, 26.5, 35, 42, 0);
+    quad([26,46.3,0],[38,46.3,0],[38,46.3,21],[26,46.3,21], WHITE, 0, 0, [32,40,10]);
+    quad([27,46.5,0],[37,46.5,0],[37,46.5,20],[27,46.5,20], NAVY, 0, 0, [32,40,10]);
+    quad([34.6,46.7,9.4],[35.8,46.7,9.4],[35.8,46.7,10.6],[34.6,46.7,10.6], GLASS, 0, 0, [32,40,10]);
+    box(44, 50, 9, 15, 30, 57, WALL, 1, 3); box(43.2, 50.8, 8.2, 15.8, 57, 59, NAVY, 1, 0);
+    // garage + driveway
+    gable(64, 102, 4, 42, 23, 11, 2, 2, false);
+    quad([70,42.3,0],[96,42.3,0],[96,42.3,18],[70,42.3,18], GD, 2, 0, [83,30,9]);
+    [4.5, 9, 13.5].forEach(function(z) { quad([70,42.45,z-.3],[96,42.45,z-.3],[96,42.45,z+.3],[70,42.45,z+.3], GL, 2, 0, [83,30,9]); });
+    win('x', 102, 1, 17, 29, 9, 19, 2); win('y', 4, -1, 77, 89, 9, 19, 2);
+    flat(70, 96, 42, 72, 0.15, PATH, 2);
+    // left wing
+    gable(-40, 0, 6, 42, 25, 12, 3, 3, false);
+    win('y', 42, 1, -33, -23, 9, 21, 3); win('y', 42, 1, -17, -7, 9, 21, 3);
+    win('y', 6, -1, -33, -23, 9, 21, 3); win('x', -40, -1, 18, 30, 9, 21, 3);
+    // front gable (ridge along y, runs back into the main roof)
+    gable(30, 60, 20, 44, 28, 9, 4, 4, true);
+    quad([26,60.3,0],[38,60.3,0],[38,60.3,20],[26,60.3,20], WHITE, 4, 0, [32,50,10]);
+    quad([27,60.5,0],[37,60.5,0],[37,60.5,19],[27,60.5,19], NAVY, 4, 0, [32,50,10]);
+    quad([34.6,60.7,9],[35.8,60.7,9],[35.8,60.7,10.2],[34.6,60.7,10.2], GLASS, 4, 0, [32,50,10]);
+    win('y', 60, 1, 29, 35, 24.5, 31, 4);
+    // garden
+    flat(27, 37, 46, 72, 0.15, PATH, 5);
+    blob(13, 52, 3.5, 5.5, 0.8, G1, 5); blob(51, 52, 3.5, 5.5, 0.8, G1, 5); blob(58.5, 51, 2.6, 3.8, 0.8, G2, 5); blob(5.5, 51, 2.6, 3.8, 0.8, G2, 5);
+    box(-13, -11, 61, 63, 0, 13, TRUNK, 5, 0); blob(-12, 62, 19, 9, 1, G1, 5); blob(-10, 60, 27, 6, 1, G2, 5);
+  })();
+
+  function sh(type, src) { var s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); return s; }
+  var prog = gl.createProgram();
+  gl.attachShader(prog, sh(gl.VERTEX_SHADER,
+    'attribute vec3 aPos,aNor,aCol;attribute float aPart,aKind;uniform mat4 uMVP;uniform vec3 uOff[6];uniform vec3 uDisc;' +
+    'varying vec3 vCol,vNor,vW;varying float vKind;varying vec2 vUnit;' +
+    'void main(){vec3 p=aPos+uOff[int(aPart+0.5)];vUnit=aPos.xy;if(aKind>1.5&&aKind<2.5)p=vec3(uDisc.xy+aPos.xy*uDisc.z,0.0);' +
+    'vW=p;vCol=aCol;vNor=aNor;vKind=aKind;gl_Position=uMVP*vec4(p,1.0);}'));
+  gl.attachShader(prog, sh(gl.FRAGMENT_SHADER,
+    'precision mediump float;varying vec3 vCol,vNor,vW;varying float vKind;varying vec2 vUnit;' +
+    'uniform float uLit,uGhost;uniform vec4 uSh;' +
+    'void main(){vec3 L=normalize(vec3(-0.45,0.6,0.72));float a=1.0;vec3 c;' +
+    'if(vKind>1.5&&vKind<2.5){float r=length(vUnit);c=mix(vec3(0.16,0.50,0.39),vec3(0.10,0.36,0.31),r);' +
+    'vec2 q=vW.xy-vec2(7.0,-6.0);float s=smoothstep(uSh.x-9.0,uSh.x+3.0,q.x)*(1.0-smoothstep(uSh.z-3.0,uSh.z+9.0,q.x))*smoothstep(uSh.y-9.0,uSh.y+3.0,q.y)*(1.0-smoothstep(uSh.w-3.0,uSh.w+9.0,q.y));' +
+    'c*=1.0-0.5*s;a=1.0-smoothstep(0.9,1.0,r);}' +
+    'else if(vKind>0.5&&vKind<1.5){c=mix(vec3(0.10,0.25,0.38),vec3(1.0,0.72,0.14),uLit);}' +
+    'else{float d=max(dot(normalize(vNor),L),0.0);c=vCol*(0.56+0.5*d);' +
+    'if(vKind>2.5&&vKind<3.5)c*=1.0-0.07*step(0.82,fract(vW.z/2.6));' +
+    'if(vKind>3.5)c*=1.0-0.10*step(0.8,fract(vW.z/1.9));}' +
+    'float g=dot(c,vec3(0.3,0.59,0.11));c=mix(c,vec3(g*0.72,g*0.82,g*0.95),uGhost);' +
+    'gl_FragColor=vec4(c*a,a);}'));
+  gl.linkProgram(prog);
+  if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) return;
+  gl.useProgram(prog);
+  var buf = gl.createBuffer(), data = new Float32Array(V), count = V.length / 11;
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf); gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW);
+  [['aPos',3,0],['aNor',3,3],['aCol',3,6],['aPart',1,9],['aKind',1,10]].forEach(function(a) {
+    var l = gl.getAttribLocation(prog, a[0]); gl.enableVertexAttribArray(l); gl.vertexAttribPointer(l, a[1], gl.FLOAT, false, 44, a[2]*4);
+  });
+  var U = {}; ['uMVP','uOff','uDisc','uLit','uGhost','uSh'].forEach(function(n) { U[n] = gl.getUniformLocation(prog, n); });
+  gl.enable(gl.DEPTH_TEST); gl.enable(gl.BLEND); gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+  stageEl.classList.add('gl');
+
+  function mul(a, b) { var o = new Float32Array(16), i, j, k; for (i = 0; i < 4; i++) for (j = 0; j < 4; j++) { var s = 0; for (k = 0; k < 4; k++) s += a[k*4+j] * b[i*4+k]; o[i*4+j] = s; } return o; }
+  function persp(fov, asp, n, f) { var t = 1/Math.tan(fov/2), o = new Float32Array(16); o[0] = t/asp; o[5] = t; o[10] = (f+n)/(n-f); o[11] = -1; o[14] = 2*f*n/(n-f); return o; }
+  function look(e, c) {
+    var f = norm(sub(c, e)), s = norm(cross(f, [0,0,1])), u = cross(s, f), o = new Float32Array(16);
+    o[0]=s[0];o[4]=s[1];o[8]=s[2];o[1]=u[0];o[5]=u[1];o[9]=u[2];o[2]=-f[0];o[6]=-f[1];o[10]=-f[2];
+    o[12]=-dot(s,e);o[13]=-dot(u,e);o[14]=dot(f,e);o[15]=1; return o;
+  }
+  // what each size shows: camera target, distance, ground disc radius, shadow footprint
+  var VIEW = {
+    none: { t: [32,29,19], d: 300, r: 54, sh: [0,0,64,46] },
+    s:    { t: [32,29,19], d: 272, r: 54, sh: [0,0,64,46] },
+    m:    { t: [50,29,18], d: 322, r: 68, sh: [0,0,102,46] },
+    l:    { t: [31,31,18], d: 384, r: 86, sh: [-40,0,102,58] }
+  };
+  var cur = { g: 0, w: 0, b: 0, lit: 0, ghost: 1, t: [32,29,19], d: 300, r: 54, sh: [0,0,64,46], az: 0 };
+  var drag = 0, dragging = null, hopAt = -1, lastSize = null, raf = 0, last = 0, t0 = 0;
+  cv.addEventListener('pointerdown', function(e) { dragging = { x: e.clientX, a: drag }; try { cv.setPointerCapture(e.pointerId); } catch (x) {} });
+  cv.addEventListener('pointermove', function(e) { if (dragging) drag = Math.max(-1.25, Math.min(1.25, dragging.a + (e.clientX - dragging.x) * 0.011)); });
+  ['pointerup', 'pointercancel'].forEach(function(n) { cv.addEventListener(n, function() { dragging = null; }); });
+
+  function frame(ts) {
+    raf = 0;
+    if (state.step !== 1 || document.hidden) return;
+    var dt = Math.min(0.05, (ts - last) / 1000 || 0.016); last = ts;
+    var still = reducedMotion(), sz = state.size || 'none', v = VIEW[sz];
+    function ease(c, to, k) { return still ? to : c + (to - c) * (1 - Math.exp(-dt * k)); }
+    if (sz !== lastSize) { if (lastSize === 'none' && !still) hopAt = ts; lastSize = sz; }
+    cur.g = ease(cur.g, sz === 'm' || sz === 'l' ? 1 : 0, 5.5);
+    cur.w = ease(cur.w, sz === 'l' ? 1 : 0, 4.5);
+    cur.b = ease(cur.b, sz === 'l' ? 1 : 0, 4.5);
+    cur.ghost = ease(cur.ghost, sz === 'none' ? 1 : 0, 6);
+    cur.lit = ease(cur.lit, sz !== 'none' && cur.ghost < 0.25 ? 1 : 0, 5);
+    cur.d = ease(cur.d, v.d, 3.5); cur.r = ease(cur.r, v.r, 3.5);
+    for (var i = 0; i < 3; i++) cur.t[i] = ease(cur.t[i], v.t[i], 3.5);
+    for (i = 0; i < 4; i++) cur.sh[i] = ease(cur.sh[i], v.sh[i], 4);
+    var hop = 0;
+    if (hopAt >= 0) { var u = (ts - hopAt) / 620; if (u >= 1) hopAt = -1; else hop = 13 * Math.sin(Math.PI * u) * (1 - u * 0.35); }
+    var sway = still ? 0 : Math.sin((ts - t0) / 2600) * 0.3;
+    cur.az = ease(cur.az, -0.62 + sway + drag, 7);
+
+    var w = cv.clientWidth, h = cv.clientHeight, dpr = Math.min(2, window.devicePixelRatio || 1);
+    if (cv.width !== Math.round(w * dpr) || cv.height !== Math.round(h * dpr)) { cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); }
+    gl.viewport(0, 0, cv.width, cv.height);
+    gl.clearColor(0, 0, 0, 0); gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    var el = 0.74, eye = [cur.t[0] + cur.d * Math.cos(el) * Math.sin(-cur.az), cur.t[1] + cur.d * Math.cos(el) * Math.cos(cur.az), cur.t[2] + cur.d * Math.sin(el)];
+    gl.uniformMatrix4fv(U.uMVP, false, mul(persp(0.42, w / h, 40, 1200), look(eye, cur.t)));
+    gl.uniform3fv(U.uOff, new Float32Array([0,0,0, 0,0,hop, -44*(1-cur.g),0,0, 44*(1-cur.w),0,0, 0,-24*(1-cur.b),0, 0,0,0]));
+    gl.uniform3f(U.uDisc, cur.t[0], cur.t[1] + 8, cur.r);
+    gl.uniform1f(U.uLit, cur.lit); gl.uniform1f(U.uGhost, cur.ghost);
+    gl.uniform4f(U.uSh, cur.sh[0] - 44*0 , cur.sh[1], cur.sh[2], cur.sh[3]);
+    gl.drawArrays(gl.TRIANGLES, 0, count);
+    raf = requestAnimationFrame(frame);
+  }
+  wakeHouse = function() { if (!raf && state.step === 1) { last = 0; raf = requestAnimationFrame(function(ts) { if (!t0) t0 = ts; last = ts; frame(ts); }); } };
+  document.addEventListener('visibilitychange', wakeHouse);
+})();
+
 each(document.querySelectorAll('input[name="size-choice"]'), function(r) {
   r.addEventListener('change', function() {
     state.size = r.value;
@@ -1357,6 +1556,7 @@ function show(step, direction) {
   $('steps').style.visibility = step === 0 ? 'hidden' : '';
   $('stepText').textContent = step === 0 ? '' : 'Step ' + step + ' of 4';
   updateDock();
+  wakeHouse();
   window.scrollTo(0, 0);
   if (direction) $(SCREENS[step]).querySelector('.screen-title').focus({ preventScroll: true });
 }
