@@ -1175,11 +1175,18 @@ function renderPlan(direction) {
 function setTier(tier) {
   if (tier === state.tier) return;
   var dir = ORDER.indexOf(tier) - ORDER.indexOf(state.tier);
+  var was = price();
   state.tier = tier;
   // keep only the add-ons this tier offers
   state.addons = state.addons.filter(function(a) { return TIERS[tier].addons.indexOf(a) !== -1; });
   document.querySelector('input[name="tier-choice"][value="' + tier + '"]').checked = true;
   renderPlan(dir);
+  // phones show one card at a time, so the price ticks from the last plan's figure to this one
+  var now = price();
+  if (was && now && !isWide()) {
+    cards[tier].shown = now[0];
+    tick(cards[tier].amount, was[0], now[0], 650, function(n) { return '$' + n; });
+  }
 }
 
 each(document.querySelectorAll('input[name="tier-choice"]'), function(r) {
