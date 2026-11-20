@@ -513,6 +513,19 @@
   .form-card .fields { margin-top: 16px; }
   .form-card .customer-note { margin-top: 14px; }
   .form-note { margin-top: 24px; font-size: 0.875rem; color: var(--text-3); }
+  /* Shown when the visitor arrived through a member's referral link. */
+  .ref-banner {
+    display: inline-block; margin: 0 auto 14px; padding: 8px 16px; max-width: 34ch;
+    background: var(--perfect-day-yellow); color: var(--navy-dark);
+    border-radius: 18px; font-family: var(--font-display); font-weight: 600; font-size: 1rem; line-height: 1.25; text-wrap: balance;
+  }
+  .ref-banner strong { font-weight: 700; }
+  .ref-banner a { color: inherit; font-weight: 500; font-style: italic; text-decoration: underline; text-underline-offset: 2px; white-space: nowrap; }
+  .ref-banner a:focus-visible { outline: 3px solid var(--navy-dark); outline-offset: 2px; border-radius: 4px; }
+  .ref-wrap { text-align: center; margin-top: 16px; }
+  .ref-wrap .ref-banner { margin-bottom: 0; }
+  .form-hint { font-size: 0.875rem; color: var(--text-2); }
+  .form-hint a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
   .fields { display: flex; flex-direction: column; gap: 14px; margin-top: 14px; }
   .field-row { display: flex; gap: 12px; flex-wrap: wrap; }
   .field-group { display: flex; flex-direction: column; gap: 6px; flex: 1 1 100%; min-width: 0; }
@@ -745,6 +758,7 @@
     <!-- 0 · LANDING -->
     <section class="screen landing" id="screen-landing" data-step="0" aria-labelledby="t-landing">
       <img class="landing-logo" id="landingLogo" alt="Hero Club">
+      <div><p class="ref-banner" hidden><strong class="ref-name"></strong> sent you. <span>You each get a month free.</span> <a href="referral-terms.html" target="_blank" rel="noopener">How it works</a></p></div>
       <h1 class="screen-title" id="t-landing" tabindex="-1"><em>It's time to be the</em> Hero of your home</h1>
       <p class="landing-hook">A spotless home. Without lifting a finger.</p>
       <p class="screen-sub">One membership. We handle the scheduling, the work and the reminders.</p>
@@ -801,6 +815,7 @@
     <section class="screen" id="screen-details" data-step="4" aria-labelledby="t-details" hidden>
       <h1 class="screen-title" id="t-details" tabindex="-1"><em>Your</em> details</h1>
       <p class="screen-sub">Window Hero will reach out within 1 business day to confirm your plan and schedule.</p>
+      <div class="ref-wrap"><p class="ref-banner" hidden><strong class="ref-name"></strong> sent you. <span>You each get a month free.</span> <a href="referral-terms.html" target="_blank" rel="noopener">How it works</a></p></div>
 
       <div class="summary" id="summary">
         <p class="summary-tier" id="sumTier"></p>
@@ -821,6 +836,8 @@
         <input type="hidden" name="home-size" id="fieldHomeSize">
         <input type="hidden" name="price" id="fieldPrice">
         <input type="hidden" name="addons" id="fieldAddons">
+        <!-- The member who referred this customer: from the link, or typed below -->
+        <input type="hidden" name="referred-by" id="fieldReferredBy">
         <p class="visually-hidden"><label>Leave this field empty <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
 
         <p class="form-note">All fields are required unless marked optional.</p>
@@ -872,6 +889,15 @@
         </div>
 
         </section>
+        <section class="form-card" id="referrerCard">
+        <h2 class="card-title"><label for="custReferrer">Did a Hero Club member refer you? <span class="optional">(optional)</span></label></h2>
+        <div class="fields">
+          <div class="field-group">
+            <input class="field-input" id="custReferrer" type="text" maxlength="80" autocomplete="off" autocapitalize="words" placeholder="Their name" aria-describedby="referrerHint">
+            <span class="form-hint" id="referrerHint">You each get a month free. <a href="referral-terms.html" target="_blank" rel="noopener">How it works</a></span>
+          </div>
+        </div>
+        </section>
         <section class="form-card">
         <h2 class="card-title"><label for="customerNote">Anything else? <span class="optional">(optional)</span></label></h2>
         <textarea class="customer-note" id="customerNote" name="notes" maxlength="500" placeholder="Any special requests or property details..."></textarea>
@@ -919,6 +945,7 @@
   </div>
 </dialog>
 
+<script src="referral.js"></script>
 <script>
 var CONTACT_EMAIL = 'tim.cook@windowhero.com';
 var SEND_TIMEOUT_MS = 8000;
@@ -1773,6 +1800,35 @@ function validateFields() {
 FIELDS.forEach(function(f) { $(f.id).addEventListener('input', function() { clearError(f.id); }); });
 $('custState').addEventListener('blur', function() { this.value = this.value.trim().toUpperCase(); });
 
+/* ── referral ──
+   A member's link ends in ?ref=their-code, for example ?ref=sarah-m. The code
+   is their name, so the page can greet the visitor without looking anything
+   up. It is kept for the browser session so a reload does not lose it. */
+var referral = (function() {
+  var KEY = 'hc-ref', R = window.HeroReferral, code = '';
+  if (!R) return { code: '', name: '' };
+  try { code = new URLSearchParams(window.location.search).get('ref') || ''; } catch (e) {}
+  code = code.trim().toLowerCase();
+  if (R.nameFromCode(code)) { try { sessionStorage.setItem(KEY, code); } catch (e) {} }
+  else { code = ''; try { code = sessionStorage.getItem(KEY) || ''; } catch (e) {} }
+  var name = R.nameFromCode(code);
+  return name ? { code: code, name: name } : { code: '', name: '' };
+})();
+
+function showReferral() {
+  each(document.querySelectorAll('.ref-banner'), function(b) {
+    b.querySelector('.ref-name').textContent = referral.name;
+    b.hidden = !referral.name;
+  });
+  $('referrerCard').hidden = !!referral.name;
+}
+// What goes to the office: the name from the link, or whatever the customer typed.
+function referredBy() {
+  if (referral.name) return referral.name + ' (link: ' + referral.code + ')';
+  var typed = fieldValue('custReferrer');
+  return typed ? typed + ' (typed)' : '';
+}
+
 /* ── sending ── */
 function buildMessage() {
   var t = TIERS[state.tier];
@@ -1795,6 +1851,7 @@ function buildMessage() {
     body += 'Add-ons requested (customer was told we will price these when we confirm):\n';
     state.addons.forEach(function(a) { body += '  • ' + a + '\n'; });
   }
+  if (referredBy()) body += '\nReferred by: ' + referredBy() + '\n';
   if (note) body += '\nNotes: ' + note + '\n';
   body += '\nPlease reach out to confirm and get them set up!\n';
   return { subject: 'New Hero Club request: ' + t.name + (isCustom() ? ' (custom plan)' : '') + ' - ' + fieldValue('custName'), body: body };
@@ -1828,6 +1885,7 @@ function submitLead() {
   $('custState').value = fieldValue('custState').toUpperCase();
   renderSummary();
   $('fieldSubject').value = 'New Hero Club request: ' + TIERS[state.tier].name + (isCustom() ? ' (custom plan)' : '') + ' - ' + fieldValue('custName');
+  $('fieldReferredBy').value = referredBy();
   lastMessage = buildMessage();
   if (navigator.onLine === false) { showEmailFallback("You're offline, so this couldn't be sent directly."); return; }
   setSending(true);
@@ -1922,6 +1980,7 @@ buildReel();
 buildCards();
 markSize(false);
 renderPlan(0);
+showReferral();
 show(0, 0);
 </script>
 
