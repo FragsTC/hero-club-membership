@@ -139,6 +139,7 @@
   body { position: relative; }
   .reel {
     --tile: 132px;
+    display: none;
     position: absolute; top: 0; left: 0; right: 0;
     height: var(--reel-h);
     overflow: hidden;
@@ -169,7 +170,10 @@
   .landing-logo { display: block; height: 76px; width: auto; margin: 0 auto 18px; filter: drop-shadow(0 6px 18px rgba(0,17,29,0.9)); }
   .landing .screen-title { font-size: 2.75rem; }
   .landing .screen-title em { font-size: 0.55em; }
+  body.on-landing .reel { display: block; animation: reel-in 0.5s ease-out both; }
+  @keyframes reel-in { from { opacity: 0; } to { opacity: 1; } }
   body.on-landing .topbar { position: relative; z-index: 2; }
+  body.on-landing .app { position: relative; z-index: 1; }
   body.on-landing .topbar-logo { visibility: hidden; }
   body.on-landing footer { display: none; }
 
@@ -533,6 +537,8 @@
 </head>
 <body>
 
+<div class="reel" id="reel" aria-hidden="true"></div>
+
 <div class="app">
   <header class="topbar">
     <button type="button" class="icon-btn" id="btnBack" aria-label="Back" hidden>
@@ -546,7 +552,6 @@
   <main>
     <!-- 0 · LANDING -->
     <section class="screen landing" id="screen-landing" data-step="0" aria-labelledby="t-landing">
-      <div class="reel" id="reel" aria-hidden="true"></div>
       <img class="landing-logo" id="landingLogo" alt="Hero Club">
       <h1 class="screen-title" id="t-landing" tabindex="-1"><em>It's time to be the</em> Hero of your home</h1>
       <p class="screen-sub">Gutters, windows and house washing, taken care of all year with a Hero Club membership.</p>
@@ -599,6 +604,8 @@
 
       <form id="leadForm" name="hero-club-lead" method="POST" data-netlify="true" netlify-honeypot="bot-field" novalidate>
         <input type="hidden" name="form-name" value="hero-club-lead">
+        <!-- Netlify uses this as the notification email subject -->
+        <input type="hidden" name="subject" id="fieldSubject" data-remove-prefix value="New Hero Club request">
         <input type="hidden" name="tier" id="fieldTier">
         <input type="hidden" name="home-size" id="fieldHomeSize">
         <input type="hidden" name="price" id="fieldPrice">
@@ -1185,6 +1192,7 @@ function submitLead() {
   }
   $('custState').value = fieldValue('custState').toUpperCase();
   renderSummary();
+  $('fieldSubject').value = 'New Hero Club request: ' + TIERS[state.tier].name + (isCustom() ? ' (custom plan)' : '') + ' - ' + fieldValue('custName');
   lastMessage = buildMessage();
   if (navigator.onLine === false) { showEmailFallback("You're offline, so this couldn't be sent directly."); return; }
   setSending(true);
