@@ -73,6 +73,7 @@ will come back and fix it at no charge.
 
 You may cancel for any reason within 3 business days of signing, and we will
 refund everything you have paid. Email [OFFICE EMAIL] or call [OFFICE PHONE].
+We do not carry out any visit during those 3 business days.
 
 ## Cancelling
 
@@ -93,7 +94,8 @@ a membership ends early, we settle up like this:
 4. If you paid for more than you received, you owe nothing more and no refund
    is due.
 
-Any balance is charged to your card on file when the membership ends.
+Any balance is charged to your card on file when the membership ends. If
+that charge does not go through, we send you an invoice for it.
 
 Window Hero may also end your membership with 30 days' notice. If we do that
 for any reason other than a failed payment, you owe nothing more, and if you
@@ -103,14 +105,16 @@ have paid for more than you received we refund the difference.
 
 If a charge to your card fails, we will let you know and you have 10 days to
 update your card. We hold your visits until the payment goes through. If the
-payment is still unpaid after 30 days, your membership ends and "Cancelling"
-above applies.
+payment is still unpaid after 30 days, your membership ends on that day. There
+is no further notice period, and we settle up as described in steps 1 to 4
+of "Cancelling" above.
 
 ## If you move
 
 If you sell your home, your membership can pass to the buyer for the rest of
 the 12 months if the buyer agrees in writing to take it over. Otherwise it
-ends on the day you tell us you have moved, and "Cancelling" above applies.
+ends on the day you tell us you have moved. There is no notice period, and we
+settle up as described in steps 1 to 4 of "Cancelling" above.
 
 ## Schedule A: regular one-time prices
 
@@ -142,7 +146,8 @@ cannot be enforced, the rest still applies.
 > **At the end of your 12 months, your membership renews for another 12
 > months unless you tell us you do not want it to.**
 >
-> **We will email you a notice 30 days before your renewal date. The notice
+> **We will email you a notice at least 15 days and no more than 45 days
+> before your renewal date. The notice
 > will state your renewal date and your monthly charge for the new year,
 > which is our price for your plan and home size at that time and may be
 > different from what you pay now.**

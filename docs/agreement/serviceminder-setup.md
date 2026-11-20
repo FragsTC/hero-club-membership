@@ -4,9 +4,11 @@ This sets up ServiceMinder so a Hero Club member gets one link, reads the
 agreement, signs, pays the deposit, and is then charged monthly for 12 months
 without anyone doing anything.
 
-**Read this first.** These steps were written from ServiceMinder's help pages,
-not from inside your account. Where a step says *(help pages)*, the menu name
-or behaviour comes from there and may look different on your screen. Nothing
+**Read this first.** These steps were written from search summaries of
+ServiceMinder's help pages. We could not open the pages themselves or your
+account while writing this. Where a step says *(help pages)*, the menu name
+or behaviour comes from those summaries and may look different on your
+screen. Nothing
 here is proven until the test in Part 6 passes. Do the test before you send a
 proposal to a real customer.
 
@@ -23,8 +25,9 @@ Allow about an hour, plus the test.
 | Gold | up to 2,500 sq ft | Gold S | $168 | $125 | $1,668 |
 | Gold | 2,501 to 3,500 sq ft | Gold M | $228 | $170 | $2,268 |
 
-The year total is what goes on the proposal as the price. The deposit comes
-off the top and the rest divides into 12 equal monthly charges. For example,
+The year total is what goes on the proposal as the price. We expect the
+deposit to come off the top and the rest to divide into 12 equal monthly
+charges; the test in Part 6 confirms it. For example,
 Silver M: $1,428 less the $144 deposit leaves $1,284, which is 12 charges of
 $107.
 
@@ -87,7 +90,7 @@ In **Control Panel > Payment Options**, in the **Payment Plans** section
 4. If the plan can be limited to certain services, limit each to its Hero
    Club service so it is never offered on an ordinary job.
 5. Leave the auto-include setting off so these plans do not appear on other
-   proposals.
+   proposals *(help pages)*.
 
 **A shortcut worth trying during the test.** The help pages also describe
 setting a flat deposit in the proposal's own Deposit section. If that works
@@ -160,7 +163,16 @@ Then check the two things most likely to cause trouble later:
       it. Confirm the failure appears in the Failed Payments list and that
       the customer email with the update-card link goes out *(help pages)*.
 
-When you are done, refund the deposit, cancel the remaining installments
+Then check the two charges the office will make by hand:
+
+- [ ] **An add-on bills at the member discount.** Create an invoice for an
+      add-on for yourself, apply the 15% Silver discount, and charge it to
+      the saved card. Note how you applied the discount.
+- [ ] **A one-off charge to the saved card works.** This is how a
+      cancellation balance is collected. Charge yourself a small amount
+      against the card on file without the customer entering it again.
+
+When you are done, refund every charge, cancel the remaining installments
 and void the proposal.
 
 **If any box cannot be ticked, stop there and report which one.** Do not
@@ -187,4 +199,5 @@ For the next phase we will need:
 - which boxes in Part 6 passed and which did not;
 - whether you used service Terms & Conditions or an Ad Hoc Form;
 - whether the one-plan shortcut worked;
-- how you made member visits finish at $0.
+- how you made member visits finish at $0;
+- how you applied the member discount to an add-on.

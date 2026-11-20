@@ -9,7 +9,9 @@ filling in.
 
 1. **Automatic renewal (N.C. Gen. Stat. 75-41).** Is the "Renewal" block
    clear and conspicuous enough where it sits, directly above the
-   acceptance line? Is a notice emailed 30 days before renewal sufficient?
+   acceptance line? The draft promises a notice at least 15 and no more
+   than 45 days before renewal, and the office aims to send it 35 days
+   before. Is that sufficient?
    The statute as we read it requires written notice at least 15 and no more
    than 45 days before renewal, and makes the renewal clause void if the
    rules are not followed. A 2025 bill, HB 188, proposed changing the notice
@@ -19,8 +21,8 @@ filling in.
    by a technician at the customer's home. Do the home-solicitation sale
    rules (federal Cooling-Off Rule and N.C. Gen. Stat. 25A-38 to 25A-42)
    apply, and if so do we need the prescribed "Notice of Cancellation" form
-   and wording, in addition to this section? What if the customer asks for a
-   visit inside the 3 days and then cancels?
+   and wording, in addition to this section? The draft says we carry out no
+   visit inside the 3 days; is that the right way to handle it?
 3. **The cancellation settlement.** A member who leaves early pays the
    regular one-time price of services received, less what they have paid,
    capped at the monthly charges left in the year. Could this be read as a

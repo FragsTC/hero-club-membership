@@ -10,33 +10,33 @@ What the office does once ServiceMinder is set up
 2. Call the customer the same day. Confirm the plan, home size and price.
    For homes over 3,500 sq ft, quote the price.
 3. In ServiceMinder, create a proposal from the matching Hero Club template
-   and send it.
+   and send it. For a home over 3,500 sq ft, put the Schedule A prices for
+   that home on the proposal. Set the board status to **Proposal sent**.
 4. When the customer accepts and pays the deposit, on the board item:
    - set the status to **Active**;
-   - set **Signed on** to the date they accepted.
-5. Do not schedule a visit inside the first 3 business days unless the
-   customer asks for one. They can cancel for a full refund in that window.
+   - set **Signed on** to the date they accepted;
+   - set **Renewal date** to one year after that.
+5. Do not carry out a visit inside the first 3 business days. The agreement
+   says we will not, and the customer can cancel for a full refund in that
+   window.
 6. Schedule the year's visits and tell the customer the seasons to expect
    them.
 
 ### One-time board setup
 
-The **Signed on** and **Renewal notice sent** date columns are already on
-the board. Two things are left to do by hand:
+The **Signed on**, **Renewal date** and **Renewal notice sent** date columns
+are already on the board. Two things are left to do by hand:
 
-1. **Add three status labels.** Click any Status cell, choose **Edit
-   Labels**, and add `Active`, `Not renewing` and `Cancelled`. Leave `New`
-   as it is; the signup page uses it.
-2. **Add the renewal reminder.** Click **Automate** at the top of the board,
-   choose the template "When date arrives, notify someone", set the date
-   column to **Signed on**, set it to fire 330 days after the date, and
-   notify the board owner. That is 35 days before the anniversary. If
-   monday.com will not accept 330 days, add a date column called
-   **Renewal date**, fill it in with the anniversary when you set **Signed
-   on**, and set the reminder to 35 days before that date.
+1. **Add four status labels.** Click any Status cell, choose **Edit
+   Labels**, and add `Proposal sent`, `Active`, `Not renewing` and
+   `Cancelled`. Leave `New` as it is; the signup page uses it.
+2. **Add the renewal reminder.** Click **Automate** at the top of the board
+   and add an automation that notifies the board owner 35 days before
+   **Renewal date** arrives. Add a second one that notifies a different
+   person 25 days before, as a backstop.
 
-**Signed on** is what every date below is counted from. If it is blank, the
-renewal reminder cannot fire.
+**Renewal date** is what the reminder runs from. If it is blank, the reminder
+cannot fire. **Signed on** is the original signing date and is never changed.
 
 ## 2. Renewal
 
@@ -47,10 +47,10 @@ must not be missed.
 
 | When | What |
 |---|---|
-| 35 days before the anniversary of **Signed on** | The board reminds the owner. Look up the current price for the member's plan and home size. |
-| 30 days before | Send the notice below by email. Set **Renewal notice sent** on the board item to today. |
+| 35 days before **Renewal date** | The board reminds the owner. Look up the current price for the member's plan and home size and send the notice below by email that day. Set **Renewal notice sent** to the date it went out. |
+| 25 days before | The backstop reminder goes to a second person. If **Renewal notice sent** is blank, send the notice now. |
 | Up to the renewal date | If the member opts out, set the status to **Not renewing**. Nothing more is charged after the twelfth monthly charge. |
-| Renewal date | If they have not opted out, set up the renewal year in ServiceMinder: 12 monthly charges at the price in the notice, no deposit, the first one month after the renewal date. Set **Signed on** to the renewal date so next year's reminder fires. |
+| Renewal date | If they have not opted out, set up the renewal year in ServiceMinder: 12 monthly charges at the price in the notice, no deposit, the first one month after the renewal date. Move **Renewal date** forward one year and clear **Renewal notice sent**, so next year's reminder fires. Leave **Signed on** alone. |
 
 **If the notice was missed:** it can still go out as long as the renewal date
 is at least 15 days away. If it is closer than that, do not renew
@@ -88,15 +88,17 @@ Send it as its own email, not inside a newsletter or a visit report.
 
 ## 3. When a payment fails
 
-ServiceMinder emails the member a link to update their card and lists the
-failure under Failed Payments. Check that list every weekday.
+ServiceMinder's help pages say it emails the member a link to update their
+card and lists the failure under Failed Payments. The test in
+`serviceminder-setup.md` Part 6 confirms that for your account. Check that
+list every weekday.
 
 | Day | What |
 |---|---|
 | 1 | Text the member (below). Hold their upcoming visits. |
 | 7 | If still unpaid, email and text again. |
 | 10 | Call. The agreement gives them 10 days to update the card. |
-| 30 | If still unpaid, the membership ends. Work out the settlement in section 4 and set the board status to **Cancelled**. |
+| 30 | If still unpaid, the membership ends that day with no further notice period. Work out the settlement in section 4, step 3. The card on file has already failed, so send an invoice for any balance. Cancel the remaining installments and set the board status to **Cancelled**. |
 
 Day 1 text:
 
@@ -117,7 +119,8 @@ When the payment goes through, release the held visits.
 ## 4. When a member cancels
 
 1. Note the date they gave notice. Inside the first 3 business days after
-   signing: refund everything and stop here.
+   signing: refund everything, cancel all 12 installments in ServiceMinder,
+   set the board status to **Cancelled**, and stop here.
 2. Otherwise the membership ends 30 days after the notice. Monthly charges
    due before that end date still run. Visits already booked before it
    still happen.
@@ -130,7 +133,7 @@ When the payment goes through, release the held visits.
      monthly charge.
    - If Received is more than Paid, they owe the difference, but never more
      than the Cap. Charge the card on file and email a receipt showing the
-     sum.
+     sum. If the charge fails, send an invoice for the balance.
    - If Paid is more than Received, they owe nothing and no refund is due.
 4. Cancel the remaining installments in ServiceMinder and set the board
    status to **Cancelled**.
@@ -138,6 +141,19 @@ When the payment goes through, release the held visits.
 If Window Hero ends the membership for any reason other than a failed
 payment, the member owes nothing, and if Paid is more than Received, refund
 the difference.
+
+### When a member moves
+
+1. Ask whether the buyer wants to take over the membership.
+2. **If yes:** get the buyer's agreement in writing by sending them a
+   proposal for the remaining monthly charges, with the agreement attached,
+   to accept with their own card. Cancel the seller's remaining
+   installments. Put the buyer's name and details on the board item and note
+   the transfer. **Signed on** and **Renewal date** stay the same.
+3. **If no:** the membership ends the day the member told you they moved.
+   There is no 30-day notice period. Work out the settlement in step 3
+   above, cancel the remaining installments and set the status to
+   **Cancelled**.
 
 ### Worked examples
 
@@ -147,8 +163,9 @@ service prices here ($400 for a house wash, $150 for a gutter cleaning) are
 A.
 
 **Example A: leaves right after the house wash.** The member signs, has the
-house wash in the first week, and gives notice on day 5. The membership ends
-on day 35. One monthly charge ran before then.
+house wash in the second week, and gives notice on day 10, which is past the
+3-business-day refund window. The membership ends on day 40. One monthly
+charge ran before then.
 
 - Received: $400
 - Paid: $70 + $54 = $124
@@ -167,7 +184,8 @@ nine monthly charges. They have had the house wash and one gutter cleaning.
 Once a week, the board owner looks at:
 
 - New requests not yet called.
-- Proposals sent but not accepted after 3 days: call.
+- Items at **Proposal sent** for more than 3 days: call.
 - Failed Payments in ServiceMinder.
-- Any **Active** item with a blank **Signed on**.
-- Renewals due in the next 45 days.
+- Any **Active** item with a blank **Signed on** or **Renewal date**.
+- Any item whose **Renewal date** is within 45 days and whose **Renewal
+  notice sent** is blank. Send the notice that day.
