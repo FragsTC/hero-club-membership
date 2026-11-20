@@ -255,6 +255,11 @@
   @keyframes stage-sheen { 0%, 55% { left: -60%; } 100% { left: 130%; } }
   .stage-art { position: relative; height: 230px; }
   .stage-art svg { position: relative; display: block; width: 100%; height: 100%; overflow: visible; }
+  .tw { position: absolute; z-index: 1; width: 11px; height: 11px; background: var(--perfect-day-yellow); opacity: 0; pointer-events: none;
+    clip-path: polygon(50% 0, 61% 39%, 100% 50%, 61% 61%, 50% 100%, 39% 61%, 0 50%, 39% 39%); }
+  .stage.has-size .tw { animation: tw 3.6s ease-in-out infinite; }
+  @keyframes tw { 0%, 100% { opacity: 0; } 50% { opacity: 0.9; } }
+  @media (prefers-reduced-motion: reduce) { .stage.has-size .tw { animation: none; opacity: 0.6; } }
   .stage-art canvas { display: none; position: absolute; top: -14px; left: -18px; width: calc(100% + 36px); height: calc(100% + 24px); touch-action: pan-y; cursor: grab; transition: opacity 0.5s; }
   .stage-art canvas:active { cursor: grabbing; }
   .stage.gl .stage-art canvas { display: block; }
@@ -737,7 +742,7 @@
       <h1 class="screen-title" id="t-size" tabindex="-1"><em>How big is</em> your home?</h1>
       <p class="screen-sub">Your price depends on the size of your home.</p>
       <div class="stage" id="stage" data-size="none">
-        <div class="stage-art" aria-hidden="true"><canvas id="houseGL"></canvas>
+        <i class="tw" style="left:9%;top:26px"></i><i class="tw" style="left:86%;top:44px;animation-delay:1.1s"></i><i class="tw" style="left:74%;top:16px;animation-delay:2s;transform:scale(.6)"></i><i class="tw" style="left:20%;top:58px;animation-delay:2.6s;transform:scale(.55)"></i><div class="stage-art" aria-hidden="true"><canvas id="houseGL"></canvas>
           <svg viewBox="-160 -108 320 200" preserveAspectRatio="xMidYMid meet"><defs><filter id="hsBlur" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="3"/></filter></defs><ellipse class="lawn" cx="0" cy="58" rx="152" ry="32"/><g class="scene"><g class="float"><g filter="url(#hsBlur)"><polygon class="shade sh-main" points="-10.4,-4.0 55.4,34.0 14.7,59.5 -52.8,20.5"/><polygon class="shade sh-garage" points="39.8,31.0 83.1,56.0 49.4,77.5 4.3,51.5"/><polygon class="shade sh-wing" points="-52.0,-20.0 -6.9,6.0 -39.0,26.5 -85.7,-0.5"/></g><g class="part p-walk"><polygon class="walk" points="-16.5,36.5 -7.8,41.5 -25.1,51.5 -33.8,46.5"/></g><g class="part p-garage-g"><polygon class="drive" points="22.5,57.0 45.0,70.0 22.5,83.0 0.0,70.0"/></g><g class="part p-wing"><polygon class="wall-f" points="-72.7,2.0 -38.1,22.0 -38.1,-4.0 -72.7,-24.0"/><polygon class="wall-r" points="-6.9,4.0 -38.1,22.0 -38.1,-4.0 -22.5,-28.0 -6.9,-22.0"/><polygon class="win" points="-66.7,-3.5 -58.0,1.5 -58.0,-10.5 -66.7,-15.5"/><polyline class="mull" points="-62.4,-1.0 -62.4,-13.0"/><polygon class="win" points="-52.8,4.5 -44.2,9.5 -44.2,-2.5 -52.8,-7.5"/><polyline class="mull" points="-48.5,7.0 -48.5,-5.0"/><polygon class="roof-f" points="-77.9,-21.5 -38.1,1.5 -19.9,-26.5 -59.8,-49.5"/><polyline class="fascia" points="-38.1,1.5 -19.9,-26.5 -1.7,-19.5"/><polyline class="eave" points="-77.9,-21.5 -38.1,1.5"/></g><g class="p-main"><polygon class="wall-f" points="-39.8,23.0 15.6,55.0 15.6,19.0 -39.8,-13.0"/><polygon class="wall-r" points="55.4,32.0 15.6,55.0 15.6,19.0 35.5,-16.5 55.4,-4.0"/><polygon class="win" points="-33.8,14.5 -23.4,20.5 -23.4,7.5 -33.8,1.5"/><polyline class="mull" points="-28.6,17.5 -28.6,4.5"/><polygon class="win" points="-0.9,33.5 9.5,39.5 9.5,26.5 -0.9,20.5"/><polyline class="mull" points="4.3,36.5 4.3,23.5"/><polygon class="door" points="-16.5,36.5 -7.8,41.5 -7.8,21.5 -16.5,16.5"/><circle class="knob" cx="-9.5" cy="30.5" r="0.9"/><polygon class="win" points="40.7,28.5 30.3,34.5 30.3,21.5 40.7,15.5"/><polyline class="mull" points="35.5,31.5 35.5,18.5"/><polygon class="win" points="39.0,-0.5 32.0,3.5 32.0,-4.5 39.0,-8.5"/><polyline class="mull" points="35.5,1.5 35.5,-6.5"/><polygon class="wall-f" points="22.5,-9.0 27.7,-6.0 27.7,-36.0 22.5,-39.0"/><polygon class="wall-r" points="32.9,-9.0 27.7,-6.0 27.7,-36.0 32.9,-39.0"/><polygon class="cap" points="27.7,-42.0 32.9,-39.0 27.7,-36.0 22.5,-39.0"/><g class="roof-main"><polygon class="roof-f" points="-45.0,-9.9 15.6,25.1 38.1,-15.0 -22.5,-50.0"/><polyline class="fascia" points="15.6,25.1 38.1,-15.0 60.6,-0.9"/><polyline class="eave" points="-45.0,-9.9 15.6,25.1"/></g></g><g class="part p-bump"><polygon class="wall-f" points="-34.6,40.0 -13.9,52.0 -13.9,22.0 -24.2,2.0 -34.6,10.0"/><polygon class="wall-r" points="-1.7,45.0 -13.9,52.0 -13.9,22.0 -1.7,15.0"/><polygon class="door" points="-28.6,43.5 -19.9,48.5 -19.9,29.5 -28.6,24.5"/><circle class="knob" cx="-21.6" cy="38.0" r="0.9"/><polygon class="win" points="-26.8,18.5 -21.6,21.5 -21.6,14.5 -26.8,11.5"/><polyline class="mull" points="-24.2,20.0 -24.2,13.0"/><polygon class="roof-r" points="-5.5,-8.9 -26.8,3.5 -14.3,27.6 0.4,19.1"/><polyline class="fascia" points="-39.0,13.3 -26.8,3.5 -14.3,27.6"/></g><g class="part p-garage"><polygon class="wall-f" points="17.3,54.0 50.2,73.0 50.2,49.0 17.3,30.0"/><polygon class="wall-r" points="83.1,54.0 50.2,73.0 50.2,49.0 66.7,25.5 83.1,30.0"/><polygon class="gdoor" points="22.5,57.0 45.0,70.0 45.0,52.0 22.5,39.0"/><polyline class="gline" points="22.5,52.5 45.0,65.5"/><polyline class="gline" points="22.5,48.0 45.0,61.0"/><polyline class="gline" points="22.5,43.5 45.0,56.5"/><polygon class="win" points="71.9,51.5 61.5,57.5 61.5,47.5 71.9,41.5"/><polyline class="mull" points="66.7,54.5 66.7,44.5"/><polygon class="roof-f" points="12.1,32.2 50.2,54.2 69.3,27.0 31.2,5.0"/><polyline class="fascia" points="50.2,54.2 69.3,27.0 88.3,32.2"/><polyline class="eave" points="12.1,32.2 50.2,54.2"/></g></g></g></svg>
         </div>
         <div class="stage-read" aria-live="polite">
@@ -1272,10 +1277,10 @@ function markSize(animate) {
 var wakeHouse = function() {};
 (function() {
   var stageEl = $('stage'), cv = $('houseGL'), gl = null;
-  try { gl = cv.getContext('webgl', { antialias: true, alpha: true, premultipliedAlpha: true }); } catch (e) {}
+  try { gl = cv.getContext('webgl', { antialias: true, alpha: true, premultipliedAlpha: true, stencil: true }); } catch (e) {}
   if (!gl) return;
 
-  var V = [], GRP = 0, PIV = null;
+  var V = [], GRP = 0, PIV = null, MAIN = 0;
   function sub(a, b) { return [a[0]-b[0], a[1]-b[1], a[2]-b[2]]; }
   function cross(a, b) { return [a[1]*b[2]-a[2]*b[1], a[2]*b[0]-a[0]*b[2], a[0]*b[1]-a[1]*b[0]]; }
   function dot(a, b) { return a[0]*b[0]+a[1]*b[1]+a[2]*b[2]; }
@@ -1306,7 +1311,7 @@ var wakeHouse = function() {};
   }
   var WALL = hex('#f1f4f8'), ROOF = hex('#0075aa'), EDGE = hex('#00456f'), NAVY = hex('#003b64'), WHITE = hex('#ffffff'), GLASS = hex('#fcaf17'),
       PATH = hex('#cfd7e2'), G1 = hex('#2f8f68'), G2 = hex('#237456'), G3 = hex('#3aa277'), PINE = hex('#1d6a55'), TRUNK = hex('#4a4038'),
-      GD = hex('#e3e8ef'), GLN = hex('#a9b8cc'), BRICK = hex('#a4614a'), MULCH = hex('#3a2f2a'), SKY = hex('#009bd8'), STEEL = hex('#c7d0dc');
+      GD = hex('#e3e8ef'), GLN = hex('#a9b8cc'), BRICK = hex('#a4614a'), MULCH = hex('#3a2f2a'), SKY = hex('#009bd8'), STEEL = hex('#c7d0dc'), FLUE = hex('#5b3a30'), SMOKE = hex('#e8eef6');
   // gabled block. swap=false: ridge runs along x. swap=true: ridge runs along y.
   function gable(u1, u2, v1, v2, h, r, part, roofPart, swap) {
     function P(u, v, z) { return swap ? [v, u, z] : [u, v, z]; }
@@ -1384,7 +1389,7 @@ var wakeHouse = function() {};
       [23.4, 39.6].forEach(function(x) { box(x, x + 1, y, y + 0.9, 13.5, 16, GLASS, part, 1); box(x - .2, x + 1.2, y, y + 1.1, 16, 16.5, NAVY, part, 0); });
     }
     door(46, 0, 20);
-    box(44, 50, 9, 15, 30, 58, BRICK, 1, 6); box(43.2, 50.8, 8.2, 15.8, 58, 59.6, STEEL, 1, 0);
+    box(44, 50, 9, 15, 30, 57, BRICK, 1, 6); box(43.4, 50.6, 8.4, 15.6, 55.4, 57.6, BRICK, 1, 6); box(45.4, 48.6, 10.4, 13.6, 57.6, 60.4, FLUE, 1, 0);
     box(61.6, 63, 46, 47.3, 0, 31, WHITE, 0, 0); box(1, 2.4, 46, 47.3, 0, 31, WHITE, 0, 0);
     bed(2.5, 23, 46.6, 51.5, 0, 1.31); bed(41, 61.5, 46.6, 51.5, 0, 2.17);
     // garage + driveway
@@ -1411,6 +1416,19 @@ var wakeHouse = function() {};
     prop(0, -9, 60, function(x, y) { tree(x, y, 0.95); });
     prop(0, 60, -9, function(x, y) { pine(x, y, 1); });
     prop(0, 45, 72, function(x, y) { box(x-.5, x+.5, y-.5, y+.5, 0, 7, WHITE, 5, 0); box(x-1.3, x+1.3, y-2.2, y+2.2, 7, 9.6, NAVY, 5, 0); box(x+1.3, x+1.7, y-.4, y+.4, 8, 11.5, GLASS, 5, 1); });
+    // picket fence round the back of the lawn (unit-circle coordinates, sized with the lawn in the shader)
+    GRP = 3;
+    var F0 = 3.32, F1 = 6.11, FN = 34, FR = 0.9;
+    for (i = 0; i <= FN; i++) {
+      var fa = F0 + (F1 - F0) * i / FN, fx = Math.cos(fa) * FR, fy = Math.sin(fa) * FR, e = 0.009;
+      box(fx - e, fx + e, fy - e, fy + e, 0, 7, WHITE, 5, 0);
+      tri([fx - e, fy - e, 7], [fx + e, fy + e, 7], [fx, fy, 8.4], WHITE, 5, 0, [fx, fy, 0]); tri([fx - e, fy + e, 7], [fx + e, fy - e, 7], [fx, fy, 8.4], WHITE, 5, 0, [fx, fy, 0]);
+      if (i < FN) {
+        var fb = F0 + (F1 - F0) * (i + 1) / FN, gx = Math.cos(fb) * FR, gy = Math.sin(fb) * FR;
+        [2, 5].forEach(function(z) { quad([fx, fy, z], [gx, gy, z], [gx, gy, z + 0.9], [fx, fy, z + 0.9], WHITE, 5, 0, [0, 0, z]); });
+      }
+    }
+    GRP = 0;
     // arrive with the middle size
     prop(1, 111, 54, function(x, y) { tree(x, y, 1.1); });
     prop(1, 92, -14, function(x, y) { pine(x, y, 1.15); });
@@ -1422,47 +1440,54 @@ var wakeHouse = function() {};
     prop(2, -48, 32, function(x, y) { bush(x, y, 4.2); });
     prop(2, 10, -14, function(x, y) { pine(x, y, 0.9); });
     prop(2, 4, 68, function(x, y) { bush(x, y, 3.6); });
+    MAIN = V.length / 15;
+    GRP = 4; PIV = [0, 0, 0]; blob(0, 0, 0, 1, 1, SMOKE, 6, 7, 4); GRP = 0; PIV = null;   // one smoke puff, drawn several times
   })();
 
   function sh(type, src) { var s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); return s; }
   var prog = gl.createProgram();
   gl.attachShader(prog, sh(gl.VERTEX_SHADER,
-    'attribute vec3 aPos,aNor,aCol,aPiv;attribute float aPart,aKind,aGrp;uniform mat4 uMVP;uniform vec3 uOff[6];uniform vec3 uDisc;uniform vec3 uGrow;' +
+    'attribute vec3 aPos,aNor,aCol,aPiv;attribute float aPart,aKind,aGrp;uniform mat4 uMVP;uniform vec3 uOff[7];uniform vec3 uDisc;uniform vec3 uGrow;uniform float uPass,uPuff;' +
     'varying vec3 vCol,vNor,vW,vM;varying float vKind;varying vec2 vUnit;' +
-    'void main(){float g=aGrp<0.5?uGrow.x:(aGrp<1.5?uGrow.y:uGrow.z);vec3 p=aPiv+(aPos-aPiv)*g+uOff[int(aPart+0.5)];vUnit=aPos.xy;vM=aPos;' +
+    'void main(){float g=aGrp<0.5?uGrow.x:(aGrp<1.5?uGrow.y:(aGrp<2.5?uGrow.z:(aGrp<3.5?1.0:uPuff)));vec3 p=aPiv+(aPos-aPiv)*g+uOff[int(aPart+0.5)];vUnit=aPos.xy;vM=aPos;' +
+    'if(aGrp>2.5&&aGrp<3.5)p=vec3(uDisc.xy+aPos.xy*uDisc.z,aPos.z);' +
     'if(aKind>1.5&&aKind<2.5)p=vec3(uDisc.xy+aPos.xy*uDisc.z,0.0);' +
-    'vW=p;vCol=aCol;vNor=aNor;vKind=aKind;gl_Position=uMVP*vec4(p,1.0);}'));
+    'if(uPass>0.5){p.xy-=vec2(0.78,0.2)*p.z;p.z=0.3;}' +
+    'vW=p;vCol=aCol;vNor=aNor;vKind=aKind;gl_Position=uMVP*vec4(p,1.0);' +
+    'if(uPass>0.5&&((aKind>1.5&&aKind<2.5)||aPos.z<0.4&&aNor.z>0.9))gl_Position=vec4(2.0,2.0,2.0,1.0);}'));
   gl.attachShader(prog, sh(gl.FRAGMENT_SHADER,
     '#ifdef GL_FRAGMENT_PRECISION_HIGH\nprecision highp float;\n#else\nprecision mediump float;\n#endif\n' +
-    'varying vec3 vCol,vNor,vW,vM;varying float vKind;varying vec2 vUnit;uniform float uLit,uGhost;uniform vec4 uSh;' +
+    'varying vec3 vCol,vNor,vW,vM;varying float vKind;varying vec2 vUnit;uniform float uLit,uGhost,uPass,uTime,uAlpha;uniform vec3 uDisc;' +
     'float hash(vec2 p){return fract(sin(dot(p,vec2(12.9898,78.233)))*43758.5453);}' +
-    'void main(){vec3 L=normalize(vec3(-0.45,0.6,0.72));float a=1.0;vec3 c;float d=max(dot(normalize(vNor),L),0.0);' +
+    'void main(){vec3 N=normalize(vNor);vec3 L=normalize(vec3(0.6,0.155,0.77));float a=1.0;vec3 c;float d=max(dot(N,L),0.0);' +
+    'if(uPass>0.5){float m=(1.0-smoothstep(0.78,1.0,length((vW.xy-uDisc.xy)/uDisc.z)))*0.42;gl_FragColor=vec4(vec3(0.0,0.04,0.08)*m,m);return;}' +
+    'vec3 lightc=mix(vec3(0.40,0.45,0.58),vec3(0.60,0.68,0.82),N.z*0.5+0.5)+vec3(1.0,0.95,0.86)*0.62*d;' +
     'if(vKind>1.5&&vKind<2.5){float r=length(vUnit);' +                                   // lawn: mown stripes, mottling, house shadow, soft edge
     'float st=smoothstep(-0.25,0.25,sin(vW.x*0.30+vW.y*0.17));float n=hash(floor(vW.xy*1.3));float n2=hash(floor(vW.xy*0.35)+7.0);' +
     'c=mix(vec3(0.17,0.50,0.36),vec3(0.21,0.58,0.40),st)*(0.90+0.12*n)*(0.94+0.10*n2);c=mix(c,vec3(0.10,0.34,0.30),smoothstep(0.55,1.0,r)*0.75);' +
-    'vec2 q=vW.xy-vec2(8.0,-7.0);float s=smoothstep(uSh.x-10.0,uSh.x+3.0,q.x)*(1.0-smoothstep(uSh.z-3.0,uSh.z+10.0,q.x))*smoothstep(uSh.y-10.0,uSh.y+3.0,q.y)*(1.0-smoothstep(uSh.w-3.0,uSh.w+10.0,q.y));' +
-    'c*=1.0-0.48*s;a=1.0-smoothstep(0.80,1.0,r);}' +
-    'else if(vKind>0.5&&vKind<1.5){vec3 lit=mix(vec3(1.0,0.66,0.10),vec3(1.0,0.86,0.42),fract(vM.z*0.21+vM.x*0.05+vM.y*0.05));c=mix(vec3(0.09,0.22,0.34),lit,uLit);}' +
-    'else{c=vCol*(0.55+0.52*d);' +
+    'a=1.0-smoothstep(0.80,1.0,r);}' +
+    'else if(vKind>0.5&&vKind<1.5){vec3 lit=mix(vec3(1.0,0.66,0.10),vec3(1.0,0.86,0.42),fract(vM.z*0.21+vM.x*0.05+vM.y*0.05));c=mix(vec3(0.09,0.22,0.34),lit,uLit);float gl=smoothstep(0.035,0.0,abs(fract((vM.x-vM.y+vM.z*1.4)*0.007-uTime*0.11)-0.5));c=mix(c,vec3(1.0),gl*0.75*uLit);}' +
+    'else{c=vCol*lightc;' +
     'if(vKind>2.5&&vKind<3.5){float f=fract(vM.z/2.5);c*=1.0-0.13*smoothstep(0.72,1.0,f);c*=0.97+0.04*hash(vec2(floor(vM.z/2.5),3.0));' +   // lap siding + stone footing
-    'if(vM.z<2.6){float b=floor((vM.x+vM.y)/4.0+0.5*step(1.3,vM.z));c=vec3(0.50,0.54,0.60)*(0.55+0.52*d)*(0.86+0.2*hash(vec2(b,step(1.3,vM.z))));c*=1.0-0.2*step(0.93,fract((vM.x+vM.y)/4.0+0.5*step(1.3,vM.z)));c*=1.0-0.2*step(0.9,fract(vM.z/1.3));}' +
+    'if(vM.z<2.6){float b=floor((vM.x+vM.y)/4.0+0.5*step(1.3,vM.z));c=vec3(0.56,0.60,0.66)*lightc*(0.86+0.2*hash(vec2(b,step(1.3,vM.z))));c*=1.0-0.2*step(0.93,fract((vM.x+vM.y)/4.0+0.5*step(1.3,vM.z)));c*=1.0-0.2*step(0.9,fract(vM.z/1.3));}' +
     'c*=0.84+0.16*smoothstep(0.0,8.0,vM.z);}' +
     'if(vKind>3.5&&vKind<4.5||vKind>6.5){float al=vKind>6.5?vM.y:vM.x;float row=floor(vM.z/1.55);float u=al/3.4+0.5*mod(row,2.0);' +         // staggered shingles
     'c*=0.88+0.2*hash(vec2(floor(u),row));c*=1.0-0.22*smoothstep(0.7,1.0,fract(vM.z/1.55));c*=1.0-0.14*step(0.93,fract(u));}' +
     'if(vKind>4.5&&vKind<5.5){vec2 t=vM.xy/4.2;c*=0.92+0.1*hash(floor(t));c*=1.0-0.16*max(step(0.93,fract(t.x)),step(0.93,fract(t.y)));}' +      // pavers
-    'if(vKind>5.5&&vKind<6.5){float row=floor(vM.z/1.5);float u=(vM.x+vM.y)/3.0+0.5*mod(row,2.0);c*=0.84+0.24*hash(vec2(floor(u),row));c=mix(c,vec3(0.78,0.74,0.70)*(0.55+0.52*d),max(step(0.9,fract(vM.z/1.5)),step(0.92,fract(u))));}' +  // brick
+    'if(vKind>5.5&&vKind<6.5){float row=floor(vM.z/1.5);float u=(vM.x+vM.y)/3.0+0.5*mod(row,2.0);c*=0.84+0.24*hash(vec2(floor(u),row));c=mix(c,vec3(0.82,0.78,0.74)*lightc,max(step(0.9,fract(vM.z/1.5)),step(0.92,fract(u))));}' +  // brick
     '}' +
     'float g=dot(c,vec3(0.3,0.59,0.11));c=mix(c,vec3(g*0.72,g*0.82,g*0.95),uGhost);' +
-    'gl_FragColor=vec4(c*a,a);}'));
+    'a*=uAlpha;gl_FragColor=vec4(c*a,a);}'));
   gl.linkProgram(prog);
   if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) return;
   gl.useProgram(prog);
   var buf = gl.createBuffer(), count = V.length / 15;
   gl.bindBuffer(gl.ARRAY_BUFFER, buf); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(V), gl.STATIC_DRAW);
+  var PUFF = count - MAIN;
   [['aPos',3,0],['aNor',3,3],['aCol',3,6],['aPart',1,9],['aKind',1,10],['aPiv',3,11],['aGrp',1,14]].forEach(function(a) {
     var l = gl.getAttribLocation(prog, a[0]); if (l < 0) return; gl.enableVertexAttribArray(l); gl.vertexAttribPointer(l, a[1], gl.FLOAT, false, 60, a[2]*4);
   });
-  var U = {}; ['uMVP','uOff','uDisc','uLit','uGhost','uSh','uGrow'].forEach(function(n) { U[n] = gl.getUniformLocation(prog, n); });
+  var U = {}; ['uMVP','uOff','uDisc','uLit','uGhost','uGrow','uPass','uPuff','uTime','uAlpha'].forEach(function(n) { U[n] = gl.getUniformLocation(prog, n); });
   gl.enable(gl.DEPTH_TEST); gl.enable(gl.BLEND); gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
   stageEl.classList.add('gl');
 
@@ -1481,7 +1506,7 @@ var wakeHouse = function() {};
     l:    { c: [31,30], r: 96, top: 60, zoom: 1,    sh: [-40,0,102,60] }
   };
   var EL = 0.72, FOV = 0.42;
-  var cur = { g: 0, w: 0, b: 0, lit: 0, ghost: 1, c: [32,32], r: 62, zoom: 1.12, sh: [0,0,64,46], az: -0.62, g1: 0, g2: 0, v1: 0, v2: 0 };
+  var cur = { g: 0, w: 0, b: 0, lit: 0, ghost: 1, c: [32,32], r: 62, zoom: 1.12, sh: [0,0,64,46], az: -0.62, g1: 0, g2: 0, v1: 0, v2: 0, kick: 0 };
   var drag = 0, dragging = null, hopAt = -1, lastSize = null, raf = 0, last = 0, t0 = 0;
   cv.addEventListener('pointerdown', function(e) { dragging = { x: e.clientX, a: drag }; try { cv.setPointerCapture(e.pointerId); } catch (x) {} });
   cv.addEventListener('pointermove', function(e) { if (dragging) drag = Math.max(-1.25, Math.min(1.25, dragging.a + (e.clientX - dragging.x) * 0.011)); });
@@ -1511,7 +1536,7 @@ var wakeHouse = function() {};
     var dt = Math.min(0.05, (ts - last) / 1000 || 0.016); last = ts;
     var still = reducedMotion(), sz = state.size || 'none', v = VIEW[sz], i;
     function ease(c, to, k) { return still ? to : c + (to - c) * (1 - Math.exp(-dt * k)); }
-    if (sz !== lastSize) { if (lastSize === 'none' && !still) hopAt = ts; lastSize = sz; }
+    if (sz !== lastSize) { if (lastSize === 'none' && !still) hopAt = ts; if (lastSize !== null && sz !== 'none' && !still) cur.kick = lastSize === 'none' || SIZE_ORDER.indexOf(sz) > SIZE_ORDER.indexOf(lastSize) ? 0.5 : -0.5; lastSize = sz; }
     cur.g = ease(cur.g, sz === 'm' || sz === 'l' ? 1 : 0, 5.5);
     cur.w = ease(cur.w, sz === 'l' ? 1 : 0, 4.5);
     cur.b = ease(cur.b, sz === 'l' ? 1 : 0, 4.5);
@@ -1527,24 +1552,43 @@ var wakeHouse = function() {};
     var hop = 0;
     if (hopAt >= 0) { var u = (ts - hopAt) / 620; if (u >= 1) hopAt = -1; else hop = 13 * Math.sin(Math.PI * u) * (1 - u * 0.35); }
     var sway = still ? 0 : Math.sin((ts - t0) / 2600) * 0.3;
-    cur.az = ease(cur.az, -0.62 + sway + drag, 7);
+    cur.kick = ease(cur.kick, 0, 2.2);
+    cur.az = ease(cur.az, -0.62 + sway + drag + cur.kick, 7);
 
     var w = cv.clientWidth, h = cv.clientHeight, dpr = Math.min(2, window.devicePixelRatio || 1);
     if (!w || !h) { raf = requestAnimationFrame(frame); return; }
     if (cv.width !== Math.round(w * dpr) || cv.height !== Math.round(h * dpr)) { cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); }
     gl.viewport(0, 0, cv.width, cv.height);
-    gl.clearColor(0, 0, 0, 0); gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    gl.clearColor(0, 0, 0, 0); gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT | gl.STENCIL_BUFFER_BIT);
     // pull the camera back exactly far enough that the whole lawn and the rooftop stay inside the frame
     var tz = 10, dist = 300, m;
     for (i = 0; i < 3; i++) { m = camera(dist, w / h, cur.az, tz); dist *= reach(m, v.top + 4) / 0.94; }
     m = camera(dist * cur.zoom, w / h, cur.az, tz);
     gl.uniformMatrix4fv(U.uMVP, false, m);
-    gl.uniform3fv(U.uOff, new Float32Array([0,0,0, 0,0,hop, -44*(1-cur.g),0,0, 44*(1-cur.w),0,0, 0,-24*(1-cur.b),0, 0,0,0]));
+    var off = new Float32Array([0,0,0, 0,0,hop, -44*(1-cur.g),0,0, 44*(1-cur.w),0,0, 0,-24*(1-cur.b),0, 0,0,0, 0,0,0]);
+    gl.uniform3fv(U.uOff, off);
     gl.uniform3f(U.uDisc, cur.c[0], cur.c[1], cur.r);
     gl.uniform3f(U.uGrow, 1, Math.max(0, cur.g1), Math.max(0, cur.g2));
     gl.uniform1f(U.uLit, cur.lit); gl.uniform1f(U.uGhost, cur.ghost);
-    gl.uniform4f(U.uSh, cur.sh[0], cur.sh[1], cur.sh[2], cur.sh[3]);
-    gl.drawArrays(gl.TRIANGLES, 0, count);
+    gl.uniform1f(U.uTime, still ? 0 : (ts - t0) / 1000); gl.uniform1f(U.uAlpha, 1); gl.uniform1f(U.uPuff, 1); gl.uniform1f(U.uPass, 0);
+    gl.drawArrays(gl.TRIANGLES, 0, MAIN);
+    // real cast shadows: the same model flattened onto the lawn along the sun's direction, drawn once per pixel
+    gl.uniform1f(U.uPass, 1);
+    gl.enable(gl.STENCIL_TEST); gl.stencilFunc(gl.EQUAL, 0, 0xff); gl.stencilOp(gl.KEEP, gl.KEEP, gl.INCR);
+    gl.enable(gl.POLYGON_OFFSET_FILL); gl.polygonOffset(-2, -2); gl.depthMask(false);
+    gl.drawArrays(gl.TRIANGLES, 0, MAIN);
+    gl.disable(gl.STENCIL_TEST); gl.disable(gl.POLYGON_OFFSET_FILL); gl.uniform1f(U.uPass, 0);
+    // chimney smoke
+    if (!still && cur.lit > 0.05) {
+      for (i = 0; i < 4; i++) {
+        var ph = ((ts - t0) / 3600 + i / 4) % 1;
+        off[18] = 47 - ph * ph * 9; off[19] = 12 - ph * 3; off[20] = 61.5 + hop + ph * 20;
+        gl.uniform3fv(U.uOff, off); gl.uniform1f(U.uPuff, 1.3 + ph * 3.2);
+        gl.uniform1f(U.uAlpha, 0.5 * (1 - ph) * Math.min(1, ph * 6) * cur.lit);
+        gl.drawArrays(gl.TRIANGLES, MAIN, PUFF);
+      }
+    }
+    gl.depthMask(true);
     raf = requestAnimationFrame(frame);
   }
   wakeHouse = function() { if (!raf && state.step === 1) { last = 0; raf = requestAnimationFrame(function(ts) { if (!t0) t0 = ts; last = ts; frame(ts); }); } };
