@@ -39,7 +39,7 @@ All of these are near the top of the `<script>` in `index.html`.
 - **Fallback email address:** `CONTACT_EMAIL`.
 
 After changing anything, bump the `CACHE` name in `sw.js` (for example
-`hero-club-v10` to `hero-club-v11`) so returning visitors get the new files.
+`hero-club-v11` to `hero-club-v12`) so returning visitors get the new files.
 
 ## Deploying
 
