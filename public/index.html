@@ -955,7 +955,7 @@ function priceText() { var p = price(); return p ? '$' + p[0] + '/month after $'
    To use job photos: put the files in a "photos" folder next to this page and
    list them here, e.g. ['photos/gutters-1.jpg', 'photos/windows-2.jpg'].
    Each is cropped to a square. With the list empty, drawn service icons show. */
-var PHOTOS = ["photos/13-pole-team.jpg", "photos/01-window-inside.jpg", "photos/16-house-wash.jpg", "photos/14-squeegee-ladder.jpg", "photos/02-softwash-house.jpg", "photos/17-window-detail.jpg", "photos/03-gutter.jpg", "photos/15-team.jpg", "photos/04-pole-brush.jpg", "photos/05-porch-wash.jpg", "photos/06-interior-window.jpg", "photos/07-pressure-wash.jpg", "photos/08-squeegee.jpg", "photos/09-window-pole.jpg", "photos/10-pool-deck.jpg", "photos/11-rinse.jpg", "photos/12-glass-brush.jpg"];
+var PHOTOS = ["photos/13-pole-team.jpg", "photos/01-window-inside.jpg", "photos/19-driveway.jpg", "photos/16-house-wash.jpg", "photos/14-squeegee-ladder.jpg", "photos/02-softwash-house.jpg", "photos/17-window-detail.jpg", "photos/18-squeegee-storefront.jpg", "photos/03-gutter.jpg", "photos/15-team.jpg", "photos/04-pole-brush.jpg", "photos/05-porch-wash.jpg", "photos/06-interior-window.jpg", "photos/07-pressure-wash.jpg", "photos/08-squeegee.jpg", "photos/09-window-pole.jpg", "photos/10-pool-deck.jpg", "photos/11-rinse.jpg", "photos/12-glass-brush.jpg"];
 
 var ICONS = [
   '<path d="M4 4h16v16H4zM12 4v16M4 12h16"/>',                                                   // window
@@ -976,7 +976,7 @@ function buildReel() {
     // each row is laid out twice so the drift loops without a seam
     for (var pass = 0; pass < 2; pass++) {
       for (var i = 0; i < perRow; i++) {
-        var n = r * 3 + i, tile = make('div', 'tile');
+        var n = r * perRow + i, tile = make('div', 'tile');
         if (PHOTOS.length) {
           tile.style.backgroundImage = 'url("' + PHOTOS[n % PHOTOS.length] + '")';
         } else {
