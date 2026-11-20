@@ -292,7 +292,8 @@
 
 
   /* ── ADD-ONS ── */
-  .addon-rows { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-top: 26px; }
+  .addon-note { width: fit-content; max-width: 100%; margin: 14px auto 0; padding: 8px 14px; border-radius: var(--pill); box-shadow: inset 0 0 0 1.5px rgba(252,175,23,0.6); color: var(--perfect-day-yellow); font-size: 0.875rem; font-weight: 600; text-align: center; line-height: 1.35; }
+  .addon-rows { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-top: 22px; }
   .addon-row {
     width: 100%;
     display: flex; align-items: center; justify-content: space-between; gap: 14px;
@@ -564,13 +565,14 @@
     <section class="screen" id="screen-addons" data-step="2" aria-labelledby="t-addons" hidden>
       <h1 class="screen-title" id="t-addons" tabindex="-1"><em>Add anything</em> extra?</h1>
       <p class="screen-sub" id="addonSub"></p>
+      <p class="addon-note" id="addonNote"></p>
       <ul class="addon-rows" id="addonRows"></ul>
     </section>
 
     <!-- 3 · DETAILS -->
     <section class="screen" id="screen-details" data-step="3" aria-labelledby="t-details" hidden>
       <h1 class="screen-title" id="t-details" tabindex="-1"><em>Your</em> details</h1>
-      <p class="screen-sub">Window Hero will reach out to confirm and get everything set up.</p>
+      <p class="screen-sub">Window Hero will reach out to confirm your plan and schedule.</p>
 
       <div class="summary" id="summary">
         <p class="summary-tier" id="sumTier"></p>
@@ -978,7 +980,8 @@ each(document.querySelectorAll('input[name="size-choice"]'), function(r) {
 /* ── step 2: add-ons ── */
 function renderAddons() {
   var t = TIERS[state.tier], rows = $('addonRows');
-  $('addonSub').textContent = t.name + ' includes ' + t.discount + ' off any additional service. Tap any you would like.';
+  $('addonSub').textContent = "Tap any you would like. We'll give you a price for these when we reach out to confirm your plan and schedule.";
+  $('addonNote').textContent = t.name + ' includes ' + t.discount + ' off any additional service.';
   rows.textContent = '';
   t.addons.forEach(function(name) {
     var li = document.createElement('li'), b = document.createElement('button'), label = document.createElement('span'), mark = document.createElement('span');
@@ -1002,7 +1005,7 @@ function renderSummary() {
   $('sumTier').textContent = t.name;
   $('sumPrice').textContent = '$' + p[0] + '/mo';
   $('sumLine').textContent = t.visits + ' visits per year · home ' + HOME_SIZES[state.size] + ' · after $' + p[1] + ' deposit';
-  $('sumAddons').textContent = state.addons.length ? 'Add-ons: ' + state.addons.join(', ') : 'No add-ons';
+  $('sumAddons').textContent = state.addons.length ? 'Add-ons: ' + state.addons.join(', ') + ". We'll give you a price for these when we confirm." : 'No add-ons';
   $('fieldTier').value = t.name + ' (' + t.visits + ' visits/year)';
   $('fieldHomeSize').value = HOME_SIZES[state.size];
   $('fieldPrice').value = priceText();
@@ -1108,7 +1111,7 @@ function buildMessage() {
   body += 'Services included:\n';
   t.email.forEach(function(s) { body += '  • ' + s + '\n'; });
   if (state.addons.length) {
-    body += 'Add-ons requested:\n';
+    body += 'Add-ons requested (customer was told we will price these when we confirm):\n';
     state.addons.forEach(function(a) { body += '  • ' + a + '\n'; });
   }
   if (note) body += '\nNotes: ' + note + '\n';
@@ -1195,7 +1198,7 @@ $('btnCopyEmail').addEventListener('click', function() {
 function showSent() {
   state.sent = true;
   var first = fieldValue('custName').split(' ')[0];
-  $('sentDetail').textContent = 'Thanks, ' + first + '. Window Hero will reach out to confirm your ' + TIERS[state.tier].name + ' membership and get everything set up.';
+  $('sentDetail').textContent = 'Thanks, ' + first + '. Window Hero will reach out to confirm your ' + TIERS[state.tier].name + ' plan and schedule' + (state.addons.length ? ', and to give you a price for your add-ons.' : '.');
   SCREENS.forEach(function(id) { $(id).hidden = true; });
   var s = $('screen-sent');
   s.hidden = false;
