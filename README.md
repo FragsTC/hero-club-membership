@@ -64,7 +64,7 @@ already downloaded, so a new file under an old name can go on showing the old
 picture.
 
 After changing anything, bump the `CACHE` name in `sw.js` (for example
-`hero-club-v29` to `hero-club-v30`) so returning visitors get the new files.
+`hero-club-v30` to `hero-club-v31`) so returning visitors get the new files.
 
 ## Deploying
 
