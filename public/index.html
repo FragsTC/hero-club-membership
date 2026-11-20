@@ -192,13 +192,13 @@
     content: '';
     position: absolute; inset: -30px;
     background: var(--bd) center 30% / cover no-repeat;
-    filter: blur(9px) saturate(1.1);
-    opacity: 0.55;
+    filter: blur(3px) saturate(1.05);
+    opacity: 0.6;
   }
   .backdrop::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,17,29,0.35), rgba(0,17,29,0.7)); }
   body[data-step="2"] .backdrop, body[data-step="3"] .backdrop, body.sent-state .backdrop { display: block; animation: reel-in 0.6s ease-out both; }
   body.sent-state .backdrop { height: min(78vh, 640px); }
-  body.sent-state .backdrop::before { opacity: 0.7; filter: blur(5px) saturate(1.1); }
+  body.sent-state .backdrop::before { opacity: 0.75; filter: blur(1.5px); background-position: 35% 30%; }
   body.on-landing .topbar-logo { visibility: hidden; }
   body.on-landing footer { display: none; }
 
@@ -796,8 +796,8 @@ var SEND_TIMEOUT_MS = 8000;
 // price: [monthly, deposit] for each home-size band, from the Hero Club door hanger.
 var TIERS = {
   "bronze": {
-    "photo": "photos/02-softwash-house.jpg",
-    "photoPos": "50% 62%",
+    "photo": "photos/plan-bronze.jpg",
+    "photoPos": "50% 50%",
     "name": "Bronze",
     "visits": 2,
     "popular": false,
@@ -831,8 +831,8 @@ var TIERS = {
     ]
   },
   "silver": {
-    "photo": "photos/06-interior-window.jpg",
-    "photoPos": "50% 55%",
+    "photo": "photos/plan-silver.jpg",
+    "photoPos": "50% 50%",
     "name": "Silver",
     "visits": 3,
     "popular": true,
@@ -874,7 +874,7 @@ var TIERS = {
     ]
   },
   "gold": {
-    "photo": "photos/05-porch-wash.jpg",
+    "photo": "photos/plan-gold.jpg",
     "photoPos": "50% 50%",
     "name": "Gold",
     "visits": 4,
@@ -920,7 +920,7 @@ var TIERS = {
 var ORDER = ['bronze', 'silver', 'gold'];
 var HOME_SIZES = { s: 'up to 2,500 sq ft', m: '2,501 to 3,500 sq ft', l: 'over 3,500 sq ft' };
 var SIZE_ORDER = ['s', 'm', 'l'];
-var BACKDROPS = { 2: 'photos/12-glass-brush.jpg', 3: 'photos/08-squeegee.jpg', sent: 'photos/09-window-pole.jpg' };
+var BACKDROPS = { 2: 'photos/bg-addons.jpg', 3: 'photos/bg-details.jpg', sent: 'photos/bg-sent.jpg' };
 function setBackdrop(key) {
   if (BACKDROPS[key]) $('backdrop').style.setProperty('--bd', 'url("' + BACKDROPS[key] + '")');
 }
@@ -955,7 +955,7 @@ function priceText() { var p = price(); return p ? '$' + p[0] + '/month after $'
    To use job photos: put the files in a "photos" folder next to this page and
    list them here, e.g. ['photos/gutters-1.jpg', 'photos/windows-2.jpg'].
    Each is cropped to a square. With the list empty, drawn service icons show. */
-var PHOTOS = ["photos/01-window-inside.jpg", "photos/02-softwash-house.jpg", "photos/03-gutter.jpg", "photos/04-pole-brush.jpg", "photos/05-porch-wash.jpg", "photos/06-interior-window.jpg", "photos/07-pressure-wash.jpg", "photos/08-squeegee.jpg", "photos/09-window-pole.jpg", "photos/10-pool-deck.jpg", "photos/11-rinse.jpg", "photos/12-glass-brush.jpg"];
+var PHOTOS = ["photos/13-pole-team.jpg", "photos/01-window-inside.jpg", "photos/16-house-wash.jpg", "photos/14-squeegee-ladder.jpg", "photos/02-softwash-house.jpg", "photos/17-window-detail.jpg", "photos/03-gutter.jpg", "photos/15-team.jpg", "photos/04-pole-brush.jpg", "photos/05-porch-wash.jpg", "photos/06-interior-window.jpg", "photos/07-pressure-wash.jpg", "photos/08-squeegee.jpg", "photos/09-window-pole.jpg", "photos/10-pool-deck.jpg", "photos/11-rinse.jpg", "photos/12-glass-brush.jpg"];
 
 var ICONS = [
   '<path d="M4 4h16v16H4zM12 4v16M4 12h16"/>',                                                   // window

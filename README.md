@@ -15,7 +15,7 @@ Live at https://heroclub-membership.netlify.app (Netlify site
 | `public/sw.js` | Offline support. Pages load fresh when online, from cache when not |
 | `public/manifest.webmanifest`, `public/icons/` | Home-screen name and icons |
 | `public/fonts/` | Barlow and Noto Sans (SIL Open Font License) |
-| `public/photos/` | Landing-screen photos, 480px squares |
+| `public/photos/` | Numbered files are landing tiles (480px squares). `plan-*.jpg` are the plan card photos and `bg-*.jpg` the page backgrounds |
 | `netlify/functions/submission-created.js` | Adds each request to monday.com |
 | `netlify.toml` | Tells Netlify to serve `public/` and where the function is |
 
@@ -59,7 +59,7 @@ All of these are near the top of the `<script>` in `public/index.html`.
 - **Fallback email address:** `CONTACT_EMAIL`.
 
 After changing anything, bump the `CACHE` name in `sw.js` (for example
-`hero-club-v15` to `hero-club-v16`) so returning visitors get the new files.
+`hero-club-v16` to `hero-club-v17`) so returning visitors get the new files.
 
 ## Deploying
 

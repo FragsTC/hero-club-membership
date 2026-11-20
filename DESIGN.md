@@ -110,9 +110,11 @@ the Hero Club door hanger. Five screens: landing, tier, add-ons, details, and
 
 ### Photos
 
-The twelve landing photos come from the Window Hero SharePoint Marketing
-Library: four from Brand Photo Shoots 1 and 3, eight from Favorite Corporate
-Photos. Use only Window Hero's own photos. Avoid any that show a house number,
+The photos are Window Hero's own. Twelve landing tiles come from the
+SharePoint Marketing Library (four from Brand Photo Shoots 1 and 3, eight from
+Favorite Corporate Photos). Five more, supplied directly, also provide the
+plan card photos and page backgrounds. The three plan cards use photos from
+that one set so they read as a matched group. Use only Window Hero's own photos. Avoid any that show a house number,
 a licence plate, another location's phone number, or a customer's face.
 
 ### Content rules
