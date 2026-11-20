@@ -82,6 +82,10 @@ the member who referred them, and the office matches the address in
 ServiceMinder. The terms, messages and office steps are in
 `docs/referrals/`.
 
+The one-page handout for members is `docs/hero-club-documents/10-referral-handout.pdf`.
+Rebuild it with `node scripts/make-referral-handout.js` (needs Playwright);
+it reads the credit amounts from the signup page.
+
 An earlier version with referral links, a banner on this page and a link
 maker page was built and then removed. It is in the git history at commit
 `847dd6b` if it is wanted later.
