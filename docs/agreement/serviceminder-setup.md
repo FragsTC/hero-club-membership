@@ -16,7 +16,7 @@ Allow about an hour, plus the test.
 
 ## The numbers you will type
 
-| Plan | Home size | Short name | Deposit | Monthly | Year total |
+| Plan | Home size | Short name | Down payment | Monthly | Year total |
 |---|---|---|---|---|---|
 | Bronze | up to 2,500 sq ft | Bronze S | $70 | $54 | $718 |
 | Bronze | 2,501 to 3,500 sq ft | Bronze M | $96 | $71 | $948 |
@@ -24,6 +24,9 @@ Allow about an hour, plus the test.
 | Silver | 2,501 to 3,500 sq ft | Silver M | $144 | $107 | $1,428 |
 | Gold | up to 2,500 sq ft | Gold S | $168 | $125 | $1,668 |
 | Gold | 2,501 to 3,500 sq ft | Gold M | $228 | $170 | $2,268 |
+
+ServiceMinder calls the down payment a **Deposit**. Wherever this guide
+says Deposit, it means that ServiceMinder field.
 
 The year total is what goes on the proposal as the price. We expect the
 deposit to come off the top and the rest to divide into 12 equal monthly

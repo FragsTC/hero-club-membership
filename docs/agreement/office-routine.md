@@ -12,7 +12,7 @@ What the office does once ServiceMinder is set up
 3. In ServiceMinder, create a proposal from the matching Hero Club template
    and send it. For a home over 3,500 sq ft, put the Schedule A prices for
    that home on the proposal. Set the board status to **Proposal sent**.
-4. When the customer accepts and pays the deposit, on the board item:
+4. When the customer accepts and pays the down payment, on the board item:
    - set the status to **Active**;
    - set **Signed on** to the date they accepted;
    - set **Renewal date** to one year after that.
@@ -50,15 +50,15 @@ must not be missed.
 | 35 days before **Renewal date** | The board reminds the owner. Look up the current price for the member's plan and home size and send the notice below by email that day. Set **Renewal notice sent** to the date it went out. |
 | 25 days before | The backstop reminder goes to a second person. If **Renewal notice sent** is blank, send the notice now. |
 | Up to the renewal date | If the member opts out, set the status to **Not renewing**. Nothing more is charged after the twelfth monthly charge. |
-| Renewal date | If they have not opted out, set up the renewal year in ServiceMinder: 12 monthly charges at the price in the notice, no deposit, the first one month after the renewal date. Move **Renewal date** forward one year and clear **Renewal notice sent**, so next year's reminder fires. Leave **Signed on** alone. |
+| Renewal date | If they have not opted out, set up the renewal year in ServiceMinder exactly like year one: the down payment charged on the renewal date, then 12 monthly charges at the prices in the notice, the first one month after the renewal date. The member's twelfth charge of the old year also falls on the renewal date, so two charges run that day. Move **Renewal date** forward one year and clear **Renewal notice sent**, so next year's reminder fires. Leave **Signed on** alone. |
 
 **If the notice was missed:** it can still go out as long as the renewal date
 is at least 15 days away. If it is closer than that, do not renew
 automatically. Call the member and send a new proposal for them to accept.
 
 Setting up the renewal year in ServiceMinder has not been tested. The
-likely way is a payment plan named `Hero Club renewal` with no deposit and
-12 monthly installments, applied to an invoice for the year's total. Confirm
+likely way is to apply the member's same Hero Club payment plan (down
+payment plus 12 monthly installments) to a new invoice for the year's total. Confirm
 how with a test before the first renewal comes due.
 
 ### The renewal notice
@@ -70,9 +70,11 @@ Subject: Your Hero Club membership renews on [RENEWAL DATE]
 > Your Hero Club [PLAN] membership for [ADDRESS] renews automatically on
 > **[RENEWAL DATE]** for another 12 months.
 >
-> **Your monthly charge for the new year will be $[NEW MONTHLY PRICE].**
-> There is no deposit. The first charge will be one month after your
-> renewal date, to the card we have on file, and then monthly for 12 months.
+> **For the new year your down payment will be $[NEW DOWN PAYMENT] and your
+> monthly charge will be $[NEW MONTHLY PRICE].** The down payment is charged
+> on your renewal date to the card we have on file. The 12 monthly charges
+> start one month after that. Your last monthly charge for this year, $[CURRENT
+> MONTHLY PRICE], is also due on your renewal date.
 >
 > Your plan includes the same services as this year: [PLAN SERVICES].
 >
@@ -128,7 +130,7 @@ When the payment goes through, release the held visits.
    - **Received:** add up every plan service performed, at the Schedule A
      price for their home size. Do not count add-ons; those were billed
      separately.
-   - **Paid:** the deposit plus every monthly charge collected.
+   - **Paid:** the down payment plus every monthly charge collected.
    - **Cap:** the number of monthly charges not yet collected, times their
      monthly charge.
    - If Received is more than Paid, they owe the difference, but never more
@@ -157,7 +159,7 @@ the difference.
 
 ### Worked examples
 
-Both use Bronze for a home up to 2,500 sq ft: $70 deposit, $54 a month. The
+Both use Bronze for a home up to 2,500 sq ft: $70 down payment, $54 a month. The
 service prices here ($400 for a house wash, $150 for a gutter cleaning) are
 **made-up figures for the example, not Window Hero's prices**. Use Schedule
 A.

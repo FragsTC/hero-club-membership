@@ -99,7 +99,7 @@ function main() {
     for (const n of amountsIn(text)) {
       assert(ok.has(n), `${file}: quotes ${money(n)}, which is not a Hero Club price in public/index.html`);
     }
-    if (/\|\s*Deposit\s*\|/i.test(text)) {
+    if (/\|\s*(Deposit|Down payment)\s*\|/i.test(text)) {
       checkPriceTable(file, text, rows);
       tables += 1;
     }

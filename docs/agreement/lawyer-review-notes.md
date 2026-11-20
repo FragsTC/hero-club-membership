@@ -29,12 +29,16 @@ filling in.
    penalty? Is the cap enough? Should the regular prices be fixed in
    Schedule A at signing, as drafted, or may they change?
 4. **Charging the card on file.** The agreement authorizes charges for the
-   deposit, monthly charges, add-ons, renewal-year charges and a
+   down payment, monthly charges, add-ons, renewal-year charges and a
    cancellation balance. Is that authorization sufficient for recurring card
    charges and for a one-off cancellation balance, or should the balance be
    invoiced first?
-5. **The renewal year.** A renewal year has no deposit and is 12 monthly
-   charges at the price in force at renewal. Is "our price for your plan and
+5. **The renewal year.** A renewal year is a down payment on the renewal
+   date plus 12 monthly charges, at the prices in force at renewal. The last
+   monthly charge of the old year falls on the same day as the renewal down
+   payment. The first payment is called a "down payment" in the agreement
+   and a "deposit" on the door hanger; the agreement says it is not held or
+   returned. Is that wording enough? Is "our price for your plan and
    home size at that time", stated in the notice, a sufficient disclosure of
    a term that changes on renewal?
 6. **Sale of the home.** The membership passes to a buyer who agrees in

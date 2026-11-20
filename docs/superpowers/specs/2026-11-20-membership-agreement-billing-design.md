@@ -113,10 +113,15 @@ member discount, and charged to the card on file. This keeps the payment
 plans fixed. The cancellation settlement counts plan services only; extras
 are already paid for separately.
 
-Renewal years (builder's call): the twelfth charge of the first year falls on
-the anniversary. The renewal year is 12 more monthly charges at the
-then-current price with no deposit, the first one month after the
-anniversary, so nothing is charged twice on the same day.
+Renewal years (owner's decision, 2026-11-20): a renewal always has a down
+payment. The renewal year is paid like the first: the down payment on the
+renewal date, then 12 monthly charges at the then-current prices, the first
+one month later. The twelfth charge of the old year falls on the renewal
+date too, so two charges run that day; the renewal notice says so.
+
+Wording (owner's decision, 2026-11-20): the first payment is called a "down
+payment" in the agreement documents, because it is not held or returned. The
+door hanger and signup page still say "deposit".
 
 ## The agreement's terms
 
@@ -146,7 +151,7 @@ anniversary, so nothing is charged twice on the same day.
 - **Renewal:** renews for another 12 months at the then-current price.
   Window Hero emails a notice 30 days before with the new price and how to
   opt out. Stated conspicuously near the signature, per 75-41. Renewal years
-  have no deposit unless the lawyer or owner says otherwise (builder's call).
+  have a down payment, as above.
 - **Governing law:** North Carolina.
 
 Schedule A is a table of regular one-time prices for each service by home

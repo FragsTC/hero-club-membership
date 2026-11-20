@@ -3,11 +3,11 @@
 This agreement is between you and [WINDOW HERO LEGAL NAME] ("Window Hero",
 "we", "us"). It covers your Hero Club membership for the home at the service
 address on your proposal. It starts the day you accept the proposal and pay
-the deposit.
+the down payment.
 
 ## Your plan
 
-Your plan, home size, deposit and monthly charge are the ones shown on the
+Your plan, home size, down payment and monthly charge are the ones shown on the
 proposal you are accepting. Over your 12 months your plan includes:
 
 | Bronze | Silver | Gold |
@@ -27,10 +27,10 @@ Services you do not use within your 12 months do not carry over.
 
 ## What you pay
 
-You pay a deposit today and then 12 monthly charges. The first monthly charge
+You pay a down payment today and then 12 monthly charges. The first monthly charge
 is one month after you sign, and the rest follow on the same day each month.
 
-| Plan | Home size | Deposit | Monthly charge | Total for the year |
+| Plan | Home size | Down payment | Monthly charge | Total for the year |
 |---|---|---|---|---|
 | Bronze | up to 2,500 sq ft | $70 | $54 | $718 |
 | Bronze | 2,501 to 3,500 sq ft | $96 | $71 | $948 |
@@ -39,8 +39,12 @@ is one month after you sign, and the rest follow on the same day each month.
 | Gold | up to 2,500 sq ft | $168 | $125 | $1,668 |
 | Gold | 2,501 to 3,500 sq ft | $228 | $170 | $2,268 |
 
-If your home is over 3,500 sq ft, your deposit and monthly charge are the
+If your home is over 3,500 sq ft, your down payment and monthly charge are the
 amounts shown on your proposal.
+
+**The down payment is your first payment toward the year.** It is not held
+as a security deposit and it is not returned at the end of the year. Some of
+our printed materials call it a deposit; it is the same payment.
 
 **Your price is locked.** Your monthly charge and your member discount do not
 change during your 12 months.
@@ -50,8 +54,9 @@ ask for one, we bill it on its own after the work is done, at your member
 discount.
 
 **Your card on file.** By accepting, you authorize Window Hero to keep your
-card on file and to charge it for the deposit, each monthly charge, any
-add-on or extra service you ask for, the monthly charges of a renewal year,
+card on file and to charge it for the down payment, each monthly charge, any
+add-on or extra service you ask for, the down payment and monthly charges of
+a renewal year,
 and any balance due under "Cancelling" below. You can change the card at any
 time by contacting us.
 
@@ -88,7 +93,7 @@ a membership ends early, we settle up like this:
 
 1. We add up the services you received, at our regular one-time prices
    (Schedule A below).
-2. We subtract everything you have paid in deposit and monthly charges.
+2. We subtract everything you have paid in down payment and monthly charges.
 3. If you received more than you paid for, you owe the difference. It is
    never more than the monthly charges that were left in your 12 months.
 4. If you paid for more than you received, you owe nothing more and no refund
@@ -148,12 +153,15 @@ cannot be enforced, the rest still applies.
 >
 > **We will email you a notice at least 15 days and no more than 45 days
 > before your renewal date. The notice
-> will state your renewal date and your monthly charge for the new year,
-> which is our price for your plan and home size at that time and may be
-> different from what you pay now.**
+> will state your renewal date
+> and your down payment and monthly charge for the new year, which are our
+> prices for your plan and home size at that time and may be different from
+> what you pay now.**
 >
-> **A renewal year has no deposit. It is 12 monthly charges, the first one
-> month after your renewal date, charged to your card on file.**
+> **A renewal year is paid the same way as your first: a down payment on
+> your renewal date, then 12 monthly charges, the first one month after your
+> renewal date, all charged to your card on file. Your last monthly charge of
+> the current year also falls on your renewal date.**
 >
 > **To stop your membership from renewing, tell us any time before your
 > renewal date: reply to the notice, email [OFFICE EMAIL] or call
