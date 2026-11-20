@@ -66,6 +66,35 @@ The prices in those documents must match `TIERS` in `public/index.html`.
 After changing a price, run `node scripts/check-agreement.js`; it fails and
 names the figure if a document is out of step.
 
+## Referrals
+
+"Give a month, get a month." A member's link is the page address with their
+code on the end, for example `?ref=sarah-m`. The code is the member's name,
+so the page shows "Sarah M. sent you" without looking anything up, and sends
+the name to the **Referred by** column on monday.com.
+
+| Path | What it is |
+|---|---|
+| `public/referral.js` | Turns a name into a code and a code back into a name. Used by both pages below |
+| `public/refer.html` | The office link maker: a member's link, QR code and message. Not linked from the signup page |
+| `public/referral-terms.html` | The referral terms customers see |
+| `public/vendor/qrcode.js` | QR code generator by Kazuhiko Arase (MIT licence) |
+| `docs/referrals/` | The terms, the messages and the office steps, with Word copies in `word/` |
+
+Credits are applied by hand in ServiceMinder. Nothing is credited
+automatically.
+
+## Tests
+
+```
+node --test tests/*.test.js
+node tests/signup-referral.e2e.js
+node tests/refer.e2e.js
+node scripts/check-agreement.js
+```
+
+The two `e2e` tests open the pages in a browser and need Playwright.
+
 ## Common changes
 
 All of these are near the top of the `<script>` in `public/index.html`.

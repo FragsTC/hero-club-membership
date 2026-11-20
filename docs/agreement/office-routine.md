@@ -186,6 +186,7 @@ nine monthly charges. They have had the house wash and one gutter cleaning.
 Once a week, the board owner looks at:
 
 - New requests not yet called.
+- Referrals: the two checks in `docs/referrals/office-steps.md`, section 5.
 - Items at **Proposal sent** for more than 3 days: call.
 - Failed Payments in ServiceMinder.
 - Any **Active** item with a blank **Signed on** or **Renewal date**.

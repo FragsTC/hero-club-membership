@@ -15,6 +15,7 @@ const path = require('node:path');
 
 const root = path.join(__dirname, '..');
 const DOCS = path.join(root, 'docs', 'agreement');
+const REFERRAL_DOCS = path.join(root, 'docs', 'referrals');
 const AGREEMENT = 'hero-club-membership-agreement.md';
 const ROUTINE = 'office-routine.md';
 const MONTHS = 12;
@@ -106,6 +107,18 @@ function main() {
     console.log(`ok   ${file}`);
   }
   assert(tables >= 1, 'No document in docs/agreement/ has a price table');
+
+  // The referral documents quote plan prices in examples. Same rule: only
+  // figures that come from the signup page.
+  if (fs.existsSync(REFERRAL_DOCS)) {
+    for (const file of fs.readdirSync(REFERRAL_DOCS).filter((f) => f.endsWith('.md')).sort()) {
+      const text = fs.readFileSync(path.join(REFERRAL_DOCS, file), 'utf8');
+      for (const n of amountsIn(text)) {
+        assert(allowed.has(n), `referrals/${file}: quotes ${money(n)}, which is not a Hero Club price in public/index.html`);
+      }
+      console.log(`ok   referrals/${file}`);
+    }
+  }
 
   const agreement = fs.readFileSync(path.join(DOCS, AGREEMENT), 'utf8');
   for (const id of Object.keys(tiers)) {
