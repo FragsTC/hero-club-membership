@@ -923,7 +923,8 @@
 var CONTACT_EMAIL = 'tim.cook@windowhero.com';
 var SEND_TIMEOUT_MS = 8000;
 
-// price: [monthly, deposit] for each home-size band, from the Hero Club door hanger.
+// price: [monthly, down payment] for each home-size band, from the Hero Club door hanger.
+// The door hanger calls the down payment a deposit; it is the same amount.
 var TIERS = {
   "bronze": {
     "photo": "photos/plan-bronze-v5.jpg",
@@ -1079,7 +1080,7 @@ var LAST = SCREENS.length - 1;
 // Homes over 3,500 sq ft have no published price: they get a custom plan.
 function isCustom() { return state.size === 'l'; }
 function price() { return TIERS[state.tier].price[state.size] || null; }
-function priceText() { var p = price(); return p ? '$' + p[0] + '/month after $' + p[1] + ' deposit' : 'Custom plan, to be quoted'; }
+function priceText() { var p = price(); return p ? '$' + p[0] + '/month after $' + p[1] + ' down payment' : 'Custom plan, to be quoted'; }
 
 /* ── landing reel ──
    To use job photos: put the files in a "photos" folder next to this page and
@@ -1190,7 +1191,7 @@ function renderPlan(direction) {
     c.price.classList.toggle('is-wait', !state.size);
     if (p) {
       roll(c, p[0]);
-      c.deposit.textContent = 'after $' + p[1] + ' deposit';
+      c.deposit.textContent = 'after $' + p[1] + ' down payment';
       c.terms.textContent = 'Prices for homes ' + HOME_SIZES[state.size] + '. 12-month agreement.';
     } else if (isCustom()) {
       c.shown = null;
@@ -1662,7 +1663,7 @@ function renderSummary() {
   var t = TIERS[state.tier], p = price();
   $('sumTier').textContent = t.name;
   $('sumPrice').textContent = p ? '$' + p[0] + '/mo' : 'Custom plan';
-  $('sumLine').textContent = t.visits + ' visits per year · home ' + HOME_SIZES[state.size] + ' · ' + (p ? 'after $' + p[1] + ' deposit' : "we'll give you your price when we confirm");
+  $('sumLine').textContent = t.visits + ' visits per year · home ' + HOME_SIZES[state.size] + ' · ' + (p ? 'after $' + p[1] + ' down payment' : "we'll give you your price when we confirm");
   $('sumAddons').textContent = state.addons.length ? 'Add-ons: ' + state.addons.join(', ') + ' (priced when we confirm)' : 'No add-ons';
   $('fieldTier').value = t.name + ' (' + t.visits + ' visits/year)';
   $('fieldHomeSize').value = HOME_SIZES[state.size];

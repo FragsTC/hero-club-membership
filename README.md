@@ -83,7 +83,8 @@ maker page was built and then removed. It is in the git history at commit
 All of these are near the top of the `<script>` in `public/index.html`.
 
 - **Prices, services, discounts, add-ons:** the `TIERS` object. `price` holds
-  `[monthly, deposit]` for each home size. These must match the Hero Club door
+  `[monthly, down payment]` for each home size. The page and the agreement
+  say "down payment"; the door hanger says "deposit" for the same amount. These must match the Hero Club door
   hanger.
 - **Home sizes:** `HOME_SIZES`.
 - **Landing photos:** add square images to `public/photos/` and list them in `PHOTOS`.
