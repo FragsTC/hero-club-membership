@@ -89,6 +89,12 @@ the Hero Club door hanger. Five screens: landing, tier, add-ons, details, and
   preselected.
 - **Landing.** Rows of square photo tiles drift in opposite directions and fade
   into navy, above the headline *It's time to be the* HERO OF YOUR HOME.
+- **Photography runs through every screen.** Each plan card opens with a photo,
+  with its pills laid over it. The add-ons, details and confirmation screens
+  sit over a soft, darkened photo that fades into navy. Later screens should
+  never fall back to plain boxes on a flat background.
+- **The details form is in short titled groups** (About you, Your home,
+  Anything else?), each on its own card.
 - **Motion.** The price rolls to its new value; the tier thumb and card slide;
   screens slide forward and back; an add-on's plus turns into a check; the
   landing tiles drift. All of it is disabled under `prefers-reduced-motion`.
