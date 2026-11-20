@@ -63,15 +63,15 @@ After changing anything, bump the `CACHE` name in `sw.js` (for example
 
 ## Deploying
 
-Deploy this whole folder with the Netlify CLI, or connect the repo to the
-`heroclub-membership` project with this folder as the base directory. Dragging
-a folder onto the Deploys tab publishes the page but does not deploy the
-monday.com function.
+Deploy this repository with the Netlify CLI, or connect it to the
+`heroclub-membership` project in Netlify so every push to `main` deploys.
+Dragging a folder onto the Deploys tab publishes the page but does not deploy
+the monday.com function.
 
 Form detection must stay enabled on the Netlify project, and the form needs an
 email notification set up in Netlify for requests to reach an inbox.
 
 ## Design
 
-See `DESIGN.md` at the repo root for the brand tokens and the design decisions
+See `DESIGN.md` for the Window Hero brand tokens and the design decisions
 behind this page.
