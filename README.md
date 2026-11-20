@@ -57,10 +57,10 @@ are in `docs/agreement/`:
 | `serviceminder-setup.md` | Setting up the services, payment plans and proposals, with a test to run first |
 | `office-routine.md` | Renewals, failed payments and cancellations |
 
-`docs/agreement/word/` holds Word copies of the same four documents, for
-filling in, sending to the lawyer and pasting into ServiceMinder. The `.md`
-files are the originals: after changing one, remake its Word copy with
-`pandoc docs/agreement/NAME.md -f gfm -o docs/agreement/word/NAME.docx`.
+Word copies of every document (agreement, referrals and the technician
+scripts in `docs/sales/`) are together in `docs/hero-club-documents/`. The
+`.md` files are the originals: after changing one, run
+`sh scripts/make-word-copies.sh` to remake the Word copies.
 
 The prices in those documents must match `TIERS` in `public/index.html`.
 After changing a price, run `node scripts/check-agreement.js`; it fails and
@@ -72,7 +72,7 @@ names the figure if a document is out of step.
 page yet. A new customer tells Window Hero the name and street address of
 the member who referred them, and the office matches the address in
 ServiceMinder. The terms, messages and office steps are in
-`docs/referrals/`, with Word copies in `word/`.
+`docs/referrals/`.
 
 An earlier version with referral links, a banner on this page and a link
 maker page was built and then removed. It is in the git history at commit
