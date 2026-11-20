@@ -724,6 +724,27 @@
     .sent-mark path { stroke-dashoffset: 0; }
     .reel-row { animation: none; }
   }
+  /* Desktop: tiles scale with the window so the strip fills it, and the type grows to match */
+  @media (min-width: 1100px) {
+    .reel { --tile: clamp(168px, min(11.5vw, 21vh), 290px); }
+    .reel-row { gap: 20px; margin-bottom: 20px; }
+    :root { --reel-h: min(56vh, 680px); }
+    .landing { max-width: none; padding-top: calc(var(--reel-h) - 168px); }
+    .landing .screen-title { white-space: nowrap; }
+    .landing .screen-sub { padding-bottom: 28px; }
+    .landing-logo { height: clamp(92px, 11vh, 132px); margin-bottom: 22px; }
+    .landing .screen-title { font-size: clamp(3.5rem, 6.6vh, 5rem); }
+    .landing-hook { font-size: clamp(1.375rem, 2.9vh, 2rem); margin-top: 18px; }
+    .landing .screen-sub { font-size: clamp(1rem, 2vh, 1.3125rem); max-width: 36ch; margin-top: 12px; }
+    body.on-landing .dock-inner { max-width: 460px; }
+    body.on-landing #btnNext { min-height: 64px; font-size: 1.125rem; }
+    .backdrop { height: 460px; }
+    .backdrop::before { background-position: center 42%; filter: blur(1.5px) saturate(1.05); opacity: 0.72; }
+    .backdrop::after { background: linear-gradient(180deg, rgba(0,17,29,0.30), rgba(0,17,29,0.62)); }
+    /* details: frame the photo so the technician sits clear of the form, to its right */
+    body[data-step="4"]:not(.sent-state) .backdrop::before { background-size: 140% auto; background-position: 100% 64%; }
+  }
+
 </style>
 </head>
 <body>
@@ -923,7 +944,8 @@
 var CONTACT_EMAIL = 'tim.cook@windowhero.com';
 var SEND_TIMEOUT_MS = 8000;
 
-// price: [monthly, deposit] for each home-size band, from the Hero Club door hanger.
+// price: [monthly, down payment] for each home-size band, from the Hero Club door hanger.
+// The door hanger calls the down payment a deposit; it is the same amount.
 var TIERS = {
   "bronze": {
     "photo": "photos/plan-bronze-v5.jpg",
@@ -1050,7 +1072,7 @@ var TIERS = {
 var ORDER = ['bronze', 'silver', 'gold'];
 var HOME_SIZES = { s: 'up to 2,500 sq ft', m: '2,501 to 3,500 sq ft', l: 'over 3,500 sq ft' };
 var SIZE_ORDER = ['s', 'm', 'l'];
-var BACKDROPS = { 3: 'photos/bg-addons.jpg', 4: 'photos/bg-details-v2.jpg', sent: 'photos/bg-sent.jpg' };
+var BACKDROPS = { 3: 'photos/bg-addons.jpg', 4: 'photos/bg-details-v3.jpg', sent: 'photos/bg-sent.jpg' };
 function setBackdrop(key) {
   if (BACKDROPS[key]) $('backdrop').style.setProperty('--bd', 'url("' + BACKDROPS[key] + '")');
 }
@@ -1079,7 +1101,7 @@ var LAST = SCREENS.length - 1;
 // Homes over 3,500 sq ft have no published price: they get a custom plan.
 function isCustom() { return state.size === 'l'; }
 function price() { return TIERS[state.tier].price[state.size] || null; }
-function priceText() { var p = price(); return p ? '$' + p[0] + '/month after $' + p[1] + ' deposit' : 'Custom plan, to be quoted'; }
+function priceText() { var p = price(); return p ? '$' + p[0] + '/month after $' + p[1] + ' down payment' : 'Custom plan, to be quoted'; }
 
 /* ── landing reel ──
    To use job photos: put the files in a "photos" folder next to this page and
@@ -1100,7 +1122,13 @@ var ICONS = [
 var TILE_STYLES = ['', 't-yellow', 't-blue', 't-white', '', 't-indigo', 't-gray', ''];
 
 function buildReel() {
-  var reel = $('reel'), rows = 4, perRow = 8;
+  var reel = $('reel'), rows = 4;
+  reel.innerHTML = '';
+  var vw = window.innerWidth, vh = window.innerHeight;
+  var tileW = vw >= 1100 ? Math.max(168, Math.min(0.115 * vw, 0.21 * vh, 290)) : (vw >= 760 ? 168 : 132);
+  // enough tiles that one pass is wider than the screen, so the loop never shows a gap
+  var perRow = Math.max(8, Math.ceil(window.innerWidth / (tileW + 12)) + 2);
+  reel.setAttribute('data-w', window.innerWidth);
   for (var r = 0; r < rows; r++) {
     var row = make('div', 'reel-row');
     // each row is laid out twice so the drift loops without a seam
@@ -1190,7 +1218,7 @@ function renderPlan(direction) {
     c.price.classList.toggle('is-wait', !state.size);
     if (p) {
       roll(c, p[0]);
-      c.deposit.textContent = 'after $' + p[1] + ' deposit';
+      c.deposit.textContent = 'after $' + p[1] + ' down payment';
       c.terms.textContent = 'Prices for homes ' + HOME_SIZES[state.size] + '. 12-month agreement.';
     } else if (isCustom()) {
       c.shown = null;
@@ -1662,7 +1690,7 @@ function renderSummary() {
   var t = TIERS[state.tier], p = price();
   $('sumTier').textContent = t.name;
   $('sumPrice').textContent = p ? '$' + p[0] + '/mo' : 'Custom plan';
-  $('sumLine').textContent = t.visits + ' visits per year · home ' + HOME_SIZES[state.size] + ' · ' + (p ? 'after $' + p[1] + ' deposit' : "we'll give you your price when we confirm");
+  $('sumLine').textContent = t.visits + ' visits per year · home ' + HOME_SIZES[state.size] + ' · ' + (p ? 'after $' + p[1] + ' down payment' : "we'll give you your price when we confirm");
   $('sumAddons').textContent = state.addons.length ? 'Add-ons: ' + state.addons.join(', ') + ' (priced when we confirm)' : 'No add-ons';
   $('fieldTier').value = t.name + ' (' + t.visits + ' visits/year)';
   $('fieldHomeSize').value = HOME_SIZES[state.size];
@@ -1919,6 +1947,13 @@ function startOver() {
 
 $('landingLogo').src = document.querySelector('.topbar-logo').src;
 buildReel();
+(function() {
+  var t = null;
+  window.addEventListener('resize', function() {
+    clearTimeout(t);
+    t = setTimeout(function() { if (Math.abs(window.innerWidth - (+$('reel').getAttribute('data-w') || 0)) > 120) buildReel(); }, 250);
+  });
+})();
 buildCards();
 markSize(false);
 renderPlan(0);
