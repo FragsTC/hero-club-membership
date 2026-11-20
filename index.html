@@ -144,8 +144,8 @@
     height: var(--reel-h);
     overflow: hidden;
     pointer-events: none;
-    -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 34%, rgba(0,0,0,0.3) 74%, transparent 100%);
-    mask-image: linear-gradient(180deg, #000 0%, #000 34%, rgba(0,0,0,0.3) 74%, transparent 100%);
+    -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 52%, rgba(0,0,0,0.5) 80%, transparent 100%);
+    mask-image: linear-gradient(180deg, #000 0%, #000 52%, rgba(0,0,0,0.5) 80%, transparent 100%);
   }
   :root { --reel-h: min(48vh, 430px); }
   .reel-row { display: flex; gap: 12px; width: max-content; margin-bottom: 12px; animation: drift 70s linear infinite; }
@@ -211,7 +211,7 @@
   .seg input:focus-visible + span { outline: 3px solid var(--gold-light); outline-offset: 2px; }
 
   /* home size: asked once, before the tiers, because it is a fact about the house */
-  .size-label { display: block; text-align: center; margin-top: 20px; font-size: 0.8125rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-3); }
+  .size-label { display: block; text-align: center; margin-top: 20px; font-size: 0.9375rem; font-weight: 600; color: var(--text-2); }
   .size-error { text-align: center; margin-top: 8px; font-size: 0.875rem; }
   .seg.none::before { opacity: 0; }
   .seg--size.attention { box-shadow: inset 0 0 0 2px var(--error); }
@@ -307,6 +307,7 @@
 
 
   /* ── ADD-ONS ── */
+  .addon-more { margin-top: 16px; text-align: center; font-size: 0.875rem; color: var(--text-3); }
   .addon-note { width: fit-content; max-width: 100%; margin: 14px auto 0; padding: 8px 14px; border-radius: var(--pill); box-shadow: inset 0 0 0 1.5px rgba(252,175,23,0.6); color: var(--perfect-day-yellow); font-size: 0.875rem; font-weight: 600; text-align: center; line-height: 1.35; }
   .addon-rows { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-top: 22px; }
   .addon-row {
@@ -357,7 +358,8 @@
 
   .form-heading { display: block; font-size: 1rem; font-weight: 700; margin-top: 28px; }
   .optional { font-weight: 400; color: var(--text-3); text-transform: none; letter-spacing: 0; }
-  .fields { display: flex; flex-direction: column; gap: 14px; margin-top: 26px; }
+  .form-note { margin-top: 24px; font-size: 0.875rem; color: var(--text-3); }
+  .fields { display: flex; flex-direction: column; gap: 14px; margin-top: 14px; }
   .field-row { display: flex; gap: 12px; flex-wrap: wrap; }
   .field-group { display: flex; flex-direction: column; gap: 6px; flex: 1 1 100%; min-width: 0; }
   .field-group--half { flex: 1 1 110px; }
@@ -389,6 +391,10 @@
   }
   .dock-inner { max-width: 480px; margin: 0 auto; pointer-events: auto; }
   body.sent-state footer { display: none; }
+  /* details: the button sits at the end of the form so it never covers a field */
+  body[data-step="3"]:not(.sent-state) .dock { position: static; padding: 26px 0 8px; background: none; pointer-events: auto; }
+  body[data-step="3"]:not(.sent-state) .dock-inner { max-width: none; }
+  body[data-step="3"]:not(.sent-state) footer { padding-bottom: 36px; }
   .btn-primary {
     width: 100%;
     display: flex; align-items: center; justify-content: center; gap: 10px;
@@ -424,6 +430,11 @@
   @keyframes ring { from { transform: scale(0.7); opacity: 0.9; } to { transform: scale(1.5); opacity: 0; } }
   .sent h1 { font-family: var(--font-display); text-transform: uppercase; font-size: 2.25rem; font-weight: 700; letter-spacing: 0.2px; line-height: 1.05; outline: none; }
   .sent-detail { font-size: 1.0625rem; color: var(--text-2); line-height: 1.45; margin-top: 12px; max-width: 34ch; }
+  .sent-recap { margin-top: 22px; width: 100%; max-width: 360px; text-align: left; background: var(--surface-up); box-shadow: var(--rim); border-radius: 20px; padding: 6px 18px; }
+  .sent-recap div { display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-top: 1px solid var(--line); font-size: 0.9375rem; }
+  .sent-recap div:first-child { border-top: none; }
+  .sent-recap dt { color: var(--text-3); flex-shrink: 0; }
+  .sent-recap dd { text-align: right; font-weight: 600; }
   .sent-cheer { font-family: var(--font-display); font-style: italic; font-size: 1.25rem; font-weight: 700; color: var(--gold-light); margin-top: 18px; text-shadow: 0 0 20px rgba(252,175,23,0.5); }
 
   /* ── EMAIL FALLBACK (sheet) ── */
@@ -498,7 +509,7 @@
     .landing-logo { height: 92px; }
     /* the cards themselves are the tier switch here; the radios stay for keyboard and screen readers */
     .seg--tier { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip-path: inset(50%); }
-    .plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; align-items: stretch; margin-top: 26px; }
+    .plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; align-items: start; margin-top: 26px; }
     .plan { display: flex; flex-direction: column; cursor: pointer; transition: transform 0.3s var(--ease-out); }
     .plan-inner { flex: 1; }
     .plan:not(.is-active) {
@@ -511,6 +522,7 @@
     .plan:not(.is-active):hover { transform: translateY(-3px); }
     .plan.is-active { transform: translateY(-6px); }
     #screen-tier:has(#segTier input:focus-visible) .plan.is-active { outline: 3px solid var(--perfect-day-yellow); outline-offset: 5px; }
+    body[data-step="1"] .dock, body[data-step="2"] .dock { position: static; background: none; padding: 26px 0 10px; }
     .dock { position: sticky; padding: 22px 0 18px; margin-top: 10px; background: linear-gradient(180deg, rgba(0,17,29,0) 0%, rgba(0,17,29,0.92) 45%, var(--ink) 100%); pointer-events: auto; }
     footer { max-width: 1120px; padding-bottom: 32px; }
     .sent { min-height: 56vh; }
@@ -573,7 +585,7 @@
 
     <!-- 1 · TIER -->
     <section class="screen" id="screen-tier" data-step="1" aria-labelledby="t-tier" hidden>
-      <h1 class="screen-title" id="t-tier" tabindex="-1"><em>Welcome to the</em> Hero Club</h1>
+      <h1 class="screen-title" id="t-tier" tabindex="-1"><em>Choose your</em> plan</h1>
       <span class="size-label" id="sizeLabel">Your home size, in square feet</span>
       <div class="seg seg--size none" id="segSize" role="radiogroup" aria-labelledby="sizeLabel" aria-describedby="sizeError">
         <label><input type="radio" name="size-choice" value="s"><span>Up to 2,500</span></label>
@@ -582,7 +594,7 @@
       </div>
       <p class="field-error size-error" id="sizeError" role="alert" hidden>Choose your home size to continue.</p>
 
-      <span class="visually-hidden" id="tierLabel">Tier</span>
+      <span class="visually-hidden" id="tierLabel">Plan</span>
       <div class="seg seg--tier" id="segTier" role="radiogroup" aria-labelledby="tierLabel">
         <label><input type="radio" name="tier-choice" value="bronze"><span>Bronze</span></label>
         <label><input type="radio" name="tier-choice" value="silver" checked><span>Silver</span></label>
@@ -598,12 +610,13 @@
       <p class="screen-sub" id="addonSub"></p>
       <p class="addon-note" id="addonNote"></p>
       <ul class="addon-rows" id="addonRows"></ul>
+      <p class="addon-more" id="addonMore" hidden>More add-ons are available with Silver and Gold.</p>
     </section>
 
     <!-- 3 · DETAILS -->
     <section class="screen" id="screen-details" data-step="3" aria-labelledby="t-details" hidden>
       <h1 class="screen-title" id="t-details" tabindex="-1"><em>Your</em> details</h1>
-      <p class="screen-sub">Window Hero will reach out to confirm your plan and schedule.</p>
+      <p class="screen-sub">Window Hero will reach out within 1 business day to confirm your plan and schedule.</p>
 
       <div class="summary" id="summary">
         <p class="summary-tier" id="sumTier"></p>
@@ -611,7 +624,7 @@
         <p class="summary-line" id="sumLine"></p>
         <p class="summary-line" id="sumAddons"></p>
         <div class="summary-actions">
-          <button type="button" class="btn-text" id="btnEditTier">Change tier</button>
+          <button type="button" class="btn-text" id="btnEditTier">Change plan</button>
           <button type="button" class="btn-text" id="btnEditAddons">Change add-ons</button>
         </div>
       </div>
@@ -626,41 +639,42 @@
         <input type="hidden" name="addons" id="fieldAddons">
         <p class="visually-hidden"><label>Leave this field empty <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
 
+        <p class="form-note">All fields are required unless marked optional.</p>
         <div class="fields">
           <div class="field-group">
             <label for="custName">Full name</label>
-            <input class="field-input" id="custName" name="name" type="text" maxlength="100" autocomplete="off" autocapitalize="words" aria-required="true" aria-describedby="err-custName">
+            <input class="field-input" id="custName" name="name" type="text" maxlength="100" autocomplete="name" autocapitalize="words" aria-required="true" aria-describedby="err-custName">
             <span class="field-error" id="err-custName" role="alert" hidden></span>
           </div>
           <div class="field-group">
             <label for="custPhone">Phone</label>
-            <input class="field-input" id="custPhone" name="phone" type="tel" inputmode="tel" maxlength="25" autocomplete="off" aria-required="true" aria-describedby="err-custPhone">
+            <input class="field-input" id="custPhone" name="phone" type="tel" inputmode="tel" maxlength="25" autocomplete="tel" aria-required="true" aria-describedby="err-custPhone">
             <span class="field-error" id="err-custPhone" role="alert" hidden></span>
           </div>
           <div class="field-group">
             <label for="custEmail">Email</label>
-            <input class="field-input" id="custEmail" name="email" type="email" inputmode="email" maxlength="120" autocomplete="off" autocapitalize="none" aria-required="true" aria-describedby="err-custEmail">
+            <input class="field-input" id="custEmail" name="email" type="email" inputmode="email" maxlength="120" autocomplete="email" autocapitalize="none" aria-required="true" aria-describedby="err-custEmail">
             <span class="field-error" id="err-custEmail" role="alert" hidden></span>
           </div>
           <div class="field-group">
             <label for="custAddress">Street address</label>
-            <input class="field-input" id="custAddress" name="address" type="text" maxlength="150" autocomplete="off" autocapitalize="words" aria-required="true" aria-describedby="err-custAddress">
+            <input class="field-input" id="custAddress" name="address" type="text" maxlength="150" autocomplete="street-address" autocapitalize="words" aria-required="true" aria-describedby="err-custAddress">
             <span class="field-error" id="err-custAddress" role="alert" hidden></span>
           </div>
           <div class="field-group">
             <label for="custCity">City</label>
-            <input class="field-input" id="custCity" name="city" type="text" maxlength="80" autocomplete="off" autocapitalize="words" aria-required="true" aria-describedby="err-custCity">
+            <input class="field-input" id="custCity" name="city" type="text" maxlength="80" autocomplete="address-level2" autocapitalize="words" aria-required="true" aria-describedby="err-custCity">
             <span class="field-error" id="err-custCity" role="alert" hidden></span>
           </div>
           <div class="field-row">
             <div class="field-group field-group--half">
               <label for="custState">State</label>
-              <input class="field-input" id="custState" name="state" type="text" maxlength="2" autocomplete="off" autocapitalize="characters" aria-required="true" aria-describedby="err-custState">
+              <input class="field-input" id="custState" name="state" type="text" maxlength="2" autocomplete="address-level1" autocapitalize="characters" aria-required="true" aria-describedby="err-custState">
               <span class="field-error" id="err-custState" role="alert" hidden></span>
             </div>
             <div class="field-group field-group--half">
               <label for="custZip">ZIP <span class="optional">(optional)</span></label>
-              <input class="field-input" id="custZip" name="zip" type="text" maxlength="10" inputmode="numeric" autocomplete="off" aria-describedby="err-custZip">
+              <input class="field-input" id="custZip" name="zip" type="text" maxlength="10" inputmode="numeric" autocomplete="postal-code" aria-describedby="err-custZip">
               <span class="field-error" id="err-custZip" role="alert" hidden></span>
             </div>
           </div>
@@ -676,6 +690,7 @@
       <svg class="sent-mark" viewBox="0 0 104 104" aria-hidden="true"><circle class="ring" cx="52" cy="52" r="34"/><circle class="disc" cx="52" cy="52" r="34"/><path d="M37 53l10 10 20-22"/></svg>
       <h1 id="t-sent" tabindex="-1">Request received</h1>
       <p class="sent-detail" id="sentDetail"></p>
+      <dl class="sent-recap" id="sentRecap"></dl>
     </section>
   </main>
 
@@ -919,7 +934,7 @@ function buildCards() {
   var wrap = $('plans');
   ORDER.forEach(function(id) {
     var t = TIERS[id];
-    var root = make('article', 'plan'); root.dataset.tier = id; root.setAttribute('aria-label', t.name + ' tier');
+    var root = make('article', 'plan'); root.dataset.tier = id; root.setAttribute('aria-label', t.name + ' plan');
     var tab = make('div', 'plan-tab');
     var medal = make('div', 'plan-medal'); medal.innerHTML = MEDAL;
     tab.appendChild(medal);
@@ -932,7 +947,7 @@ function buildCards() {
     var price = make('p', 'plan-price'), amount = make('span', 'plan-amount'), deposit = make('span', 'plan-deposit');
     price.appendChild(amount); price.appendChild(document.createTextNode(' ')); price.appendChild(make('span', 'plan-unit', '/month')); price.appendChild(deposit);
     var list = make('ul', 'plan-list');
-    t.services.forEach(function(s) { list.appendChild(make('li', '', s)); });
+    t.services.forEach(function(s) { if (s.indexOf('% off') === -1) list.appendChild(make('li', '', s)); });
     var terms = make('p', 'plan-terms');
     body.appendChild(top); body.appendChild(price); body.appendChild(list);
     if (t.note) body.appendChild(make('p', 'plan-note', t.note));
@@ -1032,7 +1047,8 @@ each(document.querySelectorAll('input[name="size-choice"]'), function(r) {
 /* ── step 2: add-ons ── */
 function renderAddons() {
   var t = TIERS[state.tier], rows = $('addonRows');
-  $('addonSub').textContent = "Tap any you would like. We'll give you a price for these when we reach out to confirm your plan and schedule.";
+  $('addonSub').textContent = "Optional. Tap any you would like, and we'll give you a price when we reach out to confirm your plan and schedule.";
+  $('addonMore').hidden = t.addons.length >= 6;
   $('addonNote').textContent = t.name + ' includes ' + t.discount + ' off any additional service.';
   rows.textContent = '';
   t.addons.forEach(function(name) {
@@ -1057,7 +1073,7 @@ function renderSummary() {
   $('sumTier').textContent = t.name;
   $('sumPrice').textContent = p ? '$' + p[0] + '/mo' : 'Custom plan';
   $('sumLine').textContent = t.visits + ' visits per year · home ' + HOME_SIZES[state.size] + ' · ' + (p ? 'after $' + p[1] + ' deposit' : "we'll give you your price when we confirm");
-  $('sumAddons').textContent = state.addons.length ? 'Add-ons: ' + state.addons.join(', ') + ". We'll give you a price for these when we confirm." : 'No add-ons';
+  $('sumAddons').textContent = state.addons.length ? 'Add-ons: ' + state.addons.join(', ') + ' (priced when we confirm)' : 'No add-ons';
   $('fieldTier').value = t.name + ' (' + t.visits + ' visits/year)';
   $('fieldHomeSize').value = HOME_SIZES[state.size];
   $('fieldPrice').value = priceText();
@@ -1070,7 +1086,7 @@ function updateDock() {
   $('btnNextArrow').style.display = (state.step === LAST || state.sent) ? 'none' : '';
   $('btnNext').disabled = state.sending;
   if (state.sent) { label.textContent = 'Done'; return; }
-  if (state.step === 0) label.textContent = "I'm ready to join";
+  if (state.step === 0) label.textContent = 'See the plans';
   else if (state.step === 1) label.textContent = 'Continue with ' + TIERS[state.tier].name;
   else if (state.step === 2) label.textContent = n === 0 ? 'Continue without add-ons' : 'Continue with ' + n + (n === 1 ? ' add-on' : ' add-ons');
   else label.textContent = state.sending ? 'Sending…' : 'Send my request';
@@ -1089,6 +1105,7 @@ function show(step, direction) {
   $('screen-sent').hidden = true;
   document.body.classList.remove('sent-state');
   document.body.classList.toggle('on-landing', step === 0);
+  document.body.setAttribute('data-step', step);
   $('btnBack').hidden = step === 0;
   each($('steps').children, function(li, n) { li.classList.toggle('on', n === step - 1); });
   $('steps').style.visibility = step === 0 ? 'hidden' : '';
@@ -1159,13 +1176,13 @@ function buildMessage() {
   var cityLine = fieldValue('custCity') + (st ? ', ' + st : '') + (zip ? ' ' + zip : '');
   var email = fieldValue('custEmail'), note = $('customerNote').value.trim();
 
-  var body = 'Hi Tim,\n\nA customer is interested in the ' + t.name + ' tier of Hero Club membership.\n\n';
+  var body = 'Hi Tim,\n\nA customer is interested in the ' + t.name + ' Hero Club plan.\n\n';
   body += 'Customer: ' + fieldValue('custName') + '\n';
   body += 'Phone: ' + fieldValue('custPhone') + '\n';
   body += 'Email: ' + email + '\n';
   body += 'Address: ' + fieldValue('custAddress') + '\n';
   body += '         ' + cityLine + '\n\n';
-  body += 'Tier: ' + t.name + ' (' + t.visits + ' visits/year)\n';
+  body += 'Plan: ' + t.name + ' (' + t.visits + ' visits/year)\n';
   body += 'Home size: ' + HOME_SIZES[state.size] + (isCustom() ? ' (CUSTOM PLAN: needs a quote)' : '') + '\n';
   body += 'Price: ' + (isCustom() ? 'custom plan, to be quoted. Customer was told we will give the price when we confirm.' : priceText() + ', 12-month agreement') + '\n';
   body += 'Services included:\n';
@@ -1176,7 +1193,7 @@ function buildMessage() {
   }
   if (note) body += '\nNotes: ' + note + '\n';
   body += '\nPlease reach out to confirm and get them set up!\n';
-  return { subject: 'New Hero Club Membership Interest — ' + t.name + ' Tier — ' + fieldValue('custName'), body: body };
+  return { subject: 'New Hero Club request: ' + t.name + (isCustom() ? ' (custom plan)' : '') + ' - ' + fieldValue('custName'), body: body };
 }
 
 function postLead() {
@@ -1262,7 +1279,12 @@ function showSent() {
   var owed = [];
   if (isCustom()) owed.push('your custom plan price');
   if (state.addons.length) owed.push('a price for your add-ons');
-  $('sentDetail').textContent = 'Thanks, ' + first + '. Window Hero will reach out to confirm your ' + TIERS[state.tier].name + ' plan and schedule' + (owed.length ? ', and to give you ' + owed.join(' and ') + '.' : '.');
+  $('sentDetail').textContent = 'Thanks, ' + first + '. Window Hero will reach out within 1 business day to confirm your ' + TIERS[state.tier].name + ' plan and schedule' + (owed.length ? ', and to give you ' + owed.join(' and ') + '.' : '.');
+  var recap = $('sentRecap'), p = price();
+  recap.textContent = '';
+  [['Plan', TIERS[state.tier].name], ['Home size', HOME_SIZES[state.size]], ['Price', p ? '$' + p[0] + '/month' : 'Custom plan, to be quoted'], ['Add-ons', state.addons.length ? state.addons.join(', ') : 'None']].forEach(function(row) {
+    var d = make('div'); d.appendChild(make('dt', '', row[0])); d.appendChild(make('dd', '', row[1])); recap.appendChild(d);
+  });
   SCREENS.forEach(function(id) { $(id).hidden = true; });
   var s = $('screen-sent');
   s.hidden = false;
