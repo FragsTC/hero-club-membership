@@ -45,6 +45,7 @@ including the brackets. Before you press send, search the email for `[`.
 
 | Email | Blanks |
 |---|---|
+| 2. Proposal follow-up | `[MONTHLY CHARGE]`, `[DOWN PAYMENT]` |
 | 6. Payment still unpaid | `[AMOUNT]`, `[DATE DUE]`, `[END DATE]` (30 days after the date due) |
 | 7. Renewal notice | `[PLAN]`, `[RENEWAL DATE]` (three places, plus the subject), `[NEW DOWN PAYMENT]`, `[NEW MONTHLY CHARGE]`, `[CURRENT MONTHLY CHARGE]` |
 | 8. Cancellation | `[END DATE]`, `[SERVICES RECEIVED AMOUNT]`, `[AMOUNT PAID]`, `[BALANCE DUE OR $0]` |

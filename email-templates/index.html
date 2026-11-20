@@ -54,18 +54,6 @@
 </main>
 <script>
 const TEMPLATES = [
-  ["Rebuilt", [
-    ["service-complete", "Service complete"],
-    ["commercial-proposal", "Commercial proposal"],
-    ["residential-proposal", "Residential proposal"]]],
-  ["New", [
-    ["appointment-confirmation", "Appointment confirmation"],
-    ["appointment-reminder", "Appointment reminder"],
-    ["on-our-way", "On our way"],
-    ["reschedule-notice", "Reschedule notice"],
-    ["proposal-follow-up", "Proposal follow-up"],
-    ["invoice", "Invoice"],
-    ["receipt", "Payment receipt"]]],
   ["Hero Club", [
     ["hero-club-welcome-bronze", "Welcome: Bronze"],
     ["hero-club-welcome-silver", "Welcome: Silver"],
@@ -80,7 +68,19 @@ const TEMPLATES = [
     ["hero-club-referral-invite", "Referral: how it works"],
     ["hero-club-referral-named", "Referral: neighbor named you"],
     ["hero-club-referral-credit", "Referral: credit applied"],
-    ["hero-club-referral-welcome", "Referral: new member"]]]
+    ["hero-club-referral-welcome", "Referral: new member"]]],
+  ["Rebuilt", [
+    ["service-complete", "Service complete"],
+    ["commercial-proposal", "Commercial proposal"],
+    ["residential-proposal", "Residential proposal"]]],
+  ["New", [
+    ["appointment-confirmation", "Appointment confirmation"],
+    ["appointment-reminder", "Appointment reminder"],
+    ["on-our-way", "On our way"],
+    ["reschedule-notice", "Reschedule notice"],
+    ["proposal-follow-up", "Proposal follow-up"],
+    ["invoice", "Invoice"],
+    ["receipt", "Payment receipt"]]]
 ];
 
 // Made-up values so you can see how a filled-in email reads. Not real customer data.
@@ -124,6 +124,7 @@ const HANDFILL = {
   "PLAN": "Silver", "RENEWAL DATE": "December 18, 2027", "NEW DOWN PAYMENT": "$108", "NEW MONTHLY CHARGE": "$80",
   "CURRENT MONTHLY CHARGE": "$80", "END DATE": "December 18, 2026", "SERVICES RECEIVED AMOUNT": "$400",
   "AMOUNT PAID": "$124", "BALANCE DUE OR $0": "$276", "AMOUNT": "$80", "DATE DUE": "November 18, 2026",
+  "MONTHLY CHARGE": "$80", "DOWN PAYMENT": "$108",
   "NEIGHBOR FIRST NAME": "Pat", "CREDIT AMOUNT": "$54", "REFERRER FIRST NAME": "Sarah"
 };
 const LINKS = ["url", "proposal.url", "proposal.pdf_url", "invoice.pdf_url", "unsubscribe.url",

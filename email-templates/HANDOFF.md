@@ -24,6 +24,7 @@ This kit now lives in the `hero-club-membership` repository under `email-templat
 | `build_emails.py` | The generator. All content and structure lives here. |
 | `index.html` | Local preview page: template list, desktop/phone switch, sample-data/shortcode switch. |
 | `SHORTCODES.md` | ServiceMinder shortcode reference and template-type rules. |
+| `make_preview.py` | Packs every template and the two logos (in `preview-assets/`) into one page, `../public/email-preview.html`, which the site serves at `/email-preview.html` for sharing. Run it after `build_emails.py`. |
 | `HERO-CLUB-EMAILS.md` | The Hero Club set: when to send each, template types, subject lines, and the blanks to type in by hand. |
 | `HANDOFF.md` | This file. |
 

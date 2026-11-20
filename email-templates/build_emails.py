@@ -649,8 +649,8 @@ def hero_club_proposal_follow_up():
     b += summary("Your Membership at a Glance",
                  [("Property", "{fullserviceaddress}"),
                   ("Plan", "{proposal.parts_list}"),
-                  ("Total for the Year", "{proposal.total}")],
-                 note="Paid as a down payment today and 12 monthly charges. The amounts are shown when you open your membership below.")
+                  ("Monthly Charge", fillin("MONTHLY CHARGE") + " a month")],
+                 note="After a down payment of " + fillin("DOWN PAYMENT") + " when you join. Your membership is 12 monthly charges, and your price is locked for the year.")
     b += card(
         heading("Your Hero Club Membership Is Ready", size=28, color="#ffffff", mb=14, tag="h1", cls="h1") +
         p("Review your membership agreement and join online. It only takes a few minutes.", mb=24, color="#ffffff", size=17, lh=1.7) +
