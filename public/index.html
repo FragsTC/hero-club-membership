@@ -524,6 +524,7 @@
   .ref-banner a:focus-visible { outline: 3px solid var(--navy-dark); outline-offset: 2px; border-radius: 4px; }
   .ref-wrap { text-align: center; margin-top: 16px; }
   .ref-wrap .ref-banner { margin-bottom: 0; }
+  .ref-clear { display: block; margin: 8px auto 0; font-size: 0.875rem; }
   .form-hint { font-size: 0.875rem; color: var(--text-2); }
   .form-hint a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
   .fields { display: flex; flex-direction: column; gap: 14px; margin-top: 14px; }
@@ -815,7 +816,8 @@
     <section class="screen" id="screen-details" data-step="4" aria-labelledby="t-details" hidden>
       <h1 class="screen-title" id="t-details" tabindex="-1"><em>Your</em> details</h1>
       <p class="screen-sub">Window Hero will reach out within 1 business day to confirm your plan and schedule.</p>
-      <div class="ref-wrap"><p class="ref-banner" hidden><strong class="ref-name"></strong> sent you. <span>You each get a month free.</span> <a href="referral-terms.html" target="_blank" rel="noopener">How it works</a></p></div>
+      <div class="ref-wrap"><p class="ref-banner" hidden><strong class="ref-name"></strong> sent you. <span>You each get a month free.</span> <a href="referral-terms.html" target="_blank" rel="noopener">How it works</a></p>
+        <button type="button" class="btn-text ref-clear" id="btnClearReferral" hidden>Not referred by them? Remove</button></div>
 
       <div class="summary" id="summary">
         <p class="summary-tier" id="sumTier"></p>
@@ -1804,16 +1806,34 @@ $('custState').addEventListener('blur', function() { this.value = this.value.tri
    A member's link ends in ?ref=their-code, for example ?ref=sarah-m. The code
    is their name, so the page can greet the visitor without looking anything
    up. It is kept for the browser session so a reload does not lose it. */
+var REF_KEY = 'hc-ref';
 var referral = (function() {
-  var KEY = 'hc-ref', R = window.HeroReferral, code = '';
-  if (!R) return { code: '', name: '' };
-  try { code = new URLSearchParams(window.location.search).get('ref') || ''; } catch (e) {}
-  code = code.trim().toLowerCase();
-  if (R.nameFromCode(code)) { try { sessionStorage.setItem(KEY, code); } catch (e) {} }
-  else { code = ''; try { code = sessionStorage.getItem(KEY) || ''; } catch (e) {} }
+  var R = window.HeroReferral, none = { code: '', name: '' }, code = null;
+  if (!R) return none;
+  try { code = new URLSearchParams(window.location.search).get('ref'); } catch (e) {}
+  if (code === null) {
+    // No code in the address: use the one this visit arrived with, if any.
+    try { code = sessionStorage.getItem(REF_KEY) || ''; } catch (e) { code = ''; }
+  } else {
+    // The address names a code. A bad one means no referral, not an older one.
+    code = code.trim().toLowerCase();
+    try { if (R.nameFromCode(code)) sessionStorage.setItem(REF_KEY, code); else sessionStorage.removeItem(REF_KEY); } catch (e) {}
+  }
   var name = R.nameFromCode(code);
-  return name ? { code: code, name: name } : { code: '', name: '' };
+  return name ? { code: code, name: name } : none;
 })();
+
+// A referral belongs to one signup. It is dropped when the customer removes
+// it and after a request is sent, so the next person on this phone starts clean.
+function clearReferral() {
+  referral = { code: '', name: '' };
+  try { sessionStorage.removeItem(REF_KEY); } catch (e) {}
+  try {
+    var url = new URL(window.location.href);
+    if (url.searchParams.has('ref')) { url.searchParams.delete('ref'); history.replaceState(history.state, '', url.pathname + url.search + url.hash); }
+  } catch (e) {}
+  showReferral();
+}
 
 function showReferral() {
   each(document.querySelectorAll('.ref-banner'), function(b) {
@@ -1821,6 +1841,7 @@ function showReferral() {
     b.hidden = !referral.name;
   });
   $('referrerCard').hidden = !!referral.name;
+  $('btnClearReferral').hidden = !referral.name;
 }
 // What goes to the office: the name from the link, or whatever the customer typed.
 function referredBy() {
@@ -1936,6 +1957,7 @@ $('btnCopyEmail').addEventListener('click', function() {
 
 /* ── sent, and starting over ── */
 function showSent() {
+  clearReferral();   // used: the next signup on this phone starts without it
   state.sent = true;
   var first = fieldValue('custName').split(' ')[0];
   var owed = [];
@@ -1964,6 +1986,7 @@ function showSent() {
 
 function startOver() {
   form.reset();
+  clearReferral();
   FIELDS.forEach(function(f) { clearError(f.id); });
   state = { step: 0, tier: 'silver', size: null, addons: [], sent: false, sending: false };
   lastMessage = null;
@@ -1980,6 +2003,7 @@ buildReel();
 buildCards();
 markSize(false);
 renderPlan(0);
+$('btnClearReferral').addEventListener('click', clearReferral);
 showReferral();
 show(0, 0);
 </script>

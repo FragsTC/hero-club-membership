@@ -29,7 +29,35 @@ test('a made code always reads back', () => {
   assert.strictEqual(R.nameFromCode(R.codeFromName('Sarah Mitchell', 3)), 'Sarah M.');
   assert.strictEqual(R.nameFromCode(R.codeFromName('Jean-Luc van der Berg')), 'Jean Luc Van Der B.');
   const long = R.codeFromName('Bartholomew Maximilian Christopher Alexander Montgomery Smith');
-  assert.ok(long === '' || R.nameFromCode(long) !== '', long);
+  assert.strictEqual(long, 'bartholomew-maximilian-christopher-s');
+  assert.strictEqual(R.nameFromCode(long), 'Bartholomew Maximilian Christopher S.');
+  const longer = R.codeFromName('Bartholomewmaximilianchristopheralexandermontgomery Smith');
+  assert.ok(longer.length <= 40 && R.nameFromCode(longer) !== '', longer);
+});
+
+test('a code never carries more of the surname than its initial', () => {
+  assert.strictEqual(R.codeFromName('John Smith Jr'), 'john-s');
+  assert.strictEqual(R.codeFromName('John Smith Jr.'), 'john-s');
+  assert.strictEqual(R.codeFromName('Sarah Mitchell III'), 'sarah-m');
+  assert.strictEqual(R.codeFromName('Sarah Mitchell-Jones'), 'sarah-m');
+  assert.strictEqual(R.codeFromName('Dr. Sarah Mitchell'), 'sarah-m');
+  assert.strictEqual(R.codeFromName('Mrs Mary-Ann Keller'), 'mary-ann-k');
+});
+
+test('names outside plain English letters are handled, not mangled', () => {
+  assert.strictEqual(R.codeFromName('Søren Ødegård'), 'soren-o');
+  assert.strictEqual(R.codeFromName('Łukasz Żak'), 'lukasz-z');
+  assert.strictEqual(R.codeFromName('José Núñez'), 'jose-n');
+  assert.strictEqual(R.codeFromName('王 小明'), '');
+  assert.strictEqual(R.codeFromName('Sarah 明'), '');
+});
+
+test('a number out of range gives no code, not a clashing one', () => {
+  assert.strictEqual(R.codeFromName('Sarah Mitchell', 1000), '');
+  assert.strictEqual(R.codeFromName('Sarah Mitchell', -3), '');
+  assert.strictEqual(R.codeFromName('Sarah Mitchell', 'abc'), '');
+  assert.strictEqual(R.codeFromName('Sarah Mitchell', ''), 'sarah-m');
+  assert.strictEqual(R.codeFromName('Sarah Mitchell', undefined), 'sarah-m');
 });
 
 test('linkFor builds the signup link', () => {

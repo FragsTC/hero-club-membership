@@ -35,8 +35,8 @@ The signup page fills **Referred by** in one of two ways:
 Then check all three:
 
 - [ ] The referrer's item is **Active**.
-- [ ] The new customer's address has never had a Hero Club membership. A
-      past one-time customer is fine.
+- [ ] The new customer's household has never had a Hero Club membership, at
+      this address or another. A past one-time customer is fine.
 - [ ] The new customer's address is not the referrer's own.
 
 If any check fails, the referral does not count. Write why in the new
@@ -50,7 +50,8 @@ customer's **Referral credit** column.
 
 A referral counts when the new member has signed, paid the down payment, and
 paid their **first monthly charge**, which runs one month after **Signed
-on**. The referrer must still be **Active** on that day.
+on**. The referrer gets their credit only if they are still **Active** on
+that day. The new member gets their free month either way.
 
 On that day:
 
@@ -65,7 +66,10 @@ On that day:
 
 2. **Check the limit.** Count the credits already noted in the referrer's
    **Referral credit** column since their last **Renewal date** (or
-   **Signed on**, in their first year). The limit is 12.
+   **Signed on**, in their first year). The limit is 12. If they already
+   have 12, skip step 3: the referrer gets no credit for this one. Still do
+   step 4, because the new member gets their month regardless. Note it in
+   the referrer's column as `No credit: 12 already this year`.
 3. **Apply the referrer's credit in ServiceMinder.** Reduce their next
    monthly installment by the credit amount. If the next installment is
    already reduced to zero by another credit, use the one after it.

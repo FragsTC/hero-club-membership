@@ -36,15 +36,15 @@
   ul, ol { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column; gap: 8px; }
   label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-2); display: flex; flex-direction: column; gap: 6px; }
   label .hint { font-weight: 400; text-transform: none; letter-spacing: 0; font-size: 0.875rem; }
-  input, textarea { font: 1rem var(--font-body); color: var(--white); background: var(--ink); border: 1.5px solid var(--line); border-radius: 14px; padding: 12px 14px; width: 100%%; min-width: 0; }
+  input, textarea { font: 1rem var(--font-body); color: var(--white); background: var(--ink); border: 1.5px solid var(--line); border-radius: 14px; padding: 12px 14px; width: 100%; min-width: 0; }
   textarea { min-height: 9.5em; resize: vertical; line-height: 1.45; }
   .row { display: flex; gap: 12px; flex-wrap: wrap; }
   .row > :first-child { flex: 3 1 200px; }
   .row > :last-child { flex: 1 1 90px; }
   .btn { font: 700 1rem var(--font-display); text-transform: uppercase; letter-spacing: 0.5px; color: var(--navy-dark); background: var(--perfect-day-yellow);
     border: 0; border-radius: 999px; padding: 12px 20px; cursor: pointer; text-decoration: none; text-align: center; align-self: flex-start; }
-  .qr-box { background: var(--white); border-radius: 16px; padding: 12px; align-self: flex-start; line-height: 0; max-width: 100%%; }
-  .qr-box canvas { width: 220px; max-width: 100%%; height: auto; image-rendering: pixelated; }
+  .qr-box { background: var(--white); border-radius: 16px; padding: 12px; align-self: flex-start; line-height: 0; max-width: 100%; }
+  .qr-box canvas { width: 220px; max-width: 100%; height: auto; image-rendering: pixelated; }
   .shown { font-family: var(--font-display); font-weight: 600; font-size: 1.125rem; color: var(--white); }
   #needName { color: var(--perfect-day-yellow); }
   .status { min-height: 1.4em; font-size: 0.875rem; color: var(--text-2); }
@@ -68,13 +68,14 @@
       </label>
     </div>
     <p class="muted">Leave the number empty unless another member already has the same code. Check the Referral code column on the Hero Club Requests board. The second Sarah M. is number 2.</p>
-    <p id="needName" role="status" hidden>Type the member's first and last name.</p>
+    <p id="needName" role="status" hidden>Type the member's first and last name in English letters. A number, if used, is 2 to 999.</p>
   </section>
 
   <div id="result" hidden style="display:flex;flex-direction:column;gap:24px">
     <section class="card" aria-labelledby="h-link">
       <h2 id="h-link">Their link</h2>
       <p class="shown" id="shownAs"></p>
+      <p class="muted">The link only ever shows first names and the initial of the last name. If you see more than that, retype the name as first name then last name.</p>
       <label for="linkOut">Signup link
         <input id="linkOut" type="text" readonly>
       </label>

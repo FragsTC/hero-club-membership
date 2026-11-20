@@ -18,11 +18,12 @@ This is when a member is happiest with you.
 > Hi [FIRST NAME], your [SERVICE] is done and the photos are attached. If a
 > neighbor asks who did it, send them your link and you each get a month
 > free: [MEMBER'S LINK]
+> How it works: https://heroclub-membership.netlify.app/referral-terms.html
 
 ## To the referrer, when their neighbor signs up
 
 > Hi [FIRST NAME], [NEIGHBOR'S FIRST NAME] just asked to join the Hero Club
-> through your link. Thank you. Once they are signed up and their first
+> and named you as the member who referred them. Thank you. Once they are signed up and their first
 > monthly payment goes through, your credit goes on your bill.
 
 ## To the referrer, when the referral counts
@@ -37,6 +38,7 @@ This is when a member is happiest with you.
 > Hi [FIRST NAME], welcome to the Hero Club. Because [REFERRER'S FIRST NAME]
 > referred you, your twelfth monthly payment is on us. You can refer your own
 > neighbors too, and you each get a month free: [NEW MEMBER'S LINK]
+> How it works: https://heroclub-membership.netlify.app/referral-terms.html
 
 ## When a referral does not count
 

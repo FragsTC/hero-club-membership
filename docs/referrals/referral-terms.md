@@ -17,8 +17,9 @@ If you change one, change the other.
 
 - The new member signs their Hero Club agreement and pays their down payment
   and their first monthly charge.
-- The member who referred them is still an active Hero Club member on that
-  day.
+- The member who referred them receives their credit only if they are still
+  an active Hero Club member on that day. The new member gets their free
+  month either way.
 - The new member's request names the member who referred them, through that
   member's link or by typing their name when signing up.
 
@@ -28,7 +29,9 @@ If you change one, change the other.
 - The new member must be a household that has never had a Hero Club
   membership. Past one-time Window Hero customers count as new. Your own
   address does not.
-- You can earn up to 12 referral credits in each membership year.
+- You can earn up to 12 referral credits in each membership year. After
+  that, the neighbors you refer still get their free month, and you start
+  earning again when your next membership year begins.
 - A credit you cannot use this year carries into your renewal year. Credits
   are lost if your membership ends.
 - A new member who leaves before their twelfth monthly charge does not

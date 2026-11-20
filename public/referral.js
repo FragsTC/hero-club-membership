@@ -24,19 +24,42 @@
     return parts.map(cap).join(' ') + ' ' + initial.toUpperCase() + '.';
   }
 
+  // Letters that do not break down into a plain letter plus an accent.
+  var PLAIN = { '\u00f8': 'o', '\u0142': 'l', '\u00e6': 'ae', '\u0153': 'oe', '\u00df': 'ss', '\u0111': 'd', '\u00f0': 'd', '\u00fe': 'th', '\u0131': 'i' };
+  var TITLES = { dr: 1, mr: 1, mrs: 1, ms: 1, miss: 1, mx: 1, prof: 1, rev: 1 };
+  var SUFFIXES = { jr: 1, sr: 1, ii: 1, iii: 1, iv: 1, v: 1 };
+
   // "Sarah Mitchell" -> "sarah-m"; with number 2 -> "sarah-m2".
-  // Needs a first and a last name; returns "" otherwise.
+  // Needs a first and a last name in letters that can be written a to z.
+  // Only the initial of the last name is ever used: "Sarah Mitchell-Jones"
+  // and "Sarah Mitchell Jr" are both sarah-m. Returns "" when it cannot make
+  // a code, including for a number outside 2 to 999.
   function codeFromName(fullName, number) {
     if (typeof fullName !== 'string') return '';
-    var plain = fullName.normalize ? fullName.normalize('NFD').replace(/[̀-ͯ]/g, '') : fullName;
-    var words = plain.toLowerCase().replace(/['’]/g, '').replace(/[^a-z]+/g, ' ').trim().split(' ').filter(Boolean);
+    var suffix = '';
+    if (number !== undefined && number !== null && String(number).trim() !== '' && Number(number) !== 1) {
+      var n = Number(number);
+      if (!(n >= 2 && n <= 999 && Math.floor(n) === n)) return '';
+      suffix = String(n);
+    }
+    var plain = fullName.toLowerCase();
+    if (plain.normalize) plain = plain.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    plain = plain.replace(/[\u00f8\u0142\u00e6\u0153\u00df\u0111\u00f0\u00fe\u0131]/g, function (ch) { return PLAIN[ch]; });
+    // Anything still outside plain ASCII is a script this code cannot spell.
+    if (/[^\x00-\x7f]/.test(plain)) return '';
+    // Whole words first, so a hyphenated surname stays one word.
+    var words = plain.replace(/['.,]/g, '').split(/\s+/).map(function (w) { return w.replace(/[^a-z-]/g, '').replace(/^-+|-+$/g, ''); }).filter(Boolean);
+    while (words.length > 2 && TITLES[words[0]]) words.shift();
+    while (words.length > 2 && SUFFIXES[words[words.length - 1]]) words.pop();
     if (words.length < 2) return '';
     var initial = words.pop().charAt(0);
-    var n = Math.floor(Number(number));
-    var suffix = (n >= 2 && n <= 999) ? String(n) : '';
-    var code = words.join('-') + '-' + initial + suffix;
-    // A very long name keeps only the first name.
-    if (code.length > MAX) code = words[0].slice(0, MAX - 2 - suffix.length) + '-' + initial + suffix;
+    var first = [];
+    words.forEach(function (w) { w.split('-').forEach(function (part) { if (part) first.push(part); }); });
+    if (!first.length || !/[a-z]/.test(initial)) return '';
+    var room = MAX - 2 - suffix.length;
+    // A very long name loses its later first names, then is cut short.
+    while (first.length > 1 && first.join('-').length > room) first.pop();
+    var code = first.join('-').slice(0, room) + '-' + initial + suffix;
     return CODE.test(code) ? code : '';
   }
 

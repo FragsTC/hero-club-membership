@@ -64,6 +64,13 @@ const darkShare = (page) => page.evaluate(() => {
       assert.match(terms, needed);
     }
     assert.strictEqual(await page.locator('meta[name="robots"]').count(), 0, 'the terms page can be found');
+    // The copy kept in docs/ must say the same as the page customers see.
+    const md = require('node:fs').readFileSync(require('node:path').join(__dirname, '..', 'docs', 'referrals', 'referral-terms.md'), 'utf8');
+    const flat = (t) => t.replace(/\*\*/g, '').replace(/\s+/g, ' ').toLowerCase();
+    const items = await page.locator('main li').allInnerTexts();
+    assert.ok(items.length >= 10, 'the terms page lists its rules');
+    for (const li of items) assert.ok(flat(md).includes(flat(li)), 'docs/referrals/referral-terms.md is missing: ' + li.slice(0, 60));
+    assert.match(terms, /free month either way/i);
     console.log('ok   referral terms page');
     assert.deepStrictEqual(errors, []);
   } finally {

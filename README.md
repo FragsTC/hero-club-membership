@@ -90,10 +90,11 @@ automatically.
 node --test tests/*.test.js
 node tests/signup-referral.e2e.js
 node tests/refer.e2e.js
+node tests/sw.e2e.js
 node scripts/check-agreement.js
 ```
 
-The two `e2e` tests open the pages in a browser and need Playwright.
+The three `e2e` tests open the pages in a browser and need Playwright.
 
 ## Common changes
 
