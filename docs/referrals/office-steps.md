@@ -1,57 +1,64 @@
 # Referrals: office steps
 
-How the office runs "give a month, get a month". The customer-facing rules
-are in `referral-terms.md`. One person should own this: the owner of the
-**Hero Club Requests** board.
+How the office runs "give a month, get a month". The rules customers see are
+in `referral-terms.md`. One person should own this: the owner of the **Hero
+Club Requests** board.
 
-Nothing here is automatic. The signup page records who referred whom. The
-office checks it and applies the credits in ServiceMinder.
+There are no referral links or codes. The new customer tells you who
+referred them, and you match that to a member in ServiceMinder by street
+address. Nothing is automatic, and the signup page does not ask about
+referrals yet, so you ask.
 
-## 1. Give every new member a link
+## 1. Ask every new customer
 
-When a member's board item goes to **Active**:
+On the call to confirm a new request, ask:
 
-1. Open the link maker: `https://heroclub-membership.netlify.app/refer.html`
-2. Type the member's full name. It shows their code, for example `sarah-m`.
-3. Look down the **Referral code** column on the board. If another member
-   already has that code, type `2` in the Number box (then `3`, and so on).
-4. Put the code in the member's **Referral code** column.
-5. Copy the message and send it to the member by text or email.
-6. If you hand out cards, save the QR code and print it on the member's
-   card.
+> "Did a Hero Club member refer you?"
 
-The link maker is not linked from the signup page. Bookmark it.
+If yes, take down:
 
-## 2. When a request arrives with "Referred by" filled in
+- **Their name.** Whoever the customer knows. It may be the spouse of the
+  person the account is under, so do not expect it to match.
+- **Their street address.** This is what you match on. If the customer does
+  not know the house number, the street and a description is enough to
+  start.
+- **Their phone number**, if the customer has it. Optional.
 
-The signup page fills **Referred by** in one of two ways:
+Write it in the new customer's **Referred by** column on the board, for
+example `Sarah Mitchell, 14 Oak Hollow Ct, 919-555-0100`.
 
-- `Sarah M. (link: sarah-m)`: the customer came through a member's link.
-  Find the member whose **Referral code** is `sarah-m`.
-- `Sarah Mitchell (typed)`: the customer typed a name. Find that member by
-  name. If you cannot tell who they mean, ask the customer when you call to
-  confirm their plan.
+Ask before they sign the agreement. A referral named after signing does not
+count.
 
-Then check all three:
+## 2. Match it in ServiceMinder
 
-- [ ] The referrer's item is **Active**.
-- [ ] The new customer's household has never had a Hero Club membership, at
-      this address or another. A past one-time customer is fine.
-- [ ] The new customer's address is not the referrer's own.
+1. Search ServiceMinder for the **street address**.
+2. Use the name and phone only as a check. A different first name at the
+   same address is normal: it is usually the spouse.
+3. Confirm all three:
+   - [ ] That address has an **active** Hero Club membership.
+   - [ ] The new customer's household has never had a Hero Club membership,
+         at this address or another. A past one-time customer is fine.
+   - [ ] The new customer's address is not the same as the referrer's.
 
-If any check fails, the referral does not count. Write why in the new
-customer's **Referral credit** column, for example `Not counted: referrer not
-a member`. Carry on with the signup as normal.
+If the address is not a Hero Club member's home, or any check fails, the
+referral does not count. Write why in the new customer's **Referral credit**
+column, for example `Not counted: 14 Oak Hollow Ct is not a member`, and
+carry on with the signup as normal.
 
-If the checks pass, write `Pending: referred by Sarah M.` in the new
-customer's **Referral credit** column.
+If you cannot find the address, ask the customer once more for the house
+number or the phone number before deciding it does not count.
+
+If the checks pass, write `Pending` in the new customer's **Referral
+credit** column, and the referring member's account name as it appears in
+ServiceMinder after it, for example `Pending: David Mitchell account`.
 
 ## 3. When the referral counts
 
 A referral counts when the new member has signed, paid the down payment, and
 paid their **first monthly charge**, which runs one month after **Signed
-on**. The referrer gets their credit only if they are still **Active** on
-that day. The new member gets their free month either way.
+on**. The referrer gets their credit only if their membership is still
+**Active** on that day. The new member gets their free month either way.
 
 On that day:
 
@@ -82,7 +89,7 @@ On that day:
    - Referrer's **Referral credit**: add a line such as
      `$54 for Pat Example, applied 15 Jan 2027`.
    - New member's **Referral credit**: change `Pending` to
-     `Month 12 free, referred by Sarah M., set 15 Jan 2027`.
+     `Month 12 free, referred by Mitchell household, set 15 Jan 2027`.
 6. **Tell them both.** The messages are in `messages.md`.
 
 How to reduce a single installment on a ServiceMinder payment plan has not
@@ -92,6 +99,10 @@ runs.
 
 ## 4. Things that will come up
 
+- **The name does not match the account.** Expected. Match on the address
+  and credit the membership at that address.
+- **Two members live on the same street and the customer is not sure which
+  house.** Ask for the house number or phone. Do not guess.
 - **The new member cancels in the first 3 business days, or never pays the
   first monthly charge.** The referral never counted. Change **Referral
   credit** to `Not counted: cancelled` and do nothing else.
@@ -100,21 +111,30 @@ runs.
   installment to zero, it is cancelled with the rest when the membership
   ends; it does not change the cancellation settlement, which counts only
   what was paid and what was received.
-- **The referrer leaves before the referral counts.** No credit for the
-  referrer. The new member still gets their twelfth month.
+- **The referrer's membership has ended before the referral counts.** No
+  credit for the referrer. The new member still gets their twelfth month.
 - **The referrer has no monthly charges left this year.** The credit carries
   into their renewal year: reduce the first monthly charge of the new year.
   If they do not renew, it is lost.
-- **Two members claim the same neighbor.** The name in **Referred by**
-  decides it. One referral, one credit.
+- **A member says they referred someone who did not mention them.** The
+  terms say the new member has to name them before signing. If the new
+  member confirms it when you ask, and they have not been a member more
+  than a few days, use your judgment and note what you did.
 - **A renewal.** Referral credits apply to monthly charges only, not to a
   down payment.
 
 ## 5. The weekly check
 
-Add these to the weekly check in `docs/agreement/office-routine.md`:
-
-- Any **Active** member with a blank **Referral code**: give them a link.
+- Any item at **Proposal sent** or **Active** with a blank **Referred by**
+  where nobody asked the question: ask.
 - Any item with **Referral credit** starting `Pending` whose **Signed on**
   is more than a month ago: the first monthly charge should have run. Do
   step 3.
+
+## Board columns
+
+| Column | What goes in it |
+|---|---|
+| **Referred by** | On the new customer's item: the name, street address and phone they gave |
+| **Referral credit** | On both items: what is pending, owed or applied, with dates |
+| **Referral code** | Not used. It was for referral links, which were dropped. It can be deleted |

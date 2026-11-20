@@ -2,6 +2,22 @@
 
 Date: 2026-11-20
 
+## Changed by the owner, 2026-11-20
+
+After the first build the owner decided:
+
+- **No referral links or codes.** The new customer names the member who
+  referred them: name and street address, with phone optional. The office
+  matches the street address in ServiceMinder, because an account is often
+  under a spouse's name.
+- **Not in the web app yet.** The signup page changes, the link maker page,
+  the referral terms page and the function change were removed. Referrals
+  are documentation and office process only: `docs/referrals/`.
+
+The reward and the rules below are unchanged. "Approaches" and "What gets
+built" describe the first build and are kept for the record. The removed
+code is in the git history up to commit `847dd6b`.
+
 ## Intent
 
 Members are the cheapest way to find more members, and a referred neighbor is

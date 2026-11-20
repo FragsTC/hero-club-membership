@@ -68,33 +68,15 @@ names the figure if a document is out of step.
 
 ## Referrals
 
-"Give a month, get a month." A member's link is the page address with their
-code on the end, for example `?ref=sarah-m`. The code is the member's name,
-so the page shows "Sarah M. sent you" without looking anything up, and sends
-the name to the **Referred by** column on monday.com.
+"Give a month, get a month" is run by the office and is not part of this
+page yet. A new customer tells Window Hero the name and street address of
+the member who referred them, and the office matches the address in
+ServiceMinder. The terms, messages and office steps are in
+`docs/referrals/`, with Word copies in `word/`.
 
-| Path | What it is |
-|---|---|
-| `public/referral.js` | Turns a name into a code and a code back into a name. Used by both pages below |
-| `public/refer.html` | The office link maker: a member's link, QR code and message. Not linked from the signup page |
-| `public/referral-terms.html` | The referral terms customers see |
-| `public/vendor/qrcode.js` | QR code generator by Kazuhiko Arase (MIT licence) |
-| `docs/referrals/` | The terms, the messages and the office steps, with Word copies in `word/` |
-
-Credits are applied by hand in ServiceMinder. Nothing is credited
-automatically.
-
-## Tests
-
-```
-node --test tests/*.test.js
-node tests/signup-referral.e2e.js
-node tests/refer.e2e.js
-node tests/sw.e2e.js
-node scripts/check-agreement.js
-```
-
-The three `e2e` tests open the pages in a browser and need Playwright.
+An earlier version with referral links, a banner on this page and a link
+maker page was built and then removed. It is in the git history at commit
+`847dd6b` if it is wanted later.
 
 ## Common changes
 

@@ -8,6 +8,9 @@ What the office does once ServiceMinder is set up
 
 1. A request arrives on the board with status **New**.
 2. Call the customer the same day. Confirm the plan, home size and price.
+   Ask whether a Hero Club member referred them, and if so note the
+   member's name and street address in **Referred by**
+   (`docs/referrals/office-steps.md`).
    For homes over 3,500 sq ft, quote the price.
 3. In ServiceMinder, create a proposal from the matching Hero Club template
    and send it. For a home over 3,500 sq ft, put the Schedule A prices for
