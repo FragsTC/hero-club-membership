@@ -45,7 +45,7 @@ export default {
     const arms = svgEl('g', {}, svg);
     svgEl('path', { d: `M ${TX + 8} 1350 L ${X - 4} 1395`, fill: 'none', stroke: pop, 'stroke-width': 16, 'stroke-linecap': 'round' }, arms);
     svgEl('path', { d: `M ${TX + 22} 1340 L ${X - 4} 1318`, fill: 'none', stroke: pop, 'stroke-width': 16, 'stroke-linecap': 'round' }, arms);
-    // Brush head pressed on the glass, seen from behind: the solid block with an end cap,
+    // Brush head pressed on the glass, seen from behind: the solid block,
     // bristle tips just showing round its edges, mounted off-centre on an angled gooseneck.
     const brush = svgEl('g', {}, svg);
     const bx = -110, bw = 160, by = -78, bh = 44;
@@ -55,7 +55,6 @@ export default {
     }
     for (let j = by + 4; j < by + bh - 4; j += 7) svgEl('rect', { x: bx - 6, y: j, width: 8, height: 3, fill: ink }, brush);
     svgEl('rect', { x: bx, y: by, width: bw, height: bh, rx: 6, fill: navy, stroke: ink, 'stroke-width': 3 }, brush); // back of the block
-    svgEl('rect', { x: bx + bw - 3, y: by - 4, width: 9, height: bh + 8, rx: 2, fill: navy, stroke: ink, 'stroke-width': 2 }, brush); // end cap
     svgEl('path', { d: `M 0 0 L 0 -14 L -14 ${by + bh / 2}`, fill: 'none', stroke: navy, 'stroke-width': 10, 'stroke-linejoin': 'round' }, brush); // gooseneck into the back
     svgEl('circle', { cx: -14, cy: by + bh / 2, r: 8, fill: navy, stroke: ink, 'stroke-width': 2 }, brush);
     // water running down the pane under the brush
