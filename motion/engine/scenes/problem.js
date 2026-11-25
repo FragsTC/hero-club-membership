@@ -66,8 +66,9 @@ const ART = {
     svgEl('feGaussianBlur', { stdDeviation: 44 }, blur);
     const mask = svgEl('mask', { id: 'pbGrow', maskUnits: 'userSpaceOnUse', x: 0, y: 0, width: AW, height: AH }, defs);
     const mg = svgEl('g', { filter: 'url(#pbSoft)' }, mask);
-    svgEl('rect', { x: 0, y: 600, width: AW, height: 200, fill: '#fff' }, mg);
-    svgEl('ellipse', { cx: 170, cy: 520, rx: 170, ry: 260, fill: '#fff' }, mg);
+    svgEl('rect', { x: 0, y: 520, width: AW, height: 280, fill: '#fff' }, mg);
+    svgEl('ellipse', { cx: 190, cy: 480, rx: 220, ry: 300, fill: '#fff' }, mg);
+    svgEl('ellipse', { cx: 700, cy: 430, rx: 160, ry: 150, fill: '#fff', opacity: 0.7 }, mg);
     svgEl('ellipse', { cx: 720, cy: 640, rx: 130, ry: 120, fill: '#fff', opacity: 0.8 }, mg);
     svgEl('ellipse', { cx: 560, cy: 340, rx: 110, ry: 60, fill: '#fff', opacity: 0.55 }, mg);
     const growth = (id, freq, seed, rgb, k, b) => {
@@ -75,10 +76,10 @@ const ART = {
       svgEl('feTurbulence', { type: 'fractalNoise', baseFrequency: freq, numOctaves: 4, seed }, f);
       svgEl('feColorMatrix', { type: 'matrix', values: `0 0 0 0 ${rgb[0]}  0 0 0 0 ${rgb[1]}  0 0 0 0 ${rgb[2]}  ${k} 0 0 0 ${b}` }, f);
     };
-    growth('pbAlgae', '0.02 0.028', 7, [0.42, 0.53, 0.24], 2.6, -0.95);
-    growth('pbAlgae2', '0.055 0.075', 3, [0.3, 0.4, 0.16], 3.2, -1.55);
+    growth('pbAlgae', '0.02 0.028', 7, [0.38, 0.52, 0.2], 3.0, -0.75);
+    growth('pbAlgae2', '0.055 0.075', 3, [0.27, 0.4, 0.13], 3.4, -1.35);
     growth('pbAlgae3', '0.3', 11, [0.22, 0.3, 0.1], 4, -2.25);
-    const grow = svgEl('g', { mask: 'url(#pbGrow)', opacity: 0.9 }, grime);
+    const grow = svgEl('g', { mask: 'url(#pbGrow)', opacity: 1 }, grime);
     for (let y = TOP + 6; y < BOT; y += 28) svgEl('rect', { x: L, y: y + 17, width: R - L, height: 8, fill: '#4b6a28', opacity: 0.5 }, grow);
     for (const id of ['pbAlgae', 'pbAlgae2', 'pbAlgae3']) svgEl('rect', { x: 0, y: 0, width: AW, height: AH, filter: `url(#${id})` }, grow);
     for (let i = 0; i < 18; i++) {
