@@ -58,15 +58,38 @@ const ART = {
     svgEl('path', { d: 'M 20 330 L 450 40 L 880 330', fill: 'none', stroke: '#003b64', 'stroke-width': 44, 'stroke-linejoin': 'miter' }, base); // roof edge
     const dirty = svgEl('g', {}, svg), clean = svgEl('g', {}, svg);
     const grime = svgEl('g', { 'clip-path': 'url(#pbHouse)' }, dirty); // house mask inside the wipe mask
-    for (let i = 0; i < 52; i++) {
-      const y = 200 + 560 * Math.sqrt(r()), x = 70 + r() * 760, s = 18 + r() * 60;
-      if (x > 320 && x < 580 && y > 370 && y < 650) continue; // keep the glass clear
-      svgEl('ellipse', { cx: x, cy: y, rx: s, ry: s * (0.35 + r() * 0.35), fill: '#5f7d32', opacity: (0.35 + r() * 0.45).toFixed(2) }, grime);
-    }
-    for (let i = 0; i < 12; i++) {
-      const x = 110 + r() * 680;
-      if (x > 320 && x < 580) continue;
-      svgEl('rect', { x, y: 260 + r() * 120, width: 6 + r() * 8, height: 140 + r() * 260, rx: 6, fill: '#5f7d32', opacity: 0.35 }, grime);
+    // Where it grows: heavy along the bottom (rain splash), heavier on the shaded left side,
+    // thinning out going up. A soft-edged mask made of blurred shapes.
+    const blur = svgEl('filter', { id: 'pbSoft', x: '-20%', y: '-20%', width: '140%', height: '140%' }, defs);
+    svgEl('feGaussianBlur', { stdDeviation: 46 }, blur);
+    const mask = svgEl('mask', { id: 'pbGrow', maskUnits: 'userSpaceOnUse', x: 0, y: 0, width: AW, height: AH }, defs);
+    const mg = svgEl('g', { filter: 'url(#pbSoft)' }, mask);
+    svgEl('rect', { x: 0, y: 620, width: AW, height: 200, fill: '#fff' }, mg);
+    svgEl('ellipse', { cx: 150, cy: 520, rx: 190, ry: 300, fill: '#fff' }, mg);
+    svgEl('ellipse', { cx: 760, cy: 640, rx: 160, ry: 160, fill: '#fff', opacity: 0.8 }, mg);
+    svgEl('ellipse', { cx: 470, cy: 700, rx: 260, ry: 90, fill: '#fff' }, mg);
+    svgEl('ellipse', { cx: 260, cy: 300, rx: 120, ry: 110, fill: '#fff', opacity: 0.6 }, mg);
+    // Mottled growth: fractal noise thresholded into green patches with ragged edges.
+    const growth = (id, freq, seed, rgb, k, b) => {
+      const f = svgEl('filter', { id, x: 0, y: 0, width: '100%', height: '100%', 'color-interpolation-filters': 'sRGB' }, defs);
+      svgEl('feTurbulence', { type: 'fractalNoise', baseFrequency: freq, numOctaves: 4, seed }, f);
+      svgEl('feColorMatrix', { type: 'matrix', values: `0 0 0 0 ${rgb[0]}  0 0 0 0 ${rgb[1]}  0 0 0 0 ${rgb[2]}  ${k} 0 0 0 ${b}` }, f);
+      return f;
+    };
+    growth('pbAlgae', '0.018 0.026', 7, [0.42, 0.53, 0.24], 2.6, -0.95);       // broad patches
+    growth('pbAlgae2', '0.05 0.07', 3, [0.3, 0.4, 0.16], 3.2, -1.55);      // darker clumps
+    growth('pbAlgae3', '0.3', 11, [0.22, 0.3, 0.1], 4, -2.25);              // fine speckle
+    const grow = svgEl('g', { mask: 'url(#pbGrow)', opacity: 0.9 }, grime);
+    // darker build-up in the shadow under each board edge, where water sits
+    for (let y = 60; y < AH; y += 48) svgEl('rect', { x: 0, y: y + 32, width: AW, height: 9, fill: '#4b6a28', opacity: 0.5 }, grow);
+    svgEl('rect', { x: 0, y: 0, width: AW, height: AH, filter: 'url(#pbAlgae)' }, grow);
+    svgEl('rect', { x: 0, y: 0, width: AW, height: AH, filter: 'url(#pbAlgae2)' }, grow);
+    svgEl('rect', { x: 0, y: 0, width: AW, height: AH, filter: 'url(#pbAlgae3)' }, grow);
+    // thin drips running down from board edges, tapering out
+    for (let i = 0; i < 16; i++) {
+      const x = 100 + r() * 700, y = 300 + Math.floor(r() * 8) * 48 + 36, h = 50 + r() * 140, w = 3 + r() * 4;
+      if (x > 320 && x < 580 && y < 650) continue; // keep the window clear
+      svgEl('path', { d: `M ${x} ${y} L ${x + w} ${y} L ${x + w * 0.6} ${y + h} L ${x + w * 0.4} ${y + h} Z`, fill: '#3f5a22', opacity: (0.35 + r() * 0.3).toFixed(2) }, grime);
     }
     return { dirty, clean, dir: 'down', tool: 'spray', stars: [[200, 420], [700, 380], [640, 700]] };
   },
