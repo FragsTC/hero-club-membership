@@ -30,10 +30,10 @@ export default {
     svgEl('rect', { x: TX + 4, y: 1415, width: 20, height: FOOT - 1415, rx: 6, ...sil }, tech);
     svgEl('rect', { x: TX - 32, y: 1328, width: 64, height: 102, rx: 20, ...sil }, tech);
     svgEl('circle', { cx: TX - 4, cy: 1298, r: 25, ...sil }, tech);
-    // Pole like the real thing, in brand colours: a solid lower section in the accent colour,
+    // Pole like the real thing, in brand colours: a thicker lower section,
     // telescoping sections above it, each joint held by a clamp collar with a lever.
     const navy = ctx.brand.colors.navy.bg;
-    const poleLow = svgEl('path', { d: `M ${X} 1425 L ${X} ${JOIN}`, fill: 'none', stroke: pop, 'stroke-width': 14 }, svg);
+    const poleLow = svgEl('path', { d: `M ${X} 1425 L ${X} ${JOIN}`, fill: 'none', stroke: navy, 'stroke-width': 14 }, svg); // navy so it stands apart from the tech
     const pole = svgEl('path', { d: `M ${X} ${JOIN} L ${X} ${TIP}`, fill: 'none', stroke: navy, 'stroke-width': 11 }, svg);
     const clampYs = [JOIN, 1166, 1096, 1026, 956, 886];
     const clamps = clampYs.map((cy) => {
