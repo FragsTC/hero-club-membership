@@ -1,29 +1,30 @@
 {
   "title": "First test: Hero Club",
   "bpm": 120,
+  "voice": { "speaker": "am_michael", "speed": 1.05 },
   "scenes": [
-    { "type": "kinetic", "mode": "slam", "push": true, "beats": 2, "bg": "accent",
-      "text": "Clogged\ngutters?" },
+    { "type": "kinetic", "mode": "slam", "push": true, "beats": 3, "bg": "accent",
+      "text": "Clogged\ngutters?", "say": "Clogged gutters?" },
 
-    { "type": "kinetic", "mode": "slam", "push": true, "beats": 2, "bg": "white",
-      "text": "Green\nsiding?" },
+    { "type": "kinetic", "mode": "slam", "push": true, "beats": 3, "bg": "white",
+      "text": "Green\nsiding?", "say": "Green siding?" },
 
-    { "type": "kinetic", "mode": "slam", "push": true, "beats": 2, "bg": "blue",
-      "text": "Grimy\nwindows?" },
+    { "type": "kinetic", "mode": "slam", "push": true, "beats": 3, "bg": "blue",
+      "text": "Grimy\nwindows?", "say": "Grimy windows?" },
 
     { "type": "kinetic", "mode": "swap", "beats": 4, "bg": "white",
-      "text": "DIRTY", "to": "CLEAR", "toBg": "blue" },
+      "text": "DIRTY", "to": "CLEAR", "toBg": "blue", "say": "From dirty..." },
 
-    { "type": "grid3d", "beats": 4, "bg": "navy" },
+    { "type": "grid3d", "beats": 4, "bg": "navy", "say": "to crystal clear." },
 
     { "type": "typewriter", "beats": 6, "bg": "black",
-      "text": "What if one plan handled it *all?*" },
+      "text": "What if one plan handled it *all?*", "say": "What if one plan handled it all?", "sayDelay": 0.3 },
 
     { "type": "badge", "beats": 4, "bg": "navy",
-      "image": "brand/hero-club-logo.png", "sub": "Year-round care\nfor your home" },
+      "image": "brand/hero-club-logo.png", "sub": "Year-round care\nfor your home", "say": "Meet the Hero Club." },
 
     { "type": "tiers", "beats": 6, "bg": "white",
-      "price": "Plans start at\n*$54/month*",
+      "price": "Plans start at\n*$54/month*", "say": "Plans start at fifty-four dollars a month.",
       "fine": "Bronze · homes up to 2,500 sq ft · plus down payment",
       "items": [
         { "name": "Bronze", "medal": "#d08a4a", "lines": ["2 visits a year", "10% off extras"] },
@@ -32,9 +33,10 @@
       ] },
 
     { "type": "icon", "icon": "check", "beats": 4, "bg": "accent",
-      "text": "Gutters, house wash & windows in every plan" },
+      "text": "Gutters, house wash & windows in every plan", "say": "Gutters, house wash, windows." },
 
     { "type": "endcard", "beats": 8, "bg": "blue",
-      "tag": "JOIN THE HERO CLUB", "area": "DURHAM · CHAPEL HILL · CARY · RALEIGH" }
+      "tag": "JOIN THE HERO CLUB", "area": "DURHAM · CHAPEL HILL · CARY · RALEIGH",
+      "say": "Join the Hero Club, at window hero dot com." }
   ]
 }

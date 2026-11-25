@@ -2,7 +2,8 @@
 // Renders videos/<video>/story.json to out/<video>/:
 //   clean.mp4           motion graphics with beat + effects
 //   filmed.mp4          the same video on a laptop in a dark room, beat + effects
-//   clean-sfx-only.mp4  motion graphics with effects only (add your own track in the app)
+//   clean-sfx-only.mp4  motion graphics with effects (and voice) only (add your own track in the app)
+//   clean-no-voice.mp4  beat + effects, no voiceover (only when the story has "say" lines)
 const fs = require('fs');
 const path = require('path');
 const { spawn, execFileSync } = require('child_process');
@@ -10,6 +11,7 @@ const { chromium } = require('playwright');
 const { serve, ROOT } = require('./server');
 const A = require('./audio');
 const { analyse, decode } = require('./beats');
+const { makeVoice } = require('./voice');
 
 const args = process.argv.slice(2);
 const name = args.find((a, i) => !a.startsWith('--') && !['--only', '--workers'].includes(args[i - 1]));
@@ -125,14 +127,28 @@ function measure(file) {
   music.scale(0.1 / body);
   sfx.scale(0.5 / Math.max(1e-6, sfx.peak()));
   A.duck(music, sfx, 0.35);
-  const mix = new A.Bus(duration); mix.mix(music); mix.mix(sfx);
+  // the mix without a voice, kept for clean-no-voice.mp4
+  const plain = new A.Bus(duration); plain.mix(music); plain.mix(sfx);
+  // voiceover: speech sits clearly on top; music dips well under it, effects a little
+  const vo = await makeVoice(story, info.scenes, duration, work, log);
+  let sfxV = sfx;
+  if (vo) {
+    let s2 = 0, n2 = 0;
+    for (let i = 0; i < vo.n; i++) { const v = Math.abs(vo.L[i]); if (v > 0.02) { s2 += v * v; n2++; } }
+    vo.scale(0.24 / Math.sqrt(s2 / Math.max(1, n2)));
+    A.duck(music, vo, 0.55);
+    sfxV = new A.Bus(duration); sfxV.mix(sfx); A.duck(sfxV, vo, 0.3);
+  }
+  const mix = new A.Bus(duration); mix.mix(music); mix.mix(sfxV); if (vo) mix.mix(vo);
   A.fadeTail(mix, 0.12);
   // loudness to about -14 LUFS (TikTok / Reels / Shorts), then a peak limiter at -1 dBFS
   fs.writeFileSync(path.join(work, 'pre.wav'), A.wav(mix));
   const pre = measure(path.join(work, 'pre.wav'));
   const gain = 10 ** ((-13.4 - pre.i) / 20); // the limiter takes back ~0.6 dB
   mix.scale(gain); A.limit(mix, 0.85);
-  const fx = new A.Bus(duration); fx.mix(sfx, gain); A.fadeTail(fx, 0.12); A.limit(fx, 0.85);
+  const fx = new A.Bus(duration); fx.mix(sfxV, gain); if (vo) fx.mix(vo, gain); A.fadeTail(fx, 0.12); A.limit(fx, 0.85);
+  const novoWav = path.join(work, 'no-voice.wav');
+  if (vo) { plain.scale(gain); A.fadeTail(plain, 0.12); A.limit(plain, 0.85); fs.writeFileSync(novoWav, A.wav(plain)); }
   const mixWav = path.join(work, 'mix.wav'), sfxWav = path.join(work, 'sfx.wav');
   fs.writeFileSync(mixWav, A.wav(mix));
   fs.writeFileSync(sfxWav, A.wav(fx));
@@ -195,12 +211,15 @@ function measure(file) {
   server.close();
   if (!args.includes('--keep-frames')) for (const d of [framesDir, filmedDir]) fs.rmSync(d, { recursive: true, force: true });
 
-  // 5. Effects-only copy: same picture, effects track.
+  // 5. Same picture, other soundtracks: effects only (plus voice), and no voice.
+  const remux = (audio, file) => ffmpeg(['-i', path.join(out, 'clean.mp4'), '-i', audio, '-map', '0:v', '-map', '1:a', '-c:v', 'copy',
+    '-c:a', 'aac', '-b:a', '256k', '-movflags', '+faststart', path.join(out, file)]).done;
   if (doClean) {
-    await ffmpeg(['-i', path.join(out, 'clean.mp4'), '-i', sfxWav, '-map', '0:v', '-map', '1:a', '-c:v', 'copy',
-      '-c:a', 'aac', '-b:a', '256k', '-movflags', '+faststart', path.join(out, 'clean-sfx-only.mp4')]).done;
+    await remux(sfxWav, 'clean-sfx-only.mp4');
+    if (vo) await remux(novoWav, 'clean-no-voice.mp4');
+    else fs.rmSync(path.join(out, 'clean-no-voice.mp4'), { force: true });
   }
   log(`done in ${sec(T0)} ->`);
-  const made = [doClean && 'clean.mp4', doFilmed && 'filmed.mp4', doClean && 'clean-sfx-only.mp4'].filter(Boolean);
+  const made = [doClean && 'clean.mp4', doFilmed && 'filmed.mp4', doClean && 'clean-sfx-only.mp4', doClean && vo && 'clean-no-voice.mp4'].filter(Boolean);
   for (const f of made) console.log('  ' + path.join('out', name, f));
 })().catch((e) => { console.error('\n✖ ' + e.message); process.exit(1); });

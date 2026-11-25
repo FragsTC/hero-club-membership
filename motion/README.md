@@ -99,6 +99,30 @@ A new scene type is one file in `engine/scenes/` exporting `build(root, scene, c
 `engine/player.js`. Use `ctx.cue(time, 'hit' | 'whoosh' | 'click' | 'snap' | 'pop' | 'tick' | 'sparkle' | 'swipe' | 'riser')`
 to place sounds; they are generated in `render/audio.js`.
 
+## Voiceover
+
+Give any scene a `"say"` line and the renderer speaks it, starting just after that scene's cut:
+
+```json
+"voice": { "speaker": "am_michael", "speed": 1.05 },
+"scenes": [
+  { "type": "kinetic", "mode": "slam", "beats": 3, "bg": "accent", "text": "Clogged\ngutters?", "say": "Clogged gutters?" }
+]
+```
+
+- The voice is Kokoro, an open-source voice model that runs on your computer: no account, no
+  per-use cost. The model downloads once (about 90 MB) on the first render.
+- If a line would run into the next one, it is spoken faster, up to 1.35x. The render log lists
+  every line with its length and room, and says `RUNS LONG: shorten this line` when even 1.35x is
+  not enough. Rule of thumb: about 2.5 words per second of scene.
+- Write numbers and web addresses the way they should be said: `fifty-four dollars`,
+  `window hero dot com`. `"sayDelay"` (seconds) starts a line later than the cut.
+- `npm run voices -- "Any line"` saves samples of several voices to `out/voice-samples/`;
+  put the one you like in `voice.speaker`.
+- The music dips under the voice and the effects dip a little. With voice lines, the render also
+  makes `clean-no-voice.mp4`, and `clean-sfx-only.mp4` keeps the voice (effects + voice, for adding
+  a library track in the app).
+
 ## Audio
 
 - **No song in `/music`:** an original 120 BPM track is generated in code (kick, clap, hats, off-beat
