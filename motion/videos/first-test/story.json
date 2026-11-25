@@ -16,8 +16,8 @@
     { "type": "icon", "icon": "pin", "beats": 4, "bg": "black",
       "text": "Serving Durham, Chapel Hill, Cary & Raleigh" },
 
-    { "type": "kinetic", "mode": "slam", "beats": 4, "bg": "navy", "push": true,
-      "text": "Hero Club", "sub": "Year-round care for your home" },
+    { "type": "badge", "beats": 4, "bg": "navy",
+      "image": "brand/hero-club-logo.png", "sub": "Year-round care\nfor your home" },
 
     { "type": "tiers", "beats": 4, "bg": "white",
       "items": [

@@ -92,6 +92,7 @@ deploying the Hero Club page with no build step.
 | `countup` | `items: [{ value, prefix, suffix, label }]` | Scoreboard digits roll up, each number lands on the next beat |
 | `icon` | `icon` (`padlock`, `check`, `star`, `pin`), `text`, `at` | The icon snaps on beat `at` (default 2) |
 | `tiers` | `items: [{ name, medal, tag, lines }]`, `every` | Plan cards, one lands per beat (Hero Club Bronze / Silver / Gold) |
+| `badge` | `image`, `sub` | A logo slams in over turning rays, stars pop, a glint sweeps across it |
 | `endcard` | `tag`, `website`, `phone` | Logo, then website, then phone on successive beats. Riser leads in |
 
 A new scene type is one file in `engine/scenes/` exporting `build(root, scene, ctx)`, registered in

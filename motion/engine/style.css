@@ -96,3 +96,14 @@ body.rendering #scrub { display: none; }
 
 /* sub line under a slammed word */
 .kw-sub { position: absolute; left: 0; right: 0; top: calc(50% + 230px); text-align: center; font: 700 44px 'JetBrains Mono'; text-transform: uppercase; letter-spacing: 0.04em; color: var(--pop); }
+
+/* badge */
+.bd-rays { position: absolute; left: 50%; top: 50%; margin: -1200px 0 0 -1200px; }
+.bd-wrap { position: relative; display: flex; flex-direction: column; align-items: center; }
+.bd-logo { position: relative; width: 820px; }
+.bd-logo img { display: block; width: 100%; }
+.bd-glint { position: absolute; inset: 0; overflow: hidden; -webkit-mask-size: 100% 100%; mask-size: 100% 100%; }
+.bd-bar { position: absolute; top: -20%; bottom: -20%; left: 0; width: 34%; background: #fcaf17; transform: skewX(-20deg); }
+.bd-ring { position: absolute; left: 50%; top: 350px; width: 900px; height: 900px; margin: -450px 0 0 -450px; border: 14px solid var(--pop); border-radius: 50%; }
+.bd-sub { font-family: 'Barlow'; font-weight: 900; font-size: 76px; line-height: 1.05; color: var(--pop); text-align: center; margin-top: 60px; width: 960px; white-space: pre-line; }
+.bd-stars { position: absolute; inset: 0; }
