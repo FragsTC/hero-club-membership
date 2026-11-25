@@ -26,11 +26,13 @@ const ART = {
     for (let i = 0; i < 34; i++) leaf(dirty, 50 + r() * 800, 250 + r() * 60, 26 + r() * 20, -70 + r() * 140, r() < 0.55 ? '#fcaf17' : '#d08a4a');
     for (let i = 0; i < 7; i++) {                                                             // overflow
       const x = 80 + i * 105 + r() * 30, h = 70 + r() * 120;
-      svgEl('rect', { x, y: 400, width: 14, height: h, rx: 7, fill: '#009bd8' }, dirty);
-      svgEl('circle', { cx: x + 7, cy: 400 + h + 26 + r() * 20, r: 9, fill: '#009bd8' }, dirty);
+      svgEl('rect', { x, y: 400, width: 14, height: h, rx: 7, fill: '#bfe8fa' }, dirty);
+      svgEl('circle', { cx: x + 7, cy: 400 + h + 26 + r() * 20, r: 9, fill: '#bfe8fa' }, dirty);
     }
-    svgEl('path', { d: 'M 778 740 C 778 760 790 760 840 760 L 900 760', fill: 'none', stroke: '#009bd8', 'stroke-width': 26, 'stroke-linecap': 'round' }, clean);
-    svgEl('rect', { x: 772, y: 690, width: 40, height: 70, fill: '#009bd8' }, clean);
+    // downspout elbow turning out at the bottom, with water pouring from it in light blue
+    // (not the background blues, so it never reads as a hole in the spout)
+    svgEl('path', { d: 'M 824 680 L 760 680 L 760 690 Q 760 712 736 712 L 700 712 L 700 752 L 744 752 Q 824 752 824 690 Z', fill: '#ffffff' }, clean);
+    svgEl('path', { d: 'M 696 720 C 670 722 660 738 658 756', fill: 'none', stroke: '#bfe8fa', 'stroke-width': 22, 'stroke-linecap': 'round' }, clean);
     return { dirty, clean, dir: 'right', tool: 'water', stars: [[200, 280], [520, 270], [860, 700]] };
   },
   // A house front in lap siding: gable roof, corner trim and a window, so it reads as a wall.
