@@ -48,7 +48,7 @@ export default {
     // Brush head pressed on the glass, seen from behind: the solid block,
     // bristle tips just showing round its edges, mounted off-centre on an angled gooseneck.
     const brush = svgEl('g', {}, svg);
-    const bx = -110, bw = 160, by = -78, bh = 44;
+    const bx = -78, bw = 110, by = -62, bh = 30;
     for (let i = bx + 3; i < bx + bw - 3; i += 7) {                                              // bristle tips peeking out
       svgEl('rect', { x: i, y: by - 6, width: 3, height: 8, fill: ink }, brush);
       svgEl('rect', { x: i + 3, y: by + bh - 2, width: 3, height: 8, fill: ink }, brush);
@@ -61,7 +61,7 @@ export default {
     const r = rng('rinse');
     const drops = Array.from({ length: 7 }, (_, i) => ({
       n: svgEl('rect', { x: -3, y: 0, width: 6, height: 14, rx: 3, fill: ink }, svg),
-      x: X - 100 + i * 20 + (r() - 0.5) * 6, d: r() * 0.35, v: 120 + r() * 60,
+      x: X - 72 + i * 14 + (r() - 0.5) * 4, d: r() * 0.35, v: 120 + r() * 60,
     }));
     const glint = svgEl('path', { d: starPath(0, 0, 30), fill: 'var(--ink)' }, svg);
 
