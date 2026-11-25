@@ -69,6 +69,7 @@ html, body { background: #000; overflow: hidden; }
 .cu-label { font-family: 'Barlow Condensed'; font-weight: 900; text-transform: uppercase; color: var(--ink); line-height: 1; margin-top: 18px; letter-spacing: 0.02em; }
 
 /* icon */
+.ic-svg { overflow: visible; }
 .ic-wrap { display: flex; flex-direction: column; align-items: center; gap: 40px; }
 .ic-text { font-family: 'Barlow Condensed'; font-weight: 900; text-transform: uppercase; text-align: center; line-height: 0.9; width: 960px; }
 

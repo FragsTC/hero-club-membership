@@ -16,14 +16,11 @@
     { "type": "linedraw", "beats": 4, "bg": "blue",
       "text": "Water-fed pole" },
 
-    { "type": "countup", "beats": 4, "bg": "black",
-      "items": [
-        { "value": 14, "label": "Years" },
-        { "value": 30, "suffix": "+", "label": "Communities" }
-      ] },
+    { "type": "icon", "icon": "pin", "beats": 4, "bg": "black",
+      "text": "Serving Durham, Chapel Hill, Cary & Raleigh" },
 
-    { "type": "icon", "icon": "padlock", "beats": 4, "bg": "accent",
-      "text": "Price locked for 5 years" },
+    { "type": "icon", "icon": "star", "beats": 4, "bg": "accent",
+      "text": "Join the Hero Club" },
 
     { "type": "endcard", "beats": 8, "bg": "blue" }
   ]

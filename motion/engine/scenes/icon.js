@@ -1,5 +1,5 @@
 // Icon snap: a big icon does its one move exactly on a beat, with a snap sound.
-// story fields: icon ("padlock" | "check" | "star"), text, bg, at (beat of the snap, default 2)
+// story fields: icon ("padlock" | "check" | "star" | "pin"), text, bg, at (beat of the snap, default 2)
 import { el, svgEl, fitText, markup, shake, starPath } from '../lib.js';
 
 const ICONS = {
@@ -12,7 +12,7 @@ const ICONS = {
     return {
       g,
       // open: shackle raised and swung; closed: seated
-      before: (tl, gsap) => gsap.set(shackle, { y: -95, rotation: -18, transformOrigin: '110px 0px' }),
+      before: (tl, gsap) => gsap.set(shackle, { y: -95, rotation: -18, svgOrigin: '110 0' }),
       snap: (tl, t) => tl.to(shackle, { y: 0, rotation: 0, duration: 0.07, ease: 'power4.in' }, t - 0.07),
     };
   },
@@ -26,12 +26,29 @@ const ICONS = {
       snap: (tl, t) => tl.to(p, { strokeDashoffset: 0, duration: 0.12, ease: 'power3.in' }, t - 0.12),
     };
   },
+  pin(svg) {
+    const g = svgEl('g', {}, svg);
+    const pin = svgEl('g', {}, g);
+    svgEl('path', { d: 'M 0 260 C -40 180 -170 60 -170 -40 A 170 170 0 1 1 170 -40 C 170 60 40 180 0 260 Z', fill: 'var(--ink)' }, pin);
+    svgEl('circle', { cx: 0, cy: -40, r: 66, fill: 'var(--bg)' }, pin);
+    const shadow = svgEl('ellipse', { cx: 0, cy: 268, rx: 70, ry: 14, fill: 'var(--ink)', opacity: 0.35 }, g);
+    return {
+      g,
+      // the pin hangs above, then drops and lands on the beat
+      before: (tl, gsap, at) => { gsap.set(pin, { y: -340, autoAlpha: 0 }); tl.set(pin, { autoAlpha: 1 }, at - 0.16); gsap.set(shadow, { scale: 0.3, svgOrigin: '0 268' }); },
+      snap: (tl, t) => {
+        tl.to(pin, { y: 0, duration: 0.16, ease: 'power3.in' }, t - 0.16);
+        tl.to(shadow, { scale: 1, duration: 0.16, ease: 'power3.in' }, t - 0.16);
+        tl.fromTo(pin, { scaleY: 0.86, svgOrigin: '0 260' }, { scaleY: 1, duration: 0.2, ease: 'back.out(3)', immediateRender: false }, t);
+      },
+    };
+  },
   star(svg) {
     const g = svgEl('g', {}, svg);
     const s = svgEl('path', { d: starPath(0, 70, 250, 0.2), fill: 'var(--ink)' }, g);
     return {
       g,
-      before: (tl, gsap) => gsap.set(s, { scale: 0.2, rotation: -90, transformOrigin: '0px 70px' }),
+      before: (tl, gsap) => gsap.set(s, { scale: 0.2, rotation: -90, svgOrigin: '0 70' }),
       snap: (tl, t) => tl.to(s, { scale: 1, rotation: 0, duration: 0.1, ease: 'power4.in' }, t - 0.1),
     };
   },
@@ -50,13 +67,14 @@ export default {
     const tl = gsap.timeline();
     tl.to({}, { duration: dur }, 0);
     const at = (scene.at ?? 2) * beat;
-    icon.before(tl, gsap);
+    icon.before(tl, gsap, at);
     // hard cut: everything is on screen from the first frame and settles
     tl.fromTo(svg, { scale: 1.3 }, { scale: 1, duration: 0.2, ease: 'expo.out' }, 0);
     tl.fromTo(text, { y: 50, scale: 1.08 }, { y: 0, scale: 1, duration: 0.22, ease: 'expo.out' }, 0);
     icon.snap(tl, at);
     tl.fromTo(svg, { scale: 1.12 }, { scale: 1, duration: 0.2, ease: 'expo.out' }, at);
-    tl.fromTo(ring, { attr: { r: 200 }, opacity: 0.9 }, { attr: { r: 330 }, opacity: 0, duration: 0.4, ease: 'expo.out' }, at);
+    tl.fromTo(ring, { attr: { r: 200 }, opacity: 0.9 }, { attr: { r: 330 }, opacity: 0, duration: 0.4, ease: 'expo.out', immediateRender: false }, at);
+    gsap.set(ring, { opacity: 0 });
     shake(tl, root.cam, at, 14, 0.18, 21);
     ctx.cue(at, 'snap');
     if (scene.push !== false) tl.fromTo(root.cam, { scale: 1 }, { scale: 1.05, duration: dur, ease: 'sine.inOut' }, 0);

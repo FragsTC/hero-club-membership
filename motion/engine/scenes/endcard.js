@@ -11,7 +11,7 @@ export default {
     const wrap = el('div', 'ec-wrap', root.cam);
     const logo = el('img', 'ec-logo', wrap);
     logo.src = '../' + (dark ? brand.logo.dark : brand.logo.light);
-    const tag = el('div', 'ec-tag', wrap, scene.tag ?? 'RALEIGH · DURHAM · CHAPEL HILL');
+    const tag = el('div', 'ec-tag', wrap, scene.tag ?? 'DURHAM · CHAPEL HILL · CARY · RALEIGH');
     const site = el('div', 'ec-site', wrap, scene.website || brand.website);
     const phone = el('div', 'ec-phone', wrap, '');
     const ph = scene.phone || brand.phone;
