@@ -130,9 +130,10 @@ export default {
     // the tool at the edge
     const tool = svgEl('g', {}, svg);
     if (art.tool === 'squeegee') {
+      // pulled: the handle leads into the dirty glass, the rubber blade trails at the clean edge
       svgEl('rect', { x: -8, y: -40, width: 16, height: AH + 80, fill: '#0a0c0f' }, tool);
-      svgEl('rect', { x: -40, y: -40, width: 32, height: AH + 80, fill: '#b9c4d3' }, tool);
-      svgEl('rect', { x: -260, y: AH / 2 - 26, width: 224, height: 52, rx: 26, fill: '#fcaf17' }, tool);
+      svgEl('rect', { x: 8, y: -40, width: 32, height: AH + 80, fill: '#b9c4d3' }, tool);
+      svgEl('rect', { x: 36, y: AH / 2 - 26, width: 224, height: 52, rx: 26, fill: '#fcaf17' }, tool);
     } else {
       const vertical = art.dir === 'right';
       svgEl('rect', vertical ? { x: -10, y: -20, width: 20, height: AH + 40, rx: 10, fill: '#009bd8' } : { x: -20, y: -10, width: AW + 40, height: 20, rx: 10, fill: '#009bd8' }, tool);
