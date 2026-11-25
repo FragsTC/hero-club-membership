@@ -1,4 +1,4 @@
-// npm run render <video> [-- --only clean|filmed] [--draft]
+// npm run render <video> [-- --only clean|filmed] [--draft] [--workers N] [--software] [--keep-frames]
 // Renders videos/<video>/story.json to out/<video>/:
 //   clean.mp4           motion graphics with beat + effects
 //   filmed.mp4          the same video on a laptop in a dark room, beat + effects
@@ -12,10 +12,17 @@ const A = require('./audio');
 const { analyse, decode } = require('./beats');
 
 const args = process.argv.slice(2);
-const name = args.find((a) => !a.startsWith('--'));
+const name = args.find((a, i) => !a.startsWith('--') && !['--only', '--workers'].includes(args[i - 1]));
 const only = args.includes('--only') ? args[args.indexOf('--only') + 1] : null;
 const draft = args.includes('--draft');
 const FPS = 30;
+const WORKERS = args.includes('--workers') ? +args[args.indexOf('--workers') + 1] : 0;
+const os = require('os');
+// --software forces software WebGL; otherwise Chrome uses the GPU if it finds one.
+const GL_ARGS = args.includes('--software')
+  ? ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist']
+  : ['--enable-unsafe-swiftshader', '--ignore-gpu-blocklist', '--enable-gpu'];
+const launch = () => chromium.launch({ args: GL_ARGS });
 const AUDIO_EXT = /\.(mp3|wav|m4a|aac|flac|ogg)$/i;
 
 if (!name) {
@@ -73,7 +80,16 @@ function measure(file) {
 
   // 2. Build the video in the browser and collect timing + sound cues.
   const { server, port } = await serve();
-  const browser = await chromium.launch({ args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });
+  const browser = await launch();
+  // which WebGL renderer we got: a real GPU, or software (SwiftShader)
+  const gl = await (await browser.newPage()).evaluate(() => {
+    const c = document.createElement('canvas').getContext('webgl');
+    if (!c) return 'none';
+    const x = c.getExtension('WEBGL_debug_renderer_info');
+    return x ? c.getParameter(x.UNMASKED_RENDERER_WEBGL) : c.getParameter(c.RENDERER);
+  });
+  const gpu = !/swiftshader|software|llvmpipe|none/i.test(gl);
+  log(`WebGL: ${gpu ? 'GPU' : 'software'} (${gl})`);
   const errors = [];
   const page = await browser.newPage({ viewport: { width: 1080, height: 1920 } });
   page.on('pageerror', (e) => errors.push(e.message));
@@ -124,39 +140,58 @@ function measure(file) {
   const m = measure(mixWav), f = measure(sfxWav);
   log(`audio: mix ${m.i} LUFS, peak ${m.tp} dBTP | effects-only ${f.i} LUFS, peak ${f.tp} dBTP (${sec(t)})`);
 
-  // 4. Frames -> video. The filmed version is composited live from each clean frame.
+  // 4. Frames -> video.
+  //   Pass A draws every clean frame (fast) and keeps them in work/frames.
+  //   Pass B composites the filmed look from those frames, split across several
+  //   browsers at once, since that is the slow part (3D, glow, reflections).
   const doClean = only !== 'filmed', doFilmed = only !== 'clean';
-  const enc = (file, audio) => ffmpeg(['-f', 'image2pipe', '-framerate', String(FPS), '-i', '-', '-i', audio,
-    '-map', '0:v', '-map', '1:a', '-c:v', 'libx264', '-preset', draft ? 'veryfast' : 'slow', '-crf', draft ? '23' : '16',
+  const enc = (file, audio, input) => ffmpeg([...(input ? ['-framerate', String(FPS), '-i', input] : ['-f', 'image2pipe', '-framerate', String(FPS), '-i', '-']),
+    '-i', audio, '-map', '0:v', '-map', '1:a', '-c:v', 'libx264', '-preset', draft ? 'veryfast' : 'slow', '-crf', draft ? '23' : '16',
     '-pix_fmt', 'yuv420p', '-profile:v', 'high', '-r', String(FPS), '-c:a', 'aac', '-b:a', '256k', '-ar', '48000',
-    '-t', duration.toFixed(3), '-movflags', '+faststart', file], { input: true });
+    '-t', duration.toFixed(3), '-movflags', '+faststart', file], { input: !input });
+  const framesDir = path.join(work, 'frames'), filmedDir = path.join(work, 'filmed');
+  for (const d of [framesDir, filmedDir]) { fs.rmSync(d, { recursive: true, force: true }); fs.mkdirSync(d, { recursive: true }); }
+  const fname = (dir, i) => path.join(dir, String(i).padStart(5, '0') + '.png');
   const clean = doClean ? enc(path.join(out, 'clean.mp4'), mixWav) : null;
-  let filmed = null, fpage = null;
-  if (doFilmed) {
-    fpage = await browser.newPage({ viewport: { width: 1080, height: 1920 } });
-    fpage.on('pageerror', (e) => errors.push('filmed: ' + e.message));
-    await fpage.goto(`http://127.0.0.1:${port}/engine/filmed.html`);
-    await fpage.evaluate((d) => window.__initFilmed({ duration: d }), duration);
-    filmed = enc(path.join(out, 'filmed.mp4'), mixWav);
-  }
   const write = (proc, buf) => new Promise((res) => (proc.p.stdin.write(buf) ? res() : proc.p.stdin.once('drain', res)));
   t = Date.now();
   for (let i = 0; i < frames; i++) {
-    const ft = i / FPS;
-    await page.evaluate((x) => window.__seek(x), ft);
+    await page.evaluate((x) => window.__seek(x), i / FPS);
     const png = await page.screenshot({ type: 'png' });
     if (clean) await write(clean, png);
-    if (filmed) {
-      await fpage.evaluate(([b64, x]) => window.__frame(b64, x), [png.toString('base64'), ft]);
-      await write(filmed, await fpage.screenshot({ type: 'png' }));
-    }
+    if (doFilmed) fs.writeFileSync(fname(framesDir, i), png);
     if (errors.length) throw new Error(errors.join('\n'));
-    if (i % 30 === 0 || i === frames - 1) process.stdout.write(`\r· frames ${i + 1}/${frames}  ${sec(t)}   `);
+    if (i % 30 === 0 || i === frames - 1) process.stdout.write(`\r· clean frames ${i + 1}/${frames}  ${sec(t)}   `);
   }
   process.stdout.write('\n');
-  for (const proc of [clean, filmed]) if (proc) { proc.p.stdin.end(); await proc.done; }
+  if (clean) { clean.p.stdin.end(); await clean.done; }
   await browser.close();
+
+  if (doFilmed) {
+    const workers = Math.max(1, Math.min(frames, WORKERS || (gpu ? 2 : Math.max(1, Math.floor(os.cpus().length / 2)))));
+    t = Date.now();
+    let done = 0;
+    const chunk = Math.ceil(frames / workers);
+    await Promise.all(Array.from({ length: workers }, async (_, w) => {
+      const b = await launch();
+      const fp = await b.newPage({ viewport: { width: 1080, height: 1920 } });
+      fp.on('pageerror', (e) => errors.push('filmed: ' + e.message));
+      await fp.goto(`http://127.0.0.1:${port}/engine/filmed.html`);
+      await fp.evaluate((d) => window.__initFilmed({ duration: d }), duration);
+      for (let i = w * chunk; i < Math.min(frames, (w + 1) * chunk); i++) {
+        const b64 = fs.readFileSync(fname(framesDir, i)).toString('base64');
+        await fp.evaluate(([x, ft]) => window.__frame(x, ft), [b64, i / FPS]);
+        await fp.screenshot({ type: 'png', path: fname(filmedDir, i) });
+        if (errors.length) throw new Error(errors.join('\n'));
+        if (++done % 30 === 0 || done === frames) process.stdout.write(`\r· filmed frames ${done}/${frames} on ${workers} workers  ${sec(t)}   `);
+      }
+      await b.close();
+    }));
+    process.stdout.write('\n');
+    await enc(path.join(out, 'filmed.mp4'), mixWav, path.join(filmedDir, '%05d.png')).done;
+  }
   server.close();
+  if (!args.includes('--keep-frames')) for (const d of [framesDir, filmedDir]) fs.rmSync(d, { recursive: true, force: true });
 
   // 5. Effects-only copy: same picture, effects track.
   if (doClean) {
