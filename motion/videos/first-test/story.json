@@ -13,9 +13,6 @@
     { "type": "stack", "beats": 4, "bg": ["blue", "white", "black", "accent"],
       "words": ["Windows", "Gutters", "Soft wash", "Solar"] },
 
-    { "type": "linedraw", "beats": 4, "bg": "blue",
-      "text": "Water-fed pole" },
-
     { "type": "icon", "icon": "pin", "beats": 4, "bg": "black",
       "text": "Serving Durham, Chapel Hill, Cary & Raleigh" },
 
