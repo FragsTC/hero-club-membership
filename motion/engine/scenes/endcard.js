@@ -1,6 +1,6 @@
 // End card: logo, website and phone land on successive beats. A riser leads
 // into it and the music resolves on it.
-// story fields: bg, tag (small line under the logo), website, phone (default from brand.json)
+// story fields: bg, tag (small line under the logo), area (small line under the phone), website, phone (default from brand.json)
 import { el, svgEl, fitText, slam, starPath } from '../lib.js';
 
 export default {
@@ -12,6 +12,7 @@ export default {
     const logo = el('img', 'ec-logo', wrap);
     logo.src = '../' + (dark ? brand.logo.dark : brand.logo.light);
     const tag = el('div', 'ec-tag', wrap, scene.tag ?? 'DURHAM · CHAPEL HILL · CARY · RALEIGH');
+    const area = scene.area ? el('div', 'ec-tag ec-area', wrap, scene.area) : null;
     const site = el('div', 'ec-site', wrap, scene.website || brand.website);
     const phone = el('div', 'ec-phone', wrap, '');
     const ph = scene.phone || brand.phone;
@@ -20,6 +21,7 @@ export default {
     fitText(phone.firstChild, 900, 260, 30, 200);
     phone.style.fontSize = phone.firstChild.style.fontSize;
     const cur = phone.querySelector('.ec-cursor');
+    if (area) wrap.appendChild(area); // under the phone number
 
     // twinkling stars around the logo, echoing the ones in it
     const svg = svgEl('svg', { class: 'ec-stars', viewBox: '0 0 1080 1920', width: 1080, height: 1920 }, root.cam);
@@ -31,7 +33,8 @@ export default {
     slam(tl, logo, 0, { from: 1.5, settle: 0.2, shakeNode: root.cam, seed: 31, amp: 26 });
     ctx.cue(0, 'hit', { v: 1.1 });
     ctx.cue(-2 * beat, 'riser', { dur: 2 * beat });
-    gsap.set([tag, site, phone], { autoAlpha: 0 });
+    gsap.set([tag, site, phone, area].filter(Boolean), { autoAlpha: 0 });
+    if (area) tl.set(area, { autoAlpha: 1 }, beat * 3);
     tl.set(tag, { autoAlpha: 1 }, beat * 0.5);
     tl.fromTo(tag, { y: 30 }, { y: 0, duration: 0.2, ease: 'expo.out' }, beat * 0.5);
     tl.set(site, { autoAlpha: 1 }, beat);

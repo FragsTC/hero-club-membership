@@ -51,6 +51,8 @@ export default {
     let acc = t0;
     for (const w of weights) { times.push(acc); acc += ((t1 - t0) * w) / total; }
     times.forEach((t, i) => { if (chars[i].textContent.trim()) ctx.cue(t, 'click', { v: 0.7 + r() * 0.5 }); });
+    // a caption after the opening is a breakdown in the music: build into the next cut
+    if (ctx.index > 0 && dur >= 3 * beat) ctx.cue(dur - 2 * beat, 'riser', { dur: 2 * beat });
 
     const tl = gsap.timeline();
     tl.to({}, { duration: dur }, 0); // pin the length

@@ -41,7 +41,7 @@ export const plain = (text) => String(text).replace(/\*/g, '');
 // Measures the text itself (max-content), not the box it sits in. Ignores transforms.
 export function fitText(node, maxW, maxH, lo = 20, hi = 900) {
   const keep = node.style.width;
-  const wraps = getComputedStyle(node).whiteSpace !== 'nowrap';
+  const wraps = !['nowrap', 'pre'].includes(getComputedStyle(node).whiteSpace);
   if (!wraps) node.style.width = 'max-content';
   for (let i = 0; i < 18; i++) {
     const mid = (lo + hi) / 2;

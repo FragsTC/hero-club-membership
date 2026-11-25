@@ -1,25 +1,30 @@
 {
-  "title": "First test",
+  "title": "First test: Hero Club",
   "bpm": 120,
   "scenes": [
-    { "type": "typewriter", "beats": 8, "bg": "black",
-      "text": "What if your windows looked *brand new?*" },
+    { "type": "kinetic", "mode": "slam", "push": true, "beats": 2, "bg": "accent",
+      "text": "Clogged\ngutters?" },
+
+    { "type": "kinetic", "mode": "slam", "push": true, "beats": 2, "bg": "white",
+      "text": "Green\nsiding?" },
+
+    { "type": "kinetic", "mode": "slam", "push": true, "beats": 2, "bg": "blue",
+      "text": "Grimy\nwindows?" },
 
     { "type": "kinetic", "mode": "swap", "beats": 4, "bg": "white",
       "text": "DIRTY", "to": "CLEAR", "toBg": "blue" },
 
-    { "type": "grid3d", "beats": 4, "bg": "black" },
+    { "type": "grid3d", "beats": 4, "bg": "navy" },
 
-    { "type": "stack", "beats": 4, "bg": ["blue", "white", "black", "accent"],
-      "words": ["Windows", "Gutters", "Soft wash", "Solar"] },
-
-    { "type": "icon", "icon": "pin", "beats": 4, "bg": "black",
-      "text": "Serving Durham, Chapel Hill, Cary & Raleigh" },
+    { "type": "typewriter", "beats": 6, "bg": "black",
+      "text": "What if one plan handled it *all?*" },
 
     { "type": "badge", "beats": 4, "bg": "navy",
       "image": "brand/hero-club-logo.png", "sub": "Year-round care\nfor your home" },
 
-    { "type": "tiers", "beats": 4, "bg": "white",
+    { "type": "tiers", "beats": 6, "bg": "white",
+      "price": "Plans start at\n*$54/month*",
+      "fine": "Bronze · homes up to 2,500 sq ft · plus down payment",
       "items": [
         { "name": "Bronze", "medal": "#d08a4a", "lines": ["2 visits a year", "10% off extras"] },
         { "name": "Silver", "medal": "#b9c4d3", "tag": "Most popular", "lines": ["3 visits a year", "15% off extras"] },
@@ -29,6 +34,7 @@
     { "type": "icon", "icon": "check", "beats": 4, "bg": "accent",
       "text": "Gutters, house wash & windows in every plan" },
 
-    { "type": "endcard", "beats": 8, "bg": "blue", "tag": "JOIN THE HERO CLUB" }
+    { "type": "endcard", "beats": 8, "bg": "blue",
+      "tag": "JOIN THE HERO CLUB", "area": "DURHAM · CHAPEL HILL · CARY · RALEIGH" }
   ]
 }

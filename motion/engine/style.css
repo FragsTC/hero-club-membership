@@ -32,7 +32,7 @@ html, body { background: #000; overflow: hidden; }
 .ec-cursor { position: relative; width: 0.4em; height: 0.78em; margin-left: 0.12em; vertical-align: -0.04em; }
 
 /* kinetic word */
-.kw-word { font-family: 'Barlow Condensed'; font-weight: 900; line-height: 0.86; text-transform: uppercase; white-space: nowrap; letter-spacing: -0.01em; position: relative; }
+.kw-word { font-family: 'Barlow Condensed'; font-weight: 900; line-height: 0.86; text-transform: uppercase; white-space: pre; text-align: center; letter-spacing: -0.01em; position: relative; }
 .kw-row { perspective: 1200px; }
 .kw-cell { display: inline-block; transform-origin: 50% 50%; }
 .kw-layer { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
@@ -85,8 +85,8 @@ html, body { background: #000; overflow: hidden; }
 body.rendering #scrub { display: none; }
 
 /* plan cards */
-.ti-col { display: flex; flex-direction: column; gap: 40px; width: 980px; }
-.ti-card { display: flex; align-items: center; gap: 40px; background: #003b64; color: #ffffff; border-radius: 28px; padding: 56px 56px; }
+.ti-col { display: flex; flex-direction: column; gap: 30px; width: 940px; }
+.ti-card { display: flex; align-items: center; gap: 40px; background: #003b64; color: #ffffff; border-radius: 28px; padding: 36px 48px; }
 .ti-medal { flex: none; width: 150px; height: 150px; border-radius: 50%; }
 .ti-head { display: flex; align-items: center; gap: 22px; margin-bottom: 8px; }
 .ti-name { font-family: 'Barlow Condensed'; font-weight: 900; font-size: 136px; line-height: 0.9; text-transform: uppercase; }
@@ -107,3 +107,10 @@ body.rendering #scrub { display: none; }
 .bd-ring { position: absolute; left: 50%; top: 350px; width: 900px; height: 900px; margin: -450px 0 0 -450px; border: 14px solid var(--pop); border-radius: 50%; }
 .bd-sub { font-family: 'Barlow'; font-weight: 900; font-size: 76px; line-height: 1.05; color: var(--pop); text-align: center; margin-top: 60px; width: 960px; white-space: pre-line; }
 .bd-stars { position: absolute; inset: 0; }
+
+.ec-area { margin-top: 70px; opacity: 0.85; font-size: 30px; }
+
+.ti-price { font-family: 'Barlow Condensed'; font-weight: 900; line-height: 0.92; text-transform: uppercase; text-align: center; color: #003b64; white-space: pre-line; }
+.ti-price .pop { font-size: 1.55em; }
+.ti-price .pop { color: #0075aa; display: inline-block; }
+.ti-fine { font: 700 28px 'JetBrains Mono'; text-transform: uppercase; text-align: center; color: #003b64; opacity: 0.75; margin-top: -20px; margin-bottom: 4px; }

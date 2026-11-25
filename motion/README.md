@@ -91,7 +91,7 @@ deploying the Hero Club page with no build step.
 | `linedraw` | `text`, `sub` | House outline draws itself, a tech steps in and a water-fed pole telescopes up to the top window, scrubs, and water runs down the glass |
 | `countup` | `items: [{ value, prefix, suffix, label }]` | Scoreboard digits roll up, each number lands on the next beat |
 | `icon` | `icon` (`padlock`, `check`, `star`, `pin`), `text`, `at` | The icon snaps on beat `at` (default 2) |
-| `tiers` | `items: [{ name, medal, tag, lines }]`, `every` | Plan cards, one lands per beat (Hero Club Bronze / Silver / Gold) |
+| `tiers` | `items: [{ name, medal, tag, lines }]`, `every`, `price`, `fine` | Plan cards, one lands per beat (Hero Club Bronze / Silver / Gold) |
 | `badge` | `image`, `sub` | A logo slams in over turning rays, stars pop, a glint sweeps across it |
 | `endcard` | `tag`, `website`, `phone` | Logo, then website, then phone on successive beats. Riser leads in |
 

@@ -124,13 +124,15 @@ function pad(bus, t, notes, len, g = 1) {
 }
 
 // ---------- the beat ------------------------------------------------------
-// Follows the layout: synth-only intro over the first scene, full groove from the
-// first cut, a two-beat break under the riser, a drop on the end card, then one
-// final chord that rings out to silence by the last frame.
+// Follows the layout: a synth-only intro if the video opens on a typewriter caption
+// (otherwise the groove starts on frame one), a breakdown under any later caption
+// that builds into a drop, a two-beat break under the riser, a drop on the end card,
+// then one final chord that rings out to silence by the last frame.
 function makeBeat(plan) {
   const { duration, beat, scenes } = plan;
   const bus = new Bus(duration), send = new Bus(duration);
-  const introEnd = scenes[0].end;
+  const introEnd = scenes[0].type === 'typewriter' ? scenes[0].end : 0;
+  const downs = scenes.slice(1).filter((s) => s.type === 'typewriter').map((s) => ({ s: s.start, e: s.end }));
   const last = scenes[scenes.length - 1];
   const endStart = last.type === 'endcard' ? last.start : duration;
   const breakStart = endStart - 2 * beat;
@@ -144,27 +146,31 @@ function makeBeat(plan) {
     if (t >= finalHit) break;
     const bar = Math.floor(b / 4), inBar = b % 4;
     const [root, tones] = prog[bar % 4];
-    const intro = t < introEnd - 1e-6, brk = t >= breakStart - 1e-6 && t < endStart - 1e-6;
+    const dn = downs.find((d) => t >= d.s - 1e-6 && t < d.e - 1e-6);
+    const intro = t < introEnd - 1e-6 || !!dn;
+    const brk = (t >= breakStart - 1e-6 && t < endStart - 1e-6) || (dn && t >= dn.e - 2 * beat - 1e-6);
+    const bs = dn ? dn.e - 2 * beat : breakStart;
     // drums
     if (!intro && !brk) kick(bus, t);
-    if (intro && inBar % 2 === 0) kick(bus, t, 0.5); // soft half-time pulse under the intro
+    if (intro && !brk && inBar % 2 === 0) kick(bus, t, 0.5); // soft half-time pulse under the intro
     if (!intro && !brk && (inBar === 1 || inBar === 3)) clap(bus, send, t);
     for (let s = 0; s < 4; s++) {
       const ts = t + (s * beat) / 4;
-      if (intro) { if (s === 2 || (s === 0 && t > introEnd / 2)) hat(bus, ts, false, 0.9, s ? 0.15 : -0.15); continue; }
+      if (intro && !brk) { if (s === 2 || (s === 0 && (dn || t > introEnd / 2))) hat(bus, ts, false, 0.9, s ? 0.15 : -0.15); continue; }
       hat(bus, ts, s === 2, s === 2 ? 1 : s % 2 ? 0.55 : 0.75, s % 2 ? 0.2 : -0.15);
     }
-    if (brk) { for (let s = 0; s < 4; s++) clap(bus, send, t + (s * beat) / 4, 0.35 + 0.18 * s + 0.4 * ((t - breakStart) / (2 * beat))); }
+    if (brk) { for (let s = 0; s < 4; s++) clap(bus, send, t + (s * beat) / 4, 0.35 + 0.18 * s + 0.4 * ((t - bs) / (2 * beat))); }
     // bass on the off-beats
     if (!intro && !brk) bass(bus, t + beat / 2, root, beat / 2 - 0.02);
     // synth line: 16ths through the chord; the filter opens across the intro
-    const open = intro ? 500 + 2300 * (t / introEnd) ** 1.5 : brk ? 2600 : 2800;
+    const open = dn ? 700 + 2100 * ((t - dn.s) / (dn.e - dn.s)) ** 1.5 : intro ? 500 + 2300 * (t / introEnd) ** 1.5 : brk ? 2600 : 2800;
     for (let s = 0; s < 4; s++) {
       const step = (b * 4 + s) % 16;
       pluck(bus, send, t + (s * beat) / 4, tones[arp[step]], open, intro ? 1.3 : 1, step % 2 ? 0.3 : -0.3);
     }
   }
-  if (introEnd < duration) crash(bus, introEnd, 0.9);
+  crash(bus, introEnd, 0.9);
+  for (const d of downs) if (d.e < duration) { crash(bus, d.e, 1.1); kick(bus, d.e, 1.1); }
   if (endStart < duration) { crash(bus, endStart, 1.2); kick(bus, endStart, 1.1); }
   // final resolve: kick + Am chord, ringing out
   if (finalHit < duration) {
