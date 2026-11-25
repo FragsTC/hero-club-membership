@@ -35,65 +35,92 @@ const ART = {
     svgEl('path', { d: 'M 696 720 C 670 722 660 738 658 756', fill: 'none', stroke: '#bfe8fa', 'stroke-width': 22, 'stroke-linecap': 'round' }, clean);
     return { dirty, clean, dir: 'right', tool: 'water', stars: [[200, 280], [520, 270], [860, 700]] };
   },
-  // A house front in lap siding: gable roof, corner trim and a window, so it reads as a wall.
-  // dirty = green algae and streaks on the boards; clean = bright boards.
+  // A classic two-storey house, face-on and symmetric: wide gable roof with a chimney, a covered
+  // porch with columns over the front door, shuttered windows, lap siding, bushes along the base.
+  // dirty = green algae film on the siding; clean = bright boards.
   siding(svg, r) {
-    const base = svgEl('g', {}, svg);
-    const wall = 'M 70 300 L 450 70 L 830 300 L 830 760 L 70 760 Z';
     const defs = svgEl('defs', {}, svg);
-    const cp = svgEl('clipPath', { id: 'pbHouse' }, defs);
-    svgEl('path', { d: wall }, cp);
-    const boards = svgEl('g', { 'clip-path': 'url(#pbHouse)' }, base);
-    svgEl('rect', { x: 0, y: 0, width: AW, height: AH, fill: '#f4f7fa' }, boards);
-    for (let y = 60; y < AH; y += 48) {
-      svgEl('rect', { x: 0, y: y + 34, width: AW, height: 14, fill: '#c9d3df' }, boards);  // board shadow
-      svgEl('rect', { x: 0, y: y + 34, width: AW, height: 3, fill: '#8ea0b5' }, boards);   // board edge
+    const base = svgEl('g', {}, svg);
+    const L = 110, R = 790, TOP = 300, BOT = 716;                 // the siding: one wide wall
+    const body = `M ${L} ${TOP} L ${R} ${TOP} L ${R} ${BOT} L ${L} ${BOT} Z`;
+    const cp = svgEl('clipPath', { id: 'pbHouse' }, defs); svgEl('path', { d: body }, cp);
+    svgEl('ellipse', { cx: 450, cy: 722, rx: 420, ry: 26, fill: '#003b64', opacity: 0.28 }, base);   // ground shadow
+    // chimney (behind the roof), roof with shingle rows, small entry gable
+    svgEl('rect', { x: 630, y: 100, width: 56, height: 120, fill: '#b9c4d3' }, base);
+    svgEl('rect', { x: 622, y: 92, width: 72, height: 16, fill: '#8ea0b5' }, base);
+    svgEl('path', { d: `M 70 ${TOP + 6} L 250 130 L 650 130 L 830 ${TOP + 6} Z`, fill: '#003b64' }, base);
+    for (let y = 160; y < TOP; y += 34) { const k = (y - 130) / (TOP + 6 - 130);
+      svgEl('rect', { x: 250 - 180 * k, y, width: 400 + 360 * k, height: 4, fill: '#0b4f80' }, base); }
+    svgEl('rect', { x: 64, y: TOP, width: 772, height: 14, fill: '#002a47' }, base);                // eave
+    // siding boards
+    const sb = svgEl('g', { 'clip-path': 'url(#pbHouse)' }, base);
+    svgEl('rect', { x: 0, y: 0, width: AW, height: AH, fill: '#f6f8fb' }, sb);
+    for (let y = TOP + 6; y < BOT; y += 28) {
+      svgEl('rect', { x: 0, y: y + 18, width: AW, height: 10, fill: '#d3dce7' }, sb);
+      svgEl('rect', { x: 0, y: y + 18, width: AW, height: 2.5, fill: '#93a5ba' }, sb);
     }
-    // window and trim
-    svgEl('rect', { x: 330, y: 380, width: 240, height: 250, fill: '#ffffff' }, base);
-    svgEl('rect', { x: 350, y: 400, width: 200, height: 210, fill: '#0075aa' }, base);
-    svgEl('rect', { x: 445, y: 400, width: 10, height: 210, fill: '#ffffff' }, base);
-    svgEl('rect', { x: 350, y: 500, width: 200, height: 10, fill: '#ffffff' }, base);
-    svgEl('rect', { x: 316, y: 626, width: 268, height: 20, fill: '#ffffff' }, base);    // sill
-    svgEl('rect', { x: 70, y: 290, width: 30, height: 470, fill: '#ffffff' }, base);     // corner boards
-    svgEl('rect', { x: 800, y: 290, width: 30, height: 470, fill: '#ffffff' }, base);
-    svgEl('path', { d: 'M 20 330 L 450 40 L 880 330', fill: 'none', stroke: '#003b64', 'stroke-width': 44, 'stroke-linejoin': 'miter' }, base); // roof edge
     const dirty = svgEl('g', {}, svg), clean = svgEl('g', {}, svg);
-    const grime = svgEl('g', { 'clip-path': 'url(#pbHouse)' }, dirty); // house mask inside the wipe mask
-    // Where it grows: heavy along the bottom (rain splash), heavier on the shaded left side,
-    // thinning out going up. A soft-edged mask made of blurred shapes.
+    const grime = svgEl('g', { 'clip-path': 'url(#pbHouse)' }, dirty);
+    // where it grows: heaviest low on the wall (rain splash) and on the shaded left end
     const blur = svgEl('filter', { id: 'pbSoft', x: '-20%', y: '-20%', width: '140%', height: '140%' }, defs);
-    svgEl('feGaussianBlur', { stdDeviation: 46 }, blur);
+    svgEl('feGaussianBlur', { stdDeviation: 44 }, blur);
     const mask = svgEl('mask', { id: 'pbGrow', maskUnits: 'userSpaceOnUse', x: 0, y: 0, width: AW, height: AH }, defs);
     const mg = svgEl('g', { filter: 'url(#pbSoft)' }, mask);
-    svgEl('rect', { x: 0, y: 620, width: AW, height: 200, fill: '#fff' }, mg);
-    svgEl('ellipse', { cx: 150, cy: 520, rx: 190, ry: 300, fill: '#fff' }, mg);
-    svgEl('ellipse', { cx: 760, cy: 640, rx: 160, ry: 160, fill: '#fff', opacity: 0.8 }, mg);
-    svgEl('ellipse', { cx: 470, cy: 700, rx: 260, ry: 90, fill: '#fff' }, mg);
-    svgEl('ellipse', { cx: 260, cy: 300, rx: 120, ry: 110, fill: '#fff', opacity: 0.6 }, mg);
-    // Mottled growth: fractal noise thresholded into green patches with ragged edges.
+    svgEl('rect', { x: 0, y: 600, width: AW, height: 200, fill: '#fff' }, mg);
+    svgEl('ellipse', { cx: 170, cy: 520, rx: 170, ry: 260, fill: '#fff' }, mg);
+    svgEl('ellipse', { cx: 720, cy: 640, rx: 130, ry: 120, fill: '#fff', opacity: 0.8 }, mg);
+    svgEl('ellipse', { cx: 560, cy: 340, rx: 110, ry: 60, fill: '#fff', opacity: 0.55 }, mg);
     const growth = (id, freq, seed, rgb, k, b) => {
       const f = svgEl('filter', { id, x: 0, y: 0, width: '100%', height: '100%', 'color-interpolation-filters': 'sRGB' }, defs);
       svgEl('feTurbulence', { type: 'fractalNoise', baseFrequency: freq, numOctaves: 4, seed }, f);
       svgEl('feColorMatrix', { type: 'matrix', values: `0 0 0 0 ${rgb[0]}  0 0 0 0 ${rgb[1]}  0 0 0 0 ${rgb[2]}  ${k} 0 0 0 ${b}` }, f);
-      return f;
     };
-    growth('pbAlgae', '0.018 0.026', 7, [0.42, 0.53, 0.24], 2.6, -0.95);       // broad patches
-    growth('pbAlgae2', '0.05 0.07', 3, [0.3, 0.4, 0.16], 3.2, -1.55);      // darker clumps
-    growth('pbAlgae3', '0.3', 11, [0.22, 0.3, 0.1], 4, -2.25);              // fine speckle
+    growth('pbAlgae', '0.02 0.028', 7, [0.42, 0.53, 0.24], 2.6, -0.95);
+    growth('pbAlgae2', '0.055 0.075', 3, [0.3, 0.4, 0.16], 3.2, -1.55);
+    growth('pbAlgae3', '0.3', 11, [0.22, 0.3, 0.1], 4, -2.25);
     const grow = svgEl('g', { mask: 'url(#pbGrow)', opacity: 0.9 }, grime);
-    // darker build-up in the shadow under each board edge, where water sits
-    for (let y = 60; y < AH; y += 48) svgEl('rect', { x: 0, y: y + 32, width: AW, height: 9, fill: '#4b6a28', opacity: 0.5 }, grow);
-    svgEl('rect', { x: 0, y: 0, width: AW, height: AH, filter: 'url(#pbAlgae)' }, grow);
-    svgEl('rect', { x: 0, y: 0, width: AW, height: AH, filter: 'url(#pbAlgae2)' }, grow);
-    svgEl('rect', { x: 0, y: 0, width: AW, height: AH, filter: 'url(#pbAlgae3)' }, grow);
-    // thin drips running down from board edges, tapering out
-    for (let i = 0; i < 16; i++) {
-      const x = 100 + r() * 700, y = 300 + Math.floor(r() * 8) * 48 + 36, h = 50 + r() * 140, w = 3 + r() * 4;
-      if (x > 320 && x < 580 && y < 650) continue; // keep the window clear
-      svgEl('path', { d: `M ${x} ${y} L ${x + w} ${y} L ${x + w * 0.6} ${y + h} L ${x + w * 0.4} ${y + h} Z`, fill: '#3f5a22', opacity: (0.35 + r() * 0.3).toFixed(2) }, grime);
+    for (let y = TOP + 6; y < BOT; y += 28) svgEl('rect', { x: L, y: y + 17, width: R - L, height: 8, fill: '#4b6a28', opacity: 0.5 }, grow);
+    for (const id of ['pbAlgae', 'pbAlgae2', 'pbAlgae3']) svgEl('rect', { x: 0, y: 0, width: AW, height: AH, filter: `url(#${id})` }, grow);
+    for (let i = 0; i < 18; i++) {
+      const x = L + 20 + r() * (R - L - 40), y = TOP + 30 + Math.floor(r() * 12) * 28 + 20, h = 40 + r() * 110, w = 3 + r() * 4;
+      svgEl('path', { d: `M ${x} ${y} L ${x + w} ${y} L ${x + w * 0.6} ${y + h} L ${x + w * 0.4} ${y + h} Z`, fill: '#3f5a22', opacity: (0.3 + r() * 0.3).toFixed(2) }, grime);
     }
-    return { dirty, clean, dir: 'down', tool: 'spray', stars: [[200, 420], [700, 380], [640, 700]] };
+    // details above the algae: trim, windows with shutters, porch, door, steps
+    const det = svgEl('g', {}, svg);
+    svgEl('rect', { x: L - 6, y: TOP + 10, width: 22, height: BOT - TOP - 10, fill: '#ffffff' }, det);
+    svgEl('rect', { x: R - 16, y: TOP + 10, width: 22, height: BOT - TOP - 10, fill: '#ffffff' }, det);
+    const win = (cx, y, w, h) => {
+      svgEl('rect', { x: cx - w / 2 - 34, y, width: 22, height: h, fill: '#003b64' }, det);            // shutters
+      svgEl('rect', { x: cx + w / 2 + 12, y, width: 22, height: h, fill: '#003b64' }, det);
+      svgEl('rect', { x: cx - w / 2 - 8, y: y - 8, width: w + 16, height: h + 16, fill: '#ffffff' }, det);
+      svgEl('rect', { x: cx - w / 2, y, width: w, height: h, fill: '#0075aa' }, det);
+      svgEl('rect', { x: cx - 4, y, width: 8, height: h, fill: '#ffffff' }, det);
+      svgEl('rect', { x: cx - w / 2, y: y + h / 2 - 4, width: w, height: 8, fill: '#ffffff' }, det);
+      svgEl('rect', { x: cx - w / 2 - 12, y: y + h + 6, width: w + 24, height: 12, fill: '#ffffff' }, det);  // sill
+    };
+    win(210, 350, 96, 112); win(450, 350, 96, 112); win(690, 350, 96, 112);
+    win(210, 540, 96, 112); win(690, 540, 96, 112);
+    // porch: roof with a small gable, two columns, door, steps
+    svgEl('path', { d: 'M 330 508 L 450 446 L 570 508 Z', fill: '#003b64' }, det);
+    svgEl('path', { d: 'M 360 500 L 450 456 L 540 500 Z', fill: '#f6f8fb' }, det);
+    svgEl('rect', { x: 320, y: 506, width: 260, height: 18, fill: '#002a47' }, det);
+    svgEl('rect', { x: 340, y: 524, width: 18, height: 192, fill: '#ffffff' }, det);
+    svgEl('rect', { x: 542, y: 524, width: 18, height: 192, fill: '#ffffff' }, det);
+    svgEl('rect', { x: 398, y: 556, width: 104, height: 160, fill: '#ffffff' }, det);
+    svgEl('rect', { x: 410, y: 568, width: 80, height: 148, fill: '#003b64' }, det);
+    svgEl('circle', { cx: 478, cy: 646, r: 6, fill: '#fcaf17' }, det);
+    svgEl('rect', { x: 330, y: 716, width: 240, height: 14, fill: '#ffffff' }, det);
+    svgEl('rect', { x: 350, y: 730, width: 200, height: 14, fill: '#dfe5ee' }, det);
+    // leafy bushes along the foundation, either side of the steps
+    const bush = svgEl('g', {}, svg);
+    for (const [cx, cy, w] of [[160, 714, 120], [280, 718, 90], [620, 718, 90], [740, 714, 120]]) {
+      for (let k = 0; k < 9; k++) {
+        const a = k / 9 * Math.PI, x = cx + Math.cos(a) * w * 0.42 * (0.6 + r() * 0.5), y = cy - Math.sin(a) * w * 0.28 - r() * 10;
+        svgEl('circle', { cx: x, cy: y, r: w * (0.2 + r() * 0.1), fill: k % 3 ? '#3f6f3a' : '#2f5a2d' }, bush);
+      }
+      for (let k = 0; k < 5; k++) svgEl('circle', { cx: cx - w * 0.3 + r() * w * 0.6, cy: cy - w * 0.2 - r() * w * 0.15, r: w * (0.09 + r() * 0.06), fill: '#5c8f4f' }, bush);
+    }
+    return { dirty, clean, dir: 'down', tool: 'spray', stars: [[150, 330], [760, 470], [600, 620]] };
   },
   // A window: dirty = grimy grey glass; clean = clear blue glass with glints.
   window(svg, r) {
