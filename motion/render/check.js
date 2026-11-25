@@ -23,7 +23,8 @@ for (let f = 1; f < n; f++) {
   let s = 0; for (let i = 0; i < w * h; i++) s += Math.abs(raw[f * w * h + i] - raw[(f - 1) * w * h + i]);
   diff.push(s / (w * h));
 }
-const planned = tl.scenes.slice(1).map((s) => Math.round(s.start * FPS));
+const planned = tl.scenes.slice(1).filter((s) => s.enter !== 'pan').map((s) => Math.round(s.start * FPS));
+const pans = tl.scenes.slice(1).filter((s) => s.enter === 'pan');
 console.log(`\nPICTURE  ${n} frames, ${(n / FPS).toFixed(2)}s, beat = ${beat}s (${(beat * FPS).toFixed(2)} frames)`);
 let bad = 0;
 for (const f of planned) {
@@ -32,6 +33,11 @@ for (const f of planned) {
   const onBeat = Math.abs((at / FPS / beat) - Math.round(at / FPS / beat)) < 0.01;
   if (at !== f || !onBeat) bad++;
   console.log(`  cut at frame ${String(at).padStart(4)}  ${(at / FPS).toFixed(3)}s  beat ${(at / FPS / beat).toFixed(2)}  change ${diff[at].toFixed(0).padStart(3)}  ${at === f && onBeat ? 'ok' : 'OFF'}`);
+}
+for (const p of pans) {
+  const b = p.start / beat, nb = Math.round(b);
+  console.log(`  pan starts ${p.start.toFixed(3)}s (beat ${b.toFixed(2)})  ${Math.abs(b - nb) < 0.01 ? 'ok, on beat' : 'OFF'}`);
+  if (Math.abs(b - nb) >= 0.01) bad++;
 }
 // big changes that are not planned scene cuts (e.g. colour flips inside a scene)
 const extra = diff.map((d, f) => [d, f]).filter(([d, f]) => d > 40 && !planned.includes(f));
@@ -59,7 +65,8 @@ for (const f of ['clean.mp4', 'clean-sfx-only.mp4', 'filmed.mp4']) {
   console.log(`\nSOUND ${f.padEnd(20)} ${s.lufs} LUFS, true peak ${s.tp} dBTP, sample peak ${s.peak} dBFS, clipped samples: ${s.clip}`);
 }
 // Energy rise around each cut in the effects track: the whoosh should peak on the cut.
-const fx = load(path.join(out, 'work', 'sfx.wav'));
+const fxFile = fs.existsSync(path.join(out, 'work', 'effects.wav')) ? 'effects.wav' : 'sfx.wav';
+const fx = load(path.join(out, 'work', fxFile));
 const win = Math.round(0.005 * SR);
 const env = new Float32Array(Math.floor(fx.length / win));
 for (let i = 0; i < env.length; i++) { let s = 0; for (let k = 0; k < win; k++) s += fx[i * win + k] ** 2; env[i] = Math.sqrt(s / win); }

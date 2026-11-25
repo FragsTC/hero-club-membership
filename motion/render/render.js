@@ -153,6 +153,7 @@ function measure(file) {
   fs.writeFileSync(mixWav, A.wav(mix));
   fs.writeFileSync(sfxWav, A.wav(fx));
   fs.writeFileSync(path.join(work, 'music.wav'), A.wav(music));
+  fs.writeFileSync(path.join(work, 'effects.wav'), A.wav(sfx)); // effects alone, for npm run check
   const m = measure(mixWav), f = measure(sfxWav);
   log(`audio: mix ${m.i} LUFS, peak ${m.tp} dBTP | effects-only ${f.i} LUFS, peak ${f.tp} dBTP (${sec(t)})`);
 

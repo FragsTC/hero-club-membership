@@ -77,6 +77,9 @@ deploying the Hero Club page with no build step.
 - `bg` is a colour name from `brand/brand.json`: `blue`, `navy`, `sky`, `white`, `black`, `accent`.
   Text colour follows automatically. Put `*stars*` around words to use the accent colour.
 - `push: true` (or `false`) adds or removes a slow camera push on a scene.
+- `"enter": "pan"` replaces the hard cut into a scene with a sideways camera pan from the previous
+  scene, one beat long (`panBeats` to change). It starts on the beat and lands on the next one; the
+  end card holds its logo slam until the pan lands.
 - Optional top level: `"label"` (top-left corner text), `"corner"` (bottom-right),
   `"music": { "file": "song.mp3", "start": 32.5, "offsetBeats": 0 }`, or `"music": false` to ignore /music.
 

@@ -40,6 +40,9 @@ async function init(story, { brand, bpm, fps = 30 }) {
     const start = t;
     const ctx = {
       gsap, brand, beat, dur, index: i, total: story.scenes.length,
+      prevType: story.scenes[i - 1]?.type, nextType: story.scenes[i + 1]?.type,
+      // a scene that pans in starts its own animation once the pan lands
+      enter: sc.enter === 'pan' ? (sc.panBeats || 1) * beat : 0,
       cue: (lt, type, opts = {}) => cues.push({ t: +(start + lt).toFixed(5), type, scene: i, ...opts }),
     };
     if (i > 0 && sc.whoosh !== false) ctx.cue(0, 'whoosh');
@@ -62,7 +65,7 @@ async function init(story, { brand, bpm, fps = 30 }) {
   seek(0);
   return {
     duration: t, beat, cues,
-    scenes: scenes.map((s) => ({ type: s.sc.type, start: s.start, end: s.start + s.dur, beats: s.sc.beats })),
+    scenes: scenes.map((s) => ({ type: s.sc.type, start: s.start, end: s.start + s.dur, beats: s.sc.beats, enter: s.sc.enter || 'cut' })),
   };
 }
 
@@ -73,9 +76,21 @@ function seek(t) {
   t = Math.max(0, Math.min(t, duration - 1e-6));
   let cur = 0;
   scenes.forEach((s, i) => { if (t >= s.start - 1e-6) cur = i; });
-  scenes.forEach((s, i) => s.node.classList.toggle('on', i === cur));
   const s = scenes[cur];
   const lt = t - s.start;
+  // pan: the previous scene (held on its last frame) slides out as this one slides in
+  const panDur = s.sc.enter === 'pan' && cur > 0 ? (s.sc.panBeats || 1) * built.beat : 0;
+  const panning = lt < panDur;
+  scenes.forEach((x, i) => { x.node.classList.toggle('on', i === cur || (panning && i === cur - 1)); x.node.style.transform = ''; });
+  if (panning) {
+    const p = scenes[cur - 1], pt = p.dur - 1e-4;
+    p.tl.seek(pt, false);
+    paint(p.node, brand.colors[p.bgAt ? p.bgAt(pt) : p.bg0]);
+    if (p.render) p.render(pt);
+    const k = gsap.parseEase('power3.inOut')(lt / panDur);
+    p.node.style.transform = `translateX(${-k * 1080}px)`;
+    s.node.style.transform = `translateX(${(1 - k) * 1080}px)`;
+  }
   // a hair past 0 so anything set exactly at the cut is drawn on the cut frame
   s.tl.seek(Math.max(lt, 1e-4), false);
   const key = s.bgAt ? s.bgAt(lt) : s.bg0;

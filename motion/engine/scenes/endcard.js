@@ -30,21 +30,25 @@ export default {
 
     const tl = gsap.timeline();
     tl.to({}, { duration: dur }, 0);
-    slam(tl, logo, 0, { from: 1.5, settle: 0.2, shakeNode: root.cam, seed: 31, amp: 26 });
-    ctx.cue(0, 'hit', { v: 1.1 });
+    const off = ctx.enter; // pan-in time: the card's own moves start when it lands
+    const it = gsap.timeline();
+    if (off) gsap.set(logo, { autoAlpha: 0 }); // the card slides in empty and the logo slams when it lands
+    slam(it, logo, 0, { from: 1.5, settle: 0.2, shakeNode: root.cam, seed: 31, amp: 26 });
+    ctx.cue(off + 0, 'hit', { v: 1.1 });
     ctx.cue(-2 * beat, 'riser', { dur: 2 * beat });
     gsap.set([tag, site, phone, area].filter(Boolean), { autoAlpha: 0 });
-    if (area) tl.set(area, { autoAlpha: 1 }, beat * 3);
-    tl.set(tag, { autoAlpha: 1 }, beat * 0.5);
-    tl.fromTo(tag, { y: 30 }, { y: 0, duration: 0.2, ease: 'expo.out' }, beat * 0.5);
-    tl.set(site, { autoAlpha: 1 }, beat);
-    tl.fromTo(site, { scale: 1.25 }, { scale: 1, duration: 0.16, ease: 'expo.out' }, beat);
-    ctx.cue(beat, 'pop', { v: 0.8 });
-    tl.set(phone, { autoAlpha: 1 }, beat * 2);
-    tl.fromTo(phone, { scale: 1.25 }, { scale: 1, duration: 0.16, ease: 'expo.out' }, beat * 2);
-    ctx.cue(beat * 2, 'pop', { v: 0.9 });
-    tl.fromTo(wrap, { scale: 1 }, { scale: 1.04, duration: dur, ease: 'sine.out' }, 0);
+    if (area) it.set(area, { autoAlpha: 1 }, beat * 3);
+    it.set(tag, { autoAlpha: 1 }, beat * 0.5);
+    it.fromTo(tag, { y: 30 }, { y: 0, duration: 0.2, ease: 'expo.out' }, beat * 0.5);
+    it.set(site, { autoAlpha: 1 }, beat);
+    it.fromTo(site, { scale: 1.25 }, { scale: 1, duration: 0.16, ease: 'expo.out' }, beat);
+    ctx.cue(off + beat, 'pop', { v: 0.8 });
+    it.set(phone, { autoAlpha: 1 }, beat * 2);
+    it.fromTo(phone, { scale: 1.25 }, { scale: 1, duration: 0.16, ease: 'expo.out' }, beat * 2);
+    ctx.cue(off + beat * 2, 'pop', { v: 0.9 });
+    it.fromTo(wrap, { scale: 1 }, { scale: 1.04, duration: dur, ease: 'sine.out' }, 0);
 
+    tl.add(it, off);
     return {
       tl,
       render(t) {

@@ -33,10 +33,15 @@
         { "name": "Gold", "medal": "#fcaf17", "lines": ["4 visits a year", "20% off extras"] }
       ] },
 
-    { "type": "icon", "icon": "check", "beats": 4, "bg": "accent",
-      "text": "Gutters, house wash & windows in every plan", "say": "Gutters, house wash, windows." },
+    { "type": "icon", "icon": "check", "beats": 8, "bg": "accent",
+      "text": "Gutters, house wash & windows included in every plan",
+      "say": "Gutters, house wash, and windows, included in every plan!" },
 
-    { "type": "endcard", "beats": 8, "bg": "blue",
+    { "type": "typewriter", "beats": 6, "bg": "navy",
+      "text": "Are you ready to be the *hero* of your home?",
+      "say": "Are you ready to be the hero of your home?", "sayDelay": 0.3 },
+
+    { "type": "endcard", "beats": 8, "bg": "blue", "enter": "pan",
       "tag": "JOIN THE HERO CLUB", "area": "DURHAM · CHAPEL HILL · CARY · RALEIGH",
       "say": "Join the Hero Club at windowhero.com!" }
   ]
