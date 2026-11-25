@@ -44,8 +44,17 @@ deploying the Hero Club page with no build step.
    - `npm run preview spring-promo` and open the link it prints (plays in real time, no sound), or
    - `npm run stills spring-promo` saves the middle and end frame of every scene to `out/spring-promo/stills/`.
      Add `--filmed` to also see the laptop version; add times to pick frames (`npm run stills spring-promo 2.5 9 --filmed`).
-4. `npm run render spring-promo` (about 15 minutes for 20 seconds; `-- --only clean` skips the
-   laptop version and takes 1 to 2 minutes; `-- --draft` encodes faster).
+4. `npm run render spring-promo`. Options go after `--`:
+   - `--only clean`: skip the laptop version (about 1 minute for 20 seconds). Use this while iterating.
+   - `--only filmed`: just the laptop version.
+   - `--workers N`: how many browsers draw the laptop version at once (default: half your CPU cores,
+     or 2 with a GPU).
+   - `--software`: force software 3D. By default Chrome uses your graphics card if it finds one;
+     the first lines of the log say `WebGL: GPU` or `WebGL: software`.
+   - `--draft`: faster, lower-quality encode.
+
+   The laptop version is the slow part: its 3D lighting, glow and reflection are drawn for every
+   frame. On a machine without a graphics card it runs at roughly 1 to 2 seconds per frame.
 5. `npm run check spring-promo` confirms every cut is on a beat, the whooshes land on the cuts,
    nothing clips, and the loudness. It also writes `check-sheet.png` (the frame before and after
    each cut) and `check-wave.png`.

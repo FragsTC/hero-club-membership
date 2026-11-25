@@ -145,8 +145,10 @@ function measure(file) {
   //   Pass B composites the filmed look from those frames, split across several
   //   browsers at once, since that is the slow part (3D, glow, reflections).
   const doClean = only !== 'filmed', doFilmed = only !== 'clean';
+  // grain in the filmed look eats bitrate, so it gets a cap that keeps the file phone-friendly (~40 MB / 20 s)
+  const cap = (file) => (file.endsWith('filmed.mp4') ? ['-maxrate', '14M', '-bufsize', '28M'] : []);
   const enc = (file, audio, input) => ffmpeg([...(input ? ['-framerate', String(FPS), '-i', input] : ['-f', 'image2pipe', '-framerate', String(FPS), '-i', '-']),
-    '-i', audio, '-map', '0:v', '-map', '1:a', '-c:v', 'libx264', '-preset', draft ? 'veryfast' : 'slow', '-crf', draft ? '23' : '16',
+    '-i', audio, '-map', '0:v', '-map', '1:a', '-c:v', 'libx264', '-preset', draft ? 'veryfast' : 'slow', '-crf', draft ? '23' : file.endsWith('filmed.mp4') ? '20' : '16', ...cap(file),
     '-pix_fmt', 'yuv420p', '-profile:v', 'high', '-r', String(FPS), '-c:a', 'aac', '-b:a', '256k', '-ar', '48000',
     '-t', duration.toFixed(3), '-movflags', '+faststart', file], { input: !input });
   const framesDir = path.join(work, 'frames'), filmedDir = path.join(work, 'filmed');
