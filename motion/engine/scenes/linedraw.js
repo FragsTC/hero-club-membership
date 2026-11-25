@@ -17,11 +17,11 @@ export default {
       'M 350 960 h 150 v 170 h -150 Z', 'M 620 960 h 150 v 170 h -150 Z',
       'M 350 1250 h 150 v 160 h -150 Z', 'M 625 1260 h 110 v 240 h -110',
       'M 425 960 v 170', 'M 695 960 v 170', 'M 425 1250 v 160', 'M 350 1045 h 150', 'M 620 1045 h 150',
-      'M 505 760 h 110 v 90 h -110 Z',
+      'M 440 765 h 200 v 102 h -200 Z', // top window, wide enough for the brush head
     ].map((d) => svgEl('path', { d, ...S }, svg));
     // A tech stands on the ground in front of the house; from this straight-on view the
     // pole (leaning into the wall) reads as vertical. The brush sits flat on the top window.
-    const X = 560, FOOT = 1500, TIP = 852, TX = X - 34, JOIN = 1236; // TX: the tech stands just left of the pole
+    const X = 560, FOOT = 1500, TIP = 862, TX = X - 34, JOIN = 1236; // TX: the tech stands just left of the pole
     const hose = svgEl('path', { d: `M ${X} 1425 C ${X} 1478 ${X - 40} 1490 ${X - 100} 1490 L 40 1490`, ...S, stroke: pop, 'stroke-width': 7 }, svg);
     const tech = svgEl('g', {}, svg);
     // flat silhouette with an outline in the background colour so it sits in front of the house lines
@@ -45,18 +45,19 @@ export default {
     const arms = svgEl('g', {}, svg);
     svgEl('path', { d: `M ${TX + 8} 1350 L ${X - 4} 1395`, fill: 'none', stroke: pop, 'stroke-width': 16, 'stroke-linecap': 'round' }, arms);
     svgEl('path', { d: `M ${TX + 22} 1340 L ${X - 4} 1318`, fill: 'none', stroke: pop, 'stroke-width': 16, 'stroke-linecap': 'round' }, arms);
-    // Brush head, face-on against the glass: a long block with a dark centre, bristles all
-    // round the edge and an end cap, mounted off-centre on an angled gooseneck.
+    // Brush head pressed on the glass, seen from behind: the solid block with an end cap,
+    // bristle tips just showing round its edges, mounted off-centre on an angled gooseneck.
     const brush = svgEl('g', {}, svg);
-    svgEl('path', { d: 'M 0 0 L 0 -14 L -12 -30', fill: 'none', stroke: navy, 'stroke-width': 9, 'stroke-linejoin': 'round' }, brush);
-    const bx = -118, bw = 160, by = -76, bh = 46;
-    svgEl('rect', { x: bx, y: by, width: bw, height: bh, rx: 6, fill: ink }, brush);           // bristle edge
-    for (let i = bx + 4; i < bx + bw - 4; i += 8) {                                              // ragged bristle tips
-      svgEl('rect', { x: i, y: by - 5, width: 4, height: 7, fill: ink }, brush);
-      svgEl('rect', { x: i + 4, y: by + bh - 2, width: 4, height: 7, fill: ink }, brush);
+    const bx = -110, bw = 160, by = -78, bh = 44;
+    for (let i = bx + 3; i < bx + bw - 3; i += 7) {                                              // bristle tips peeking out
+      svgEl('rect', { x: i, y: by - 6, width: 3, height: 8, fill: ink }, brush);
+      svgEl('rect', { x: i + 3, y: by + bh - 2, width: 3, height: 8, fill: ink }, brush);
     }
-    svgEl('rect', { x: bx + 7, y: by + 11, width: bw - 14, height: bh - 22, rx: 3, fill: navy }, brush); // dark centre
-    svgEl('rect', { x: bx + bw - 2, y: by - 3, width: 8, height: bh + 6, rx: 2, fill: navy }, brush);  // end cap
+    for (let j = by + 4; j < by + bh - 4; j += 7) svgEl('rect', { x: bx - 6, y: j, width: 8, height: 3, fill: ink }, brush);
+    svgEl('rect', { x: bx, y: by, width: bw, height: bh, rx: 6, fill: navy, stroke: ink, 'stroke-width': 3 }, brush); // back of the block
+    svgEl('rect', { x: bx + bw - 3, y: by - 4, width: 9, height: bh + 8, rx: 2, fill: navy, stroke: ink, 'stroke-width': 2 }, brush); // end cap
+    svgEl('path', { d: `M 0 0 L 0 -14 L -14 ${by + bh / 2}`, fill: 'none', stroke: navy, 'stroke-width': 10, 'stroke-linejoin': 'round' }, brush); // gooseneck into the back
+    svgEl('circle', { cx: -14, cy: by + bh / 2, r: 8, fill: navy, stroke: ink, 'stroke-width': 2 }, brush);
     // water running down the pane under the brush
     const r = rng('rinse');
     const drops = Array.from({ length: 7 }, (_, i) => ({
@@ -126,7 +127,7 @@ export default {
           const kk = ((k % life) + life) % life;
           if (k < 0) { d.n.style.display = 'none'; return; }
           d.n.style.display = '';
-          d.n.setAttribute('transform', `translate(${d.x + dx} ${TIP - 24 + kk * d.v})`);
+          d.n.setAttribute('transform', `translate(${d.x + dx} ${TIP - 30 + kk * d.v * 0.25})`);
           d.n.style.opacity = 1 - kk / life;
         });
         const g = a - 0.45;
