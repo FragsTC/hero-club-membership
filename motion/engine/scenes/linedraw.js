@@ -1,7 +1,7 @@
-// Line-draw: a building outline draws itself, then a water-fed pole line
-// climbs it to the top window and the brush lands with a spray.
+// Line-draw: a house outline draws itself, a tech steps in, and a water-fed pole
+// telescopes up to the top window; the brush scrubs and water runs down the glass.
 // story fields: text (big label), sub (small mono label), bg
-import { el, svgEl, fitText, rng, slam } from '../lib.js';
+import { el, svgEl, fitText, rng, slam, starPath } from '../lib.js';
 
 export default {
   build(root, scene, ctx) {
@@ -19,14 +19,35 @@ export default {
       'M 425 960 v 170', 'M 695 960 v 170', 'M 425 1250 v 160', 'M 350 1045 h 150', 'M 620 1045 h 150',
       'M 505 760 h 110 v 90 h -110 Z',
     ].map((d) => svgEl('path', { d, ...S }, svg));
-    // The pole: from the tech's hands at ground level up to the top window.
-    const pole = svgEl('path', { d: 'M 150 1500 L 150 1420 L 540 790', ...S, stroke: pop, 'stroke-width': 14 }, svg);
+    // A tech stands on the ground in front of the house; from this straight-on view the
+    // pole (leaning into the wall) reads as vertical. The brush sits flat on the top window.
+    const X = 560, FOOT = 1500, TIP = 818, TX = X - 34; // TX: the tech stands just left of the pole
+    const hose = svgEl('path', { d: `M ${X} 1425 C ${X} 1478 ${X - 40} 1490 ${X - 100} 1490 L 40 1490`, ...S, stroke: pop, 'stroke-width': 7 }, svg);
+    const tech = svgEl('g', {}, svg);
+    // flat silhouette with an outline in the background colour so it sits in front of the house lines
+    const sil = { fill: pop, stroke: 'var(--bg)', 'stroke-width': 8, 'paint-order': 'stroke' };
+    svgEl('rect', { x: TX - 24, y: 1415, width: 20, height: FOOT - 1415, rx: 6, ...sil }, tech);
+    svgEl('rect', { x: TX + 4, y: 1415, width: 20, height: FOOT - 1415, rx: 6, ...sil }, tech);
+    svgEl('rect', { x: TX - 32, y: 1328, width: 64, height: 102, rx: 20, ...sil }, tech);
+    svgEl('circle', { cx: TX - 4, cy: 1298, r: 25, ...sil }, tech);
+    const pole = svgEl('path', { d: `M ${X} 1425 L ${X} ${TIP}`, ...S, stroke: pop, 'stroke-width': 12, 'stroke-linecap': 'butt' }, svg);
+    const arms = svgEl('g', {}, svg);
+    svgEl('path', { d: `M ${TX + 8} 1350 L ${X - 4} 1395`, fill: 'none', stroke: pop, 'stroke-width': 16, 'stroke-linecap': 'round' }, arms);
+    svgEl('path', { d: `M ${TX + 22} 1340 L ${X - 4} 1318`, fill: 'none', stroke: pop, 'stroke-width': 16, 'stroke-linecap': 'round' }, arms);
+    // brush head: a bar with bristles top and bottom, face-on against the glass
     const brush = svgEl('g', {}, svg);
-    svgEl('rect', { x: -46, y: -14, width: 92, height: 28, rx: 6, fill: pop }, brush);
-    for (let i = -36; i <= 36; i += 12) svgEl('rect', { x: i - 3, y: -32, width: 6, height: 20, fill: pop }, brush);
-    const drops = [];
-    const r = rng('spray');
-    for (let i = 0; i < 14; i++) drops.push({ n: svgEl('rect', { x: -5, y: -5, width: 10, height: 10, rx: 5, fill: ink }, svg), a: -Math.PI / 2 + (r() - 0.5) * 2.4, s: 140 + r() * 160 });
+    svgEl('rect', { x: -52, y: -13, width: 104, height: 26, rx: 5, fill: pop }, brush);
+    for (let i = -44; i <= 44; i += 11) {
+      svgEl('rect', { x: i - 2.5, y: -24, width: 5, height: 11, fill: pop }, brush);
+      svgEl('rect', { x: i - 2.5, y: 13, width: 5, height: 11, fill: pop }, brush);
+    }
+    // water running down the pane under the brush
+    const r = rng('rinse');
+    const drops = Array.from({ length: 7 }, (_, i) => ({
+      n: svgEl('rect', { x: -3, y: 0, width: 6, height: 14, rx: 3, fill: ink }, svg),
+      x: X - 42 + i * 14 + (r() - 0.5) * 6, d: r() * 0.35, v: 120 + r() * 60,
+    }));
+    const glint = svgEl('path', { d: starPath(0, 0, 30), fill: 'var(--ink)' }, svg);
 
     const big = el('div', 'ld-text', root.cam);
     big.textContent = (scene.text || '').toUpperCase();
@@ -50,6 +71,11 @@ export default {
     // The pole tops out exactly on a beat.
     const top = Math.min(beat * 3, dur - beat * 0.5);
     const p0 = houseEnd * 0.55;
+    // tech steps in, hose runs out, pole telescopes up and lands on the glass on the beat
+    gsap.set([tech, arms], { autoAlpha: 0 });
+    tl.set([tech, arms], { autoAlpha: 1 }, p0 - 0.12);
+    tl.fromTo([tech, arms], { y: 40 }, { y: 0, duration: 0.18, ease: 'expo.out' }, p0 - 0.12);
+    draw(hose, p0 - 0.1, 0.35);
     draw(pole, p0, top - p0);
     const P = { k: 0 };
     tl.fromTo(P, { k: 0 }, { k: 1, duration: top - p0, ease: 'power2.inOut' }, p0);
@@ -63,18 +89,26 @@ export default {
     return {
       tl,
       render(t) {
-        const L = len(pole);
-        const pt = pole.getPointAtLength(L * P.k);
-        brush.setAttribute('transform', `translate(${pt.x} ${pt.y}) rotate(-58)`);
+        const a = t - at;
+        // after landing the brush scrubs side to side and the pole tip follows it
+        const dx = a > 0 ? 16 * Math.sin(a * Math.PI * 2 * 3) * Math.exp(-a * 1.2) : 0;
+        const y = 1425 - (1425 - TIP) * P.k;
+        if (a > 0) { pole.setAttribute('d', `M ${X} 1425 L ${X + dx} ${TIP}`); pole.style.strokeDasharray = 'none'; }
+        else { pole.setAttribute('d', `M ${X} 1425 L ${X} ${TIP}`); }
+        brush.setAttribute('transform', `translate(${X + dx} ${y - 12})`);
         brush.style.display = t < p0 ? 'none' : '';
         drops.forEach((d) => {
-          const a = t - at;
-          if (a < 0 || a > 0.6) { d.n.style.display = 'none'; return; }
+          const k = a - d.d;
+          const life = 0.5;
+          const kk = ((k % life) + life) % life;
+          if (k < 0) { d.n.style.display = 'none'; return; }
           d.n.style.display = '';
-          const x = pt.x + Math.cos(d.a) * d.s * a * 2;
-          const y = pt.y + Math.sin(d.a) * d.s * a * 2 + 900 * a * a;
-          d.n.setAttribute('transform', `translate(${x} ${y}) scale(${1 - a / 0.6})`);
+          d.n.setAttribute('transform', `translate(${d.x + dx * 0.5} ${TIP + 18 + kk * d.v})`);
+          d.n.style.opacity = 1 - kk / life;
         });
+        const g = a - 0.45;
+        glint.style.display = g < 0 || g > 0.5 ? 'none' : '';
+        glint.setAttribute('transform', `translate(${X + 70} ${TIP - 50}) scale(${Math.sin(Math.max(0, g) / 0.5 * Math.PI)}) rotate(${g * 180})`);
       },
     };
   },

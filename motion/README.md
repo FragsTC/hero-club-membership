@@ -88,7 +88,7 @@ deploying the Hero Club page with no build step.
 | `kinetic` | `text`, `mode`, `to`, `toBg`, `at` | Giant word. `mode`: `slam` (hits in on the cut), `morph` (letters flip from `text` to `to`), `swap` (squeegee wipes `text` into `to` on `toBg`). `at` = beat of the change |
 | `stack` | `words`, `bg` (one or a list), `every` | One word per beat, colour field flips on each, earlier words stay as outlines |
 | `grid3d` | `cols`, `rows`, `text` | 3D wall of window panes flipping from grey to sparkling in a wave |
-| `linedraw` | `text`, `sub` | House outline draws itself, then a water-fed pole climbs it |
+| `linedraw` | `text`, `sub` | House outline draws itself, a tech steps in and a water-fed pole telescopes up to the top window, scrubs, and water runs down the glass |
 | `countup` | `items: [{ value, prefix, suffix, label }]` | Scoreboard digits roll up, each number lands on the next beat |
 | `icon` | `icon` (`padlock`, `check`, `star`), `text`, `at` | The icon snaps on beat `at` (default 2) |
 | `endcard` | `tag`, `website`, `phone` | Logo, then website, then phone on successive beats. Riser leads in |
