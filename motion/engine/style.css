@@ -114,3 +114,8 @@ body.rendering #scrub { display: none; }
 .ti-price .pop { font-size: 1.55em; }
 .ti-price .pop { color: #0075aa; display: inline-block; }
 .ti-fine { font: 700 28px 'JetBrains Mono'; text-transform: uppercase; text-align: center; color: #003b64; opacity: 0.75; margin-top: -20px; margin-bottom: 4px; }
+
+/* problem -> fixed */
+.pb-col { display: flex; flex-direction: column; align-items: center; gap: 70px; }
+.pb-q { line-height: 0.88; }
+.pb-art { width: 900px; height: 760px; overflow: visible; transform-origin: 50% 50%; }

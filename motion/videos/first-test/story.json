@@ -3,20 +3,14 @@
   "bpm": 120,
   "voice": { "dir": "voice/first-test", "note": "Creatify voice Emily (08CkEVoaTLelRyGYAv0P); remove dir to fall back to Kokoro" },
   "scenes": [
-    { "type": "kinetic", "mode": "slam", "push": true, "beats": 3, "bg": "accent",
+    { "type": "problem", "art": "gutter", "beats": 4, "bg": "navy",
       "text": "Clogged\ngutters?", "say": "Clogged gutters?" },
 
-    { "type": "kinetic", "mode": "slam", "push": true, "beats": 3, "bg": "white",
+    { "type": "problem", "art": "siding", "beats": 4, "bg": "accent",
       "text": "Green\nsiding?", "say": "Green siding?" },
 
-    { "type": "kinetic", "mode": "slam", "push": true, "beats": 3, "bg": "blue",
+    { "type": "problem", "art": "window", "beats": 4, "bg": "blue",
       "text": "Grimy\nwindows?", "say": "Grimy windows?" },
-
-    { "type": "kinetic", "mode": "swap", "beats": 4, "bg": "white",
-      "text": "DIRTY", "to": "CLEAR", "toBg": "blue",
-      "say": [{ "text": "From dirty...", "at": 0 }, { "text": "to crystal clear!", "at": 2 }] },
-
-    { "type": "grid3d", "beats": 4, "bg": "navy" },
 
     { "type": "typewriter", "beats": 6, "bg": "black",
       "text": "What if one plan handled it *all?*", "say": "What if one plan handled it all?", "sayDelay": 0.3 },
