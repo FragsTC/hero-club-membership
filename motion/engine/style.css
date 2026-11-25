@@ -83,3 +83,16 @@ html, body { background: #000; overflow: hidden; }
 /* preview scrub bar (not in renders) */
 #scrub { position: fixed; left: 0; bottom: 0; height: 6px; background: #fcaf17; width: 0; }
 body.rendering #scrub { display: none; }
+
+/* plan cards */
+.ti-col { display: flex; flex-direction: column; gap: 40px; width: 980px; }
+.ti-card { display: flex; align-items: center; gap: 40px; background: #003b64; color: #ffffff; border-radius: 28px; padding: 56px 56px; }
+.ti-medal { flex: none; width: 150px; height: 150px; border-radius: 50%; }
+.ti-head { display: flex; align-items: center; gap: 22px; margin-bottom: 8px; }
+.ti-name { font-family: 'Barlow Condensed'; font-weight: 900; font-size: 136px; line-height: 0.9; text-transform: uppercase; }
+.ti-tag { font: 700 30px 'JetBrains Mono'; text-transform: uppercase; background: #fcaf17; color: #003b64; padding: 8px 14px; border-radius: 8px; }
+.ti-line { font-family: 'Barlow'; font-weight: 800; font-size: 58px; line-height: 1.12; }
+.ti-pop { color: #fcaf17; }
+
+/* sub line under a slammed word */
+.kw-sub { position: absolute; left: 0; right: 0; top: calc(50% + 230px); text-align: center; font: 700 44px 'JetBrains Mono'; text-transform: uppercase; letter-spacing: 0.04em; color: var(--pop); }

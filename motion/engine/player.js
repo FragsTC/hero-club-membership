@@ -11,8 +11,9 @@ import linedraw from './scenes/linedraw.js';
 import countup from './scenes/countup.js';
 import icon from './scenes/icon.js';
 import endcard from './scenes/endcard.js';
+import tiers from './scenes/tiers.js';
 
-const TYPES = { typewriter, kinetic, stack, grid3d, linedraw, countup, icon, endcard };
+const TYPES = { typewriter, kinetic, stack, grid3d, linedraw, countup, icon, endcard, tiers };
 const stage = document.getElementById('stage');
 let built = null;
 

@@ -22,7 +22,7 @@ const ICONS = {
     const p = svgEl('path', { d: 'M -110 70 L -25 155 L 125 -10', fill: 'none', stroke: 'var(--bg)', 'stroke-width': 56, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, g);
     return {
       g,
-      before: (tl, gsap) => { const L = p.getTotalLength(); gsap.set(p, { strokeDasharray: L, strokeDashoffset: L }); },
+      before: (tl, gsap, at) => { const L = p.getTotalLength(); gsap.set(p, { strokeDasharray: L, strokeDashoffset: L, autoAlpha: 0 }); tl.set(p, { autoAlpha: 1 }, at - 0.12); },
       snap: (tl, t) => tl.to(p, { strokeDashoffset: 0, duration: 0.12, ease: 'power3.in' }, t - 0.12),
     };
   },

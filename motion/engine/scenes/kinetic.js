@@ -1,5 +1,5 @@
 // Giant kinetic word that fills the screen.
-// story fields: text, bg, mode, to, toBg, at (beat of the change, default half way)
+// story fields: text, bg, mode, to, toBg, at (beat of the change, default half way), sub (small line under a slam)
 //   mode "slam"  : the word slams in on the cut (a hit).
 //   mode "morph" : letters flip one by one from `text` into `to`.
 //   mode "swap"  : a squeegee wipes across mid-scene, revealing `to` on `toBg`.
@@ -21,9 +21,16 @@ export default {
 
     if (mode === 'slam') {
       const w = word(root.cam, scene.text);
-      fitText(w, 980, 1500);
+      fitText(w, 980, scene.sub ? 420 : 1500);
       slam(tl, w, 0, { shakeNode: root.cam, seed: 3 });
       ctx.cue(0, 'hit');
+      if (scene.sub) {
+        const sub = el('div', 'kw-sub', root.cam, scene.sub);
+        gsap.set(sub, { autoAlpha: 0 });
+        tl.set(sub, { autoAlpha: 1 }, beat);
+        tl.fromTo(sub, { y: 24 }, { y: 0, duration: 0.2, ease: 'expo.out' }, beat);
+        ctx.cue(beat, 'pop', { v: 0.7 });
+      }
       if (scene.push) tl.to(root.cam, { scale: 1.08, duration: dur, ease: 'sine.inOut' }, 0);
       return { tl };
     }

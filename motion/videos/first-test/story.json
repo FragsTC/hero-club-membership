@@ -19,9 +19,19 @@
     { "type": "icon", "icon": "pin", "beats": 4, "bg": "black",
       "text": "Serving Durham, Chapel Hill, Cary & Raleigh" },
 
-    { "type": "icon", "icon": "star", "beats": 4, "bg": "accent",
-      "text": "Join the Hero Club" },
+    { "type": "kinetic", "mode": "slam", "beats": 4, "bg": "navy", "push": true,
+      "text": "Hero Club", "sub": "Year-round care for your home" },
 
-    { "type": "endcard", "beats": 8, "bg": "blue" }
+    { "type": "tiers", "beats": 4, "bg": "white",
+      "items": [
+        { "name": "Bronze", "medal": "#d08a4a", "lines": ["2 visits a year", "10% off extras"] },
+        { "name": "Silver", "medal": "#b9c4d3", "tag": "Most popular", "lines": ["3 visits a year", "15% off extras"] },
+        { "name": "Gold", "medal": "#fcaf17", "lines": ["4 visits a year", "20% off extras"] }
+      ] },
+
+    { "type": "icon", "icon": "check", "beats": 4, "bg": "accent",
+      "text": "Gutters, house wash & windows in every plan" },
+
+    { "type": "endcard", "beats": 8, "bg": "blue", "tag": "JOIN THE HERO CLUB" }
   ]
 }
