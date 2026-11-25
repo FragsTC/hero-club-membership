@@ -42,7 +42,7 @@
       "say": "Are you ready to be the hero of your home?", "sayDelay": 0.3 },
 
     { "type": "endcard", "beats": 8, "bg": "blue", "enter": "pan",
-      "tag": "JOIN THE HERO CLUB", "area": "DURHAM · CHAPEL HILL · CARY · RALEIGH",
-      "say": "Join the Hero Club at windowhero.com!" }
+      "tag": "CALL OR TEXT TODAY · JOIN THE HERO CLUB", "area": "DURHAM · CHAPEL HILL · CARY · RALEIGH",
+      "say": "Call or text us today and join the Hero Club!" }
   ]
 }
