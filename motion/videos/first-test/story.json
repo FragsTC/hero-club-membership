@@ -1,7 +1,7 @@
 {
   "title": "First test: Hero Club",
   "bpm": 120,
-  "voice": { "speaker": "am_michael", "speed": 1.05 },
+  "voice": { "dir": "voice/first-test", "note": "Creatify voice Emily (08CkEVoaTLelRyGYAv0P); remove dir to fall back to Kokoro" },
   "scenes": [
     { "type": "kinetic", "mode": "slam", "push": true, "beats": 3, "bg": "accent",
       "text": "Clogged\ngutters?", "say": "Clogged gutters?" },
@@ -13,18 +13,19 @@
       "text": "Grimy\nwindows?", "say": "Grimy windows?" },
 
     { "type": "kinetic", "mode": "swap", "beats": 4, "bg": "white",
-      "text": "DIRTY", "to": "CLEAR", "toBg": "blue", "say": "From dirty..." },
+      "text": "DIRTY", "to": "CLEAR", "toBg": "blue",
+      "say": [{ "text": "From dirty...", "at": 0 }, { "text": "to crystal clear!", "at": 2 }] },
 
-    { "type": "grid3d", "beats": 4, "bg": "navy", "say": "to crystal clear." },
+    { "type": "grid3d", "beats": 4, "bg": "navy" },
 
     { "type": "typewriter", "beats": 6, "bg": "black",
       "text": "What if one plan handled it *all?*", "say": "What if one plan handled it all?", "sayDelay": 0.3 },
 
     { "type": "badge", "beats": 4, "bg": "navy",
-      "image": "brand/hero-club-logo.png", "sub": "Year-round care\nfor your home", "say": "Meet the Hero Club." },
+      "image": "brand/hero-club-logo.png", "sub": "Year-round care\nfor your home", "say": "Meet the Hero Club!" },
 
     { "type": "tiers", "beats": 6, "bg": "white",
-      "price": "Plans start at\n*$54/month*", "say": "Plans start at fifty-four dollars a month.",
+      "price": "Plans start at\n*$54/month*", "say": "Plans start at $54 a month!",
       "fine": "Bronze · homes up to 2,500 sq ft · plus down payment",
       "items": [
         { "name": "Bronze", "medal": "#d08a4a", "lines": ["2 visits a year", "10% off extras"] },
@@ -37,6 +38,6 @@
 
     { "type": "endcard", "beats": 8, "bg": "blue",
       "tag": "JOIN THE HERO CLUB", "area": "DURHAM · CHAPEL HILL · CARY · RALEIGH",
-      "say": "Join the Hero Club, at window hero dot com." }
+      "say": "Join the Hero Club at windowhero.com!" }
   ]
 }

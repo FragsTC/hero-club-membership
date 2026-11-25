@@ -101,7 +101,7 @@ to place sounds; they are generated in `render/audio.js`.
 
 ## Voiceover
 
-Give any scene a `"say"` line and the renderer speaks it, starting just after that scene's cut:
+Give any scene a `"say"` line and the renderer speaks it, starting just after that scene's cut. For more than one line in a scene, or a line that lands on a moment inside it, use a list: `"say": [{ "text": "From dirty...", "at": 0 }, { "text": "to crystal clear!", "at": 2 }]` (`at` is in beats from the cut).
 
 ```json
 "voice": { "speaker": "am_michael", "speed": 1.05 },
@@ -117,6 +117,12 @@ Give any scene a `"say"` line and the renderer speaks it, starting just after th
   not enough. Rule of thumb: about 2.5 words per second of scene.
 - Write numbers and web addresses the way they should be said: `fifty-four dollars`,
   `window hero dot com`. `"sayDelay"` (seconds) starts a line later than the cut.
+- **Recorded or premium voices** (Creatify, ElevenLabs, or your own phone): put one file per line
+  in a folder, named `01.wav`, `02.wav`, ... in script order, and set
+  `"voice": { "dir": "voice/<video>" }`. The renderer uses those instead of Kokoro, trims silence,
+  and tightens a line (pitch kept, up to 1.25x) only if it runs into the next one. first-test uses
+  Creatify's voice "Emily" this way, in `voice/first-test/`. Keep each `say` text matching its
+  recording so the script in story.json stays the source of truth.
 - `npm run voices -- "Any line"` saves samples of several voices to `out/voice-samples/`;
   put the one you like in `voice.speaker`.
 - The music dips under the voice and the effects dip a little. With voice lines, the render also
