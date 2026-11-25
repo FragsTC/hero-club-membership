@@ -1,0 +1,30 @@
+{
+  "title": "First test",
+  "bpm": 120,
+  "scenes": [
+    { "type": "typewriter", "beats": 8, "bg": "black",
+      "text": "What if your windows looked *brand new?*" },
+
+    { "type": "kinetic", "mode": "swap", "beats": 4, "bg": "white",
+      "text": "DIRTY", "to": "CLEAR", "toBg": "blue" },
+
+    { "type": "grid3d", "beats": 4, "bg": "black" },
+
+    { "type": "stack", "beats": 4, "bg": ["blue", "white", "black", "accent"],
+      "words": ["Windows", "Gutters", "Soft wash", "Solar"] },
+
+    { "type": "linedraw", "beats": 4, "bg": "blue",
+      "text": "Water-fed pole" },
+
+    { "type": "countup", "beats": 4, "bg": "black",
+      "items": [
+        { "value": 14, "label": "Years" },
+        { "value": 30, "suffix": "+", "label": "Communities" }
+      ] },
+
+    { "type": "icon", "icon": "padlock", "beats": 4, "bg": "accent",
+      "text": "Price locked for 5 years" },
+
+    { "type": "endcard", "beats": 8, "bg": "blue" }
+  ]
+}

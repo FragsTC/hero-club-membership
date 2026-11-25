@@ -122,3 +122,8 @@ email notification set up in Netlify for requests to reach an inbox.
 
 See `DESIGN.md` for the Window Hero brand tokens and the design decisions
 behind this page.
+
+## Motion videos
+
+`motion/` is a separate project for short vertical videos (TikTok, Reels,
+Shorts). It is not part of the Netlify site. See `motion/README.md`.

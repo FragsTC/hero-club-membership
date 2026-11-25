@@ -1,0 +1,22 @@
+{
+  "name": "Window Hero RDU",
+  "website": "windowhero.com",
+  "phone": "919-746-4485",
+  "colors": {
+    "blue":   { "bg": "#0075aa", "ink": "#ffffff", "pop": "#fcaf17" },
+    "navy":   { "bg": "#003b64", "ink": "#ffffff", "pop": "#fcaf17" },
+    "sky":    { "bg": "#009bd8", "ink": "#ffffff", "pop": "#003b64" },
+    "white":  { "bg": "#ffffff", "ink": "#003b64", "pop": "#0075aa" },
+    "black":  { "bg": "#0a0c0f", "ink": "#ffffff", "pop": "#fcaf17" },
+    "accent": { "bg": "#fcaf17", "ink": "#003b64", "pop": "#003b64" }
+  },
+  "fonts": {
+    "display": "Barlow Condensed",
+    "text": "Barlow",
+    "mono": "JetBrains Mono"
+  },
+  "logo": {
+    "light": "brand/logo-white.png",
+    "dark": "brand/logo-navy.png"
+  }
+}

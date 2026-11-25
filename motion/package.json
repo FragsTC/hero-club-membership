@@ -1,0 +1,22 @@
+{
+  "name": "window-hero-motion",
+  "version": "1.0.0",
+  "description": "Window Hero RDU short-form motion videos",
+  "scripts": {
+    "render": "node render/render.js",
+    "preview": "node render/server.js",
+    "stills": "node render/stills.js",
+    "check": "node render/check.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@fontsource/barlow": "^5.3.0",
+    "@fontsource/barlow-condensed": "^5.3.0",
+    "@fontsource/jetbrains-mono": "^5.3.0",
+    "gsap": "^3.15.1",
+    "playwright": "^1.63.0",
+    "three": "^0.187.0"
+  },
+  "private": true
+}

@@ -1,0 +1,84 @@
+@font-face { font-family: 'Barlow Condensed'; font-weight: 700; src: url(../brand/fonts/barlow-condensed-latin-700-normal.woff2); }
+@font-face { font-family: 'Barlow Condensed'; font-weight: 800; src: url(../brand/fonts/barlow-condensed-latin-800-normal.woff2); }
+@font-face { font-family: 'Barlow Condensed'; font-weight: 900; src: url(../brand/fonts/barlow-condensed-latin-900-normal.woff2); }
+@font-face { font-family: 'Barlow'; font-weight: 500; src: url(../brand/fonts/barlow-latin-500-normal.woff2); }
+@font-face { font-family: 'Barlow'; font-weight: 800; src: url(../brand/fonts/barlow-latin-800-normal.woff2); }
+@font-face { font-family: 'Barlow'; font-weight: 900; src: url(../brand/fonts/barlow-latin-900-normal.woff2); }
+@font-face { font-family: 'JetBrains Mono'; font-weight: 500; src: url(../brand/fonts/jetbrains-mono-latin-500-normal.woff2); }
+@font-face { font-family: 'JetBrains Mono'; font-weight: 700; src: url(../brand/fonts/jetbrains-mono-latin-700-normal.woff2); }
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: #000; overflow: hidden; }
+#stage { position: relative; width: 1080px; height: 1920px; overflow: hidden; transform-origin: 0 0; }
+.scene { position: absolute; inset: 0; visibility: hidden; overflow: hidden; }
+.scene.on { visibility: visible; }
+.cam { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; transform-origin: 50% 50%; }
+.pop { color: var(--pop); }
+
+/* corner labels */
+#hud { position: absolute; inset: 0; pointer-events: none; font: 500 30px/1 'JetBrains Mono', monospace; letter-spacing: 0.04em; text-transform: uppercase; }
+#hud div { position: absolute; }
+#hud .tl { top: 84px; left: 64px; }
+#hud .tr { top: 84px; right: 64px; }
+#hud .bl { bottom: 84px; left: 64px; }
+#hud .br { bottom: 84px; right: 64px; }
+#hud .tl::before { content: ''; display: inline-block; width: 16px; height: 16px; background: currentColor; margin-right: 14px; vertical-align: 1px; }
+
+/* typewriter */
+.tw-box { width: 900px; }
+.tw-text { position: relative; font-family: 'Barlow'; font-weight: 900; line-height: 1.02; letter-spacing: -0.01em; }
+.tw-word { white-space: nowrap; }
+.tw-cursor { display: inline-block; background: var(--pop); top: 0; left: 0; }
+.ec-cursor { position: relative; width: 0.4em; height: 0.78em; margin-left: 0.12em; vertical-align: -0.04em; }
+
+/* kinetic word */
+.kw-word { font-family: 'Barlow Condensed'; font-weight: 900; line-height: 0.86; text-transform: uppercase; white-space: nowrap; letter-spacing: -0.01em; position: relative; }
+.kw-row { perspective: 1200px; }
+.kw-cell { display: inline-block; transform-origin: 50% 50%; }
+.kw-layer { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+.kw-dirty { background: #e4ddd0 !important; color: #4d4438 !important; }
+.kw-grime, .kw-sparkles, .g3-sparkles, .ld-svg, .ec-stars { position: absolute; inset: 0; }
+.kw-squeegee { position: absolute; left: 0; top: -100px; width: 330px; height: 2120px; transform-origin: 297px 50%; rotate: 6deg; }
+.sq-handle { position: absolute; left: 0; top: 50%; width: 256px; height: 64px; margin-top: -32px; background: #fcaf17; border-radius: 32px 0 0 32px; }
+.sq-channel { position: absolute; left: 250px; top: 0; width: 36px; height: 100%; background: #b9c4d3; }
+.sq-blade { position: absolute; left: 284px; top: 0; width: 26px; height: 100%; background: #111; }
+
+/* word stack */
+.st-col { display: flex; flex-direction: column; align-items: center; gap: 0; }
+.st-word { font-family: 'Barlow Condensed'; font-weight: 900; line-height: 0.9; white-space: nowrap; text-transform: uppercase; visibility: hidden; }
+.st-word.st-new { color: var(--ink); }
+.st-word.st-old { color: transparent; -webkit-text-stroke: 4px var(--ink); }
+
+/* 3d grid */
+.g3-canvas { position: absolute; inset: 0; width: 1080px; height: 1920px; }
+.g3-label { position: absolute; bottom: 300px; font: 700 44px 'JetBrains Mono'; color: var(--ink); text-transform: uppercase; }
+
+/* line draw */
+.ld-text { position: absolute; top: 250px; left: 0; right: 0; text-align: center; font-family: 'Barlow Condensed'; font-weight: 900; line-height: 0.9; white-space: nowrap; }
+.ld-sub { position: absolute; top: 1560px; left: 0; right: 0; text-align: center; font: 700 40px 'JetBrains Mono'; text-transform: uppercase; }
+
+/* count up */
+.cu-wrap { display: flex; flex-direction: column; gap: 70px; align-items: center; }
+.cu-item { display: flex; flex-direction: column; align-items: center; }
+.cu-row { display: flex; align-items: center; font-family: 'Barlow Condensed'; font-weight: 900; line-height: 1; color: var(--pop); }
+.cu-cell { position: relative; display: inline-block; height: 1em; width: 0.66em; overflow: hidden; margin: 0 0.04em; background: #1c2026; border-radius: 0.06em; }
+.cu-strip { position: absolute; left: 0; right: 0; top: 0; display: flex; flex-direction: column; }
+.cu-d { height: 1em; display: block; text-align: center; line-height: 1.02; }
+.cu-split { position: absolute; left: 0; right: 0; top: 50%; height: 0.02em; background: #0a0c0f; }
+.cu-fix { margin-left: 0.04em; }
+.cu-label { font-family: 'Barlow Condensed'; font-weight: 900; text-transform: uppercase; color: var(--ink); line-height: 1; margin-top: 18px; letter-spacing: 0.02em; }
+
+/* icon */
+.ic-wrap { display: flex; flex-direction: column; align-items: center; gap: 40px; }
+.ic-text { font-family: 'Barlow Condensed'; font-weight: 900; text-transform: uppercase; text-align: center; line-height: 0.9; width: 960px; }
+
+/* end card */
+.ec-wrap { display: flex; flex-direction: column; align-items: center; }
+.ec-logo { width: 860px; }
+.ec-tag { font: 700 34px 'JetBrains Mono'; letter-spacing: 0.08em; margin-top: 46px; }
+.ec-site { font-family: 'Barlow'; font-weight: 900; margin-top: 120px; line-height: 1; }
+.ec-phone { font-family: 'Barlow Condensed'; font-weight: 900; color: var(--pop); margin-top: 30px; line-height: 1; white-space: nowrap; }
+
+/* preview scrub bar (not in renders) */
+#scrub { position: fixed; left: 0; bottom: 0; height: 6px; background: #fcaf17; width: 0; }
+body.rendering #scrub { display: none; }
