@@ -21,7 +21,7 @@ export default {
     ].map((d) => svgEl('path', { d, ...S }, svg));
     // A tech stands on the ground in front of the house; from this straight-on view the
     // pole (leaning into the wall) reads as vertical. The brush sits flat on the top window.
-    const X = 560, FOOT = 1500, TIP = 818, TX = X - 34; // TX: the tech stands just left of the pole
+    const X = 560, FOOT = 1500, TIP = 852, TX = X - 34, JOIN = 1236; // TX: the tech stands just left of the pole
     const hose = svgEl('path', { d: `M ${X} 1425 C ${X} 1478 ${X - 40} 1490 ${X - 100} 1490 L 40 1490`, ...S, stroke: pop, 'stroke-width': 7 }, svg);
     const tech = svgEl('g', {}, svg);
     // flat silhouette with an outline in the background colour so it sits in front of the house lines
@@ -30,22 +30,38 @@ export default {
     svgEl('rect', { x: TX + 4, y: 1415, width: 20, height: FOOT - 1415, rx: 6, ...sil }, tech);
     svgEl('rect', { x: TX - 32, y: 1328, width: 64, height: 102, rx: 20, ...sil }, tech);
     svgEl('circle', { cx: TX - 4, cy: 1298, r: 25, ...sil }, tech);
-    const pole = svgEl('path', { d: `M ${X} 1425 L ${X} ${TIP}`, ...S, stroke: pop, 'stroke-width': 12, 'stroke-linecap': 'butt' }, svg);
+    // Pole like the real thing, in brand colours: a solid lower section in the accent colour,
+    // telescoping sections above it, each joint held by a clamp collar with a lever.
+    const navy = ctx.brand.colors.navy.bg;
+    const poleLow = svgEl('path', { d: `M ${X} 1425 L ${X} ${JOIN}`, fill: 'none', stroke: pop, 'stroke-width': 14 }, svg);
+    const pole = svgEl('path', { d: `M ${X} ${JOIN} L ${X} ${TIP}`, fill: 'none', stroke: navy, 'stroke-width': 11 }, svg);
+    const clampYs = [JOIN, 1166, 1096, 1026, 956, 886];
+    const clamps = clampYs.map((cy) => {
+      const g = svgEl('g', {}, svg);
+      svgEl('rect', { x: -11, y: -26, width: 22, height: 28, rx: 4, fill: navy }, g);
+      svgEl('rect', { x: 9, y: -22, width: 14, height: 13, rx: 3, fill: pop }, g); // lever
+      return { g, cy };
+    });
     const arms = svgEl('g', {}, svg);
     svgEl('path', { d: `M ${TX + 8} 1350 L ${X - 4} 1395`, fill: 'none', stroke: pop, 'stroke-width': 16, 'stroke-linecap': 'round' }, arms);
     svgEl('path', { d: `M ${TX + 22} 1340 L ${X - 4} 1318`, fill: 'none', stroke: pop, 'stroke-width': 16, 'stroke-linecap': 'round' }, arms);
-    // brush head: a bar with bristles top and bottom, face-on against the glass
+    // Brush head, face-on against the glass: a long block with a dark centre, bristles all
+    // round the edge and an end cap, mounted off-centre on an angled gooseneck.
     const brush = svgEl('g', {}, svg);
-    svgEl('rect', { x: -52, y: -13, width: 104, height: 26, rx: 5, fill: pop }, brush);
-    for (let i = -44; i <= 44; i += 11) {
-      svgEl('rect', { x: i - 2.5, y: -24, width: 5, height: 11, fill: pop }, brush);
-      svgEl('rect', { x: i - 2.5, y: 13, width: 5, height: 11, fill: pop }, brush);
+    svgEl('path', { d: 'M 0 0 L 0 -14 L -12 -30', fill: 'none', stroke: navy, 'stroke-width': 9, 'stroke-linejoin': 'round' }, brush);
+    const bx = -118, bw = 160, by = -76, bh = 46;
+    svgEl('rect', { x: bx, y: by, width: bw, height: bh, rx: 6, fill: ink }, brush);           // bristle edge
+    for (let i = bx + 4; i < bx + bw - 4; i += 8) {                                              // ragged bristle tips
+      svgEl('rect', { x: i, y: by - 5, width: 4, height: 7, fill: ink }, brush);
+      svgEl('rect', { x: i + 4, y: by + bh - 2, width: 4, height: 7, fill: ink }, brush);
     }
+    svgEl('rect', { x: bx + 7, y: by + 11, width: bw - 14, height: bh - 22, rx: 3, fill: navy }, brush); // dark centre
+    svgEl('rect', { x: bx + bw - 2, y: by - 3, width: 8, height: bh + 6, rx: 2, fill: navy }, brush);  // end cap
     // water running down the pane under the brush
     const r = rng('rinse');
     const drops = Array.from({ length: 7 }, (_, i) => ({
       n: svgEl('rect', { x: -3, y: 0, width: 6, height: 14, rx: 3, fill: ink }, svg),
-      x: X - 42 + i * 14 + (r() - 0.5) * 6, d: r() * 0.35, v: 120 + r() * 60,
+      x: X - 100 + i * 20 + (r() - 0.5) * 6, d: r() * 0.35, v: 120 + r() * 60,
     }));
     const glint = svgEl('path', { d: starPath(0, 0, 30), fill: 'var(--ink)' }, svg);
 
@@ -72,9 +88,9 @@ export default {
     const top = Math.min(beat * 3, dur - beat * 0.5);
     const p0 = houseEnd * 0.55;
     // tech steps in, hose runs out, pole telescopes up and lands on the glass on the beat
-    gsap.set([tech, arms], { autoAlpha: 0 });
-    tl.set([tech, arms], { autoAlpha: 1 }, p0 - 0.12);
-    tl.fromTo([tech, arms], { y: 40 }, { y: 0, duration: 0.18, ease: 'expo.out' }, p0 - 0.12);
+    gsap.set([tech, arms, poleLow], { autoAlpha: 0 });
+    tl.set([tech, arms, poleLow], { autoAlpha: 1 }, p0 - 0.12);
+    tl.fromTo([tech, arms, poleLow], { y: 40 }, { y: 0, duration: 0.18, ease: 'expo.out' }, p0 - 0.12);
     draw(hose, p0 - 0.1, 0.35);
     draw(pole, p0, top - p0);
     const P = { k: 0 };
@@ -92,10 +108,17 @@ export default {
         const a = t - at;
         // after landing the brush scrubs side to side and the pole tip follows it
         const dx = a > 0 ? 16 * Math.sin(a * Math.PI * 2 * 3) * Math.exp(-a * 1.2) : 0;
-        const y = 1425 - (1425 - TIP) * P.k;
-        if (a > 0) { pole.setAttribute('d', `M ${X} 1425 L ${X + dx} ${TIP}`); pole.style.strokeDasharray = 'none'; }
-        else { pole.setAttribute('d', `M ${X} 1425 L ${X} ${TIP}`); }
-        brush.setAttribute('transform', `translate(${X + dx} ${y - 12})`);
+        const y = JOIN - (JOIN - TIP) * P.k;
+        const lean = (yy) => X + dx * (JOIN - yy) / (JOIN - TIP); // the scrub bends the upper sections
+        if (a > 0) { pole.setAttribute('d', `M ${X} ${JOIN} L ${X + dx} ${TIP}`); pole.style.strokeDasharray = 'none'; }
+        else { pole.setAttribute('d', `M ${X} ${JOIN} L ${X} ${TIP}`); }
+        const tipY = Math.min(JOIN, y);
+        // a clamp shows once the section above it has slid out
+        clamps.forEach((c) => {
+          c.g.style.display = t >= p0 && tipY < c.cy - 30 ? '' : 'none';
+          c.g.setAttribute('transform', `translate(${lean(c.cy)} ${c.cy})`);
+        });
+        brush.setAttribute('transform', `translate(${X + dx} ${tipY})`);
         brush.style.display = t < p0 ? 'none' : '';
         drops.forEach((d) => {
           const k = a - d.d;
@@ -103,12 +126,12 @@ export default {
           const kk = ((k % life) + life) % life;
           if (k < 0) { d.n.style.display = 'none'; return; }
           d.n.style.display = '';
-          d.n.setAttribute('transform', `translate(${d.x + dx * 0.5} ${TIP + 18 + kk * d.v})`);
+          d.n.setAttribute('transform', `translate(${d.x + dx} ${TIP - 24 + kk * d.v})`);
           d.n.style.opacity = 1 - kk / life;
         });
         const g = a - 0.45;
         glint.style.display = g < 0 || g > 0.5 ? 'none' : '';
-        glint.setAttribute('transform', `translate(${X + 70} ${TIP - 50}) scale(${Math.sin(Math.max(0, g) / 0.5 * Math.PI)}) rotate(${g * 180})`);
+        glint.setAttribute('transform', `translate(${X + 60} ${TIP - 100}) scale(${Math.sin(Math.max(0, g) / 0.5 * Math.PI)}) rotate(${g * 180})`);
       },
     };
   },
